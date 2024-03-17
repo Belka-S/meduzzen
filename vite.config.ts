@@ -28,5 +28,5 @@ export default defineConfig({
     port: 3000,
     open: '/',
   },
-  base: '/mern-tstarter',
+  base: '/meduzzen',
 });
