@@ -36,7 +36,13 @@ To get started with the project, follow these steps:
 
 1. Project structure:
 
-`. ├── src ├── ... ├── Dockerfile └── README.md`
+```
+.
+├── src
+├── ...
+├── Dockerfile
+└── README.md
+```
 
 2. Build the Docker image:
 
