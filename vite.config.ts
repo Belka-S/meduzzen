@@ -21,6 +21,12 @@ export default defineConfig({
   resolve: {
     alias: { ...dirPaths },
   },
-  server: { open: '/', port: 3000 },
+  server: {
+    watch: { usePolling: true },
+    host: true,
+    strictPort: true,
+    port: 3000,
+    open: '/',
+  },
   base: '/mern-tstarter',
 });

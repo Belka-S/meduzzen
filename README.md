@@ -1,12 +1,11 @@
-## TStarter Application
-
-## Promo
+## mern-tstarter Application
 
 This application built with Vite + React.
 
 ### Table of Contents
 
 - Getting Started
+- Compose sample application
 - Technologies
 - Contributing
 
@@ -33,11 +32,81 @@ To get started with the project, follow these steps:
 5. Open your web browser and navigate to `http://localhost:3000/mern-tstarter`
    to access the application.
 
+### Compose sample application
+
+Project structure:
+
+```
+.
+├── src
+├── ...
+├── Dockerfile
+└── README.md
+```
+
+[compose.yaml\_](compose.yaml)
+
+```
+services:
+  frontend:
+    build:
+      context: frontend
+    ...
+    ports:
+      - 3000:3000
+    ...
+  server:
+    container_name: server
+    restart: always
+    build:
+      context: server
+      args:
+        NODE_PORT: 3000
+    ports:
+      - 3000:3000
+    ...
+    depends_on:
+      - mongo
+  mongo:
+    container_name: mongo
+    restart: always
+    ...
+```
+
+The compose file defines an application with three services
+
+Snippet of frontend(ReactJS)`DockerFile`
+
+You will find this `DockerFile`.
+
+```bash
+# Create image based on the official Node image from dockerhub
+FROM node:20-alpine
+#Argument that is passed from docer-compose.yaml file
+ARG FRONT_END_PORT
+# Create app directory
+WORKDIR /app
+#Echo the argument to check passed argument loaded here correctly
+RUN echo "Argument port is : $FRONT_END_PORT"
+# Copy dependency definitions
+COPY package.json .
+COPY package-lock.json .
+# Install dependecies
+RUN npm ci
+# Get all the code needed to run the app
+COPY . .
+# Expose the port the app runs in
+EXPOSE ${FRONT_END_PORT}
+# Serve the app
+CMD ["npm", "start"]
+```
+
 ### Technologies
 
 - React
+- Vite
 - React Router
-- Redux Toolkit
+- Redux
 
 ### Contributing
 
