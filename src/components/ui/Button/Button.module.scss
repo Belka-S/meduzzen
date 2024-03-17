@@ -6,33 +6,47 @@
 
   cursor: pointer;
   background: none;
-  border-radius: var(--indent-xs);
   font-weight: 700;
   font-size: 18px;
 }
 
-// size
+//border
+.orthogonal {
+  border-radius: var(--indent-xs);
+}
 
+// size
 .s {
-  height: 30px;
-  padding: 8px;
-  gap: 8px;
+  height: var(--btn-height-s);
+  padding: var(--btn-gap-s);
+  gap: var(--btn-gap-s);
+
+  &.round {
+    border-radius: calc(var(--btn-height-s) / 2);
+  }
 }
 
 .m {
-  height: 50px;
-  padding: 10px;
-  gap: 10px;
+  height: var(--btn-height-m);
+  padding: var(--btn-gap-m);
+  gap: var(--btn-gap-m);
+
+  &.round {
+    border-radius: calc(var(--btn-height-m) / 2);
+  }
 }
 
 .l {
-  height: 70px;
-  padding: 12px;
-  gap: 12px;
+  height: var(--btn-height-l);
+  padding: var(--btn-gap-l);
+  gap: var(--btn-gap-l);
+
+  &.round {
+    border-radius: calc(var(--btn-height-l) / 2);
+  }
 }
 
 // variant
-
 .default {
   background-color: var(--accent-color);
   color: var(--white-color);

@@ -1,7 +1,8 @@
-import classNames from 'classnames';
 import { createElement, FC } from 'react';
+import classNames from 'classnames';
 
 import { ITypographyProps, weightNames } from './types';
+
 import styles from './Typography.module.scss';
 
 const Typography: FC<ITypographyProps> = props => {

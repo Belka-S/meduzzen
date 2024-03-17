@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import HomePage from 'pages/HomePage';
+import SigninPage from 'pages/SigninPage';
 import { loadWebFonts } from 'styles/loadWebFonts';
 
 const App = () => {
@@ -7,7 +7,7 @@ const App = () => {
     loadWebFonts();
   }, []);
 
-  return <HomePage />;
+  return <SigninPage />;
 };
 
 export default App;
