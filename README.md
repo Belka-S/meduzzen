@@ -1,4 +1,4 @@
-## mern-tstarter Application
+## The Application
 
 This application built with Vite + React.
 
@@ -15,7 +15,7 @@ To get started with the project, follow these steps:
 
 1. Clone this repository to your local machine:
 
-`git clone` <repository-url>
+`git clone <repository-url>`
 
 2. Change directory to the project folder:
 
@@ -29,12 +29,12 @@ To get started with the project, follow these steps:
 
 `npm run dev`
 
-5. Open your web browser and navigate to `http://localhost:3000/mern-tstarter`
-   to access the application.
+5. Open your web browser and navigate to `http://localhost:3000` to access the
+   application.
 
 ### Compose sample application
 
-Project structure:
+1. Project structure:
 
 ```
 .
@@ -44,62 +44,25 @@ Project structure:
 └── README.md
 ```
 
-[compose.yaml\_](compose.yaml)
+2. Build the Docker image:
 
-```
-services:
-  frontend:
-    build:
-      context: frontend
-    ...
-    ports:
-      - 3000:3000
-    ...
-  server:
-    container_name: server
-    restart: always
-    build:
-      context: server
-      args:
-        NODE_PORT: 3000
-    ports:
-      - 3000:3000
-    ...
-    depends_on:
-      - mongo
-  mongo:
-    container_name: mongo
-    restart: always
-    ...
-```
+`docker build -t <user-name>/<image-name> .`
 
-The compose file defines an application with three services
+3. Run the image locally:
 
-Snippet of frontend(ReactJS)`DockerFile`
+`docker run -it --rm -p 3000:3000 --name <container-name> <user-name>/<image-name>`
 
-You will find this `DockerFile`.
+4. Build and run the the image locally:
 
-```bash
-# Create image based on the official Node image from dockerhub
-FROM node:20-alpine
-#Argument that is passed from docer-compose.yaml file
-ARG FRONT_END_PORT
-# Create app directory
-WORKDIR /app
-#Echo the argument to check passed argument loaded here correctly
-RUN echo "Argument port is : $FRONT_END_PORT"
-# Copy dependency definitions
-COPY package.json .
-COPY package-lock.json .
-# Install dependecies
-RUN npm ci
-# Get all the code needed to run the app
-COPY . .
-# Expose the port the app runs in
-EXPOSE ${FRONT_END_PORT}
-# Serve the app
-CMD ["npm", "start"]
-```
+`docker-compose up`
+
+5. After the application starts, navigate to:
+
+`http://localhost:3000` in your web browser.
+
+6. Push the image to a private repository:
+
+`docker push <user-name>/<image-name>`
 
 ### Technologies
 

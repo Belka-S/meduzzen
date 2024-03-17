@@ -9,8 +9,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - 3000:3000
-    volumes:
-      - src_files:/app/src
     restart: unless-stopped # always
+    volumes:
+      - app-files:/app/
 volumes:
-  src_files:
+  app-files:
+    # external: true
