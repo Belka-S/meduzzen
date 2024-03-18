@@ -15,7 +15,7 @@ const PublicRoutes = () => {
       <Outlet />
     </Suspense>
   ) : (
-    <Navigate to={state ? state : '/profile'} />
+    <Navigate to={state ? state : '/cluster'} />
   );
 };
 

@@ -9,8 +9,8 @@ const HomePage = lazy(() => import('pages/HomePage'));
 const AboutPage = lazy(() => import('pages/AboutPage'));
 const SignupPage = lazy(() => import('pages/SignupPage'));
 const SigninPage = lazy(() => import('pages/SigninPage'));
-const UserListPage = lazy(() => import('pages/UserListPage'));
-const UserPage = lazy(() => import('pages/UserPage'));
+const ClusterListPage = lazy(() => import('pages/ClusterListPage'));
+const ClusterPage = lazy(() => import('pages/ClusterPage'));
 const CompanyListPage = lazy(() => import('pages/CompanyListPage'));
 const CompanyPage = lazy(() => import('pages/CompanyPage'));
 
@@ -29,8 +29,8 @@ const App = () => {
           <Route path="signin" element={<SigninPage />} />
         </Route>
         <Route element={<PrivateRoutes />}>
-          <Route path="user" element={<UserListPage />} />
-          <Route path="user/:id" element={<UserPage />} />
+          <Route path="cluster" element={<ClusterListPage />} />
+          <Route path="cluster/:id" element={<ClusterPage />} />
           <Route path="company" element={<CompanyListPage />} />
           <Route path="company/:id" element={<CompanyPage />} />
         </Route>
