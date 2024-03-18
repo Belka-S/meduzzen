@@ -1,0 +1,16 @@
+version: '0.0.1'
+services:
+  client:
+    image: ${DOCKER_USER_NAME}/${APP_NAME}
+    container_name: client
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - ${FRONT_PORT}:${FRONT_PORT}
+    restart: unless-stopped # always
+    volumes:
+      - app-files:/app/
+volumes:
+  app-files:
+    # external: true
