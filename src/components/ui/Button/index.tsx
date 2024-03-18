@@ -1,7 +1,7 @@
 import { FC, MouseEvent, ReactElement } from 'react';
 import classNames from 'classnames';
 
-import styles from './Button.module.scss';
+import s from './index.module.scss';
 
 interface IButtonProps {
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
@@ -31,10 +31,10 @@ const Button: FC<IButtonProps> = props => {
       onClick={onClick}
       type={type}
       className={classNames(
-        styles.button,
-        styles[size],
-        styles[variant],
-        styles[border],
+        s.button,
+        s[size],
+        s[variant],
+        s[border],
         className,
       )}
     >

@@ -9,18 +9,18 @@ html,
 body {
   width: 100vw;
   height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+
   overflow-x: hidden;
   color: var(--primary-text-color);
   background-color: var(--primary-bg-color);
 }
 
-main {
+main,
+#root {
   flex-grow: 1;
-}
-
-.layout {
-  display: flex;
-  flex-direction: column;
 }
 
 .container {

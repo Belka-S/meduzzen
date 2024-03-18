@@ -1,27 +1,23 @@
+import sprite from 'assets/sprite.svg';
 import classNames from 'classnames';
 
-import s from './SvgIcon.module.scss';
+import s from './index.module.scss';
 
 type SvgIconProps = {
-  id: string;
-  width?: number;
-  height?: number;
+  svgId: string;
+  size?: number;
   className?: string;
 };
 
-const SvgIcon = ({
-  id,
-  width = 20,
-  height = 20,
-  className = '',
-}: SvgIconProps) => {
+const SvgIcon = ({ svgId, size = 20, className = '' }: SvgIconProps) => {
   return (
     <svg
-      className={classNames(s.SvgIcon, className)}
-      width={width}
-      height={height}
+      className={classNames(s.svgIcon, className)}
+      width={size}
+      height={size}
     >
-      <use href={`./sprite.svg#${id}`} />
+      {/* <use href={`./sprite.svg#${svgId}`} /> Next.js - /public/sprite.svg*/}
+      <use href={`${sprite}#${svgId}`} />
     </svg>
   );
 };

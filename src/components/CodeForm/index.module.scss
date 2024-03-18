@@ -1,8 +1,10 @@
 .form {
   width: 450px;
   padding: 30px;
+
   display: grid;
   gap: 15px;
+
   border: none;
   border-radius: var(--indent-s);
   background-color: var(--primary-bg-color);
@@ -24,8 +26,10 @@
   height: 46px;
   width: 100%;
   padding: 0 12px;
+
   display: flex;
   outline: none;
+
   border: 1px solid var(--border-color);
   transition: border-color 0.25s;
   border-radius: var(--indent-xs);

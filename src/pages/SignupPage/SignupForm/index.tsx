@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import Button from 'components/ui/Button';
 import H3 from 'components/ui/Typography/H3';
 import { Resolver, SubmitHandler, useForm } from 'react-hook-form';
+import { NavLink } from 'react-router-dom';
 // import { registerThunk } from 'store/auth/authThunks';
 import { signupSchema } from 'utils/validation';
 import { InferType } from 'yup';
@@ -33,9 +34,9 @@ const SignupForm = () => {
     <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
       <div className={s.title__wrap}>
         <H3 className={s.title}>Sign Up</H3>
-        <a className={s.navlink} href="#">
+        <NavLink to={'/signin'} className={s.navlink} href="#">
           Have an account?
-        </a>
+        </NavLink>
       </div>
 
       {inputFields.map(field => (

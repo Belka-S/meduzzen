@@ -1,8 +1,10 @@
 .form {
   min-width: 400px;
   padding: 40px;
+
   display: grid;
   gap: 20px;
+
   background-color: var(--accent-color);
   border-radius: var(--indent-s);
   background-color: var(--white-color);
@@ -24,12 +26,12 @@
     text-decoration: underline;
     font-size: 14px;
     font-family: var(--fontRoboto);
-    font-style: italic;
   }
 }
 
 .label {
   width: 100%;
+
   font-size: 16px;
   font-weight: 500;
   text-transform: capitalize;
@@ -45,7 +47,9 @@
   height: 46px;
   width: 100%;
   padding: 0 12px;
+
   display: flex;
+
   outline: none;
   border: 1px solid var(--border-color);
   transition: border-color 0.25s;

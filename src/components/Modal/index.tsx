@@ -1,14 +1,16 @@
-'use client';
-
-import classNames from 'classnames';
 import { FC, KeyboardEvent, MouseEvent, ReactNode, useEffect } from 'react';
+import classNames from 'classnames';
+import { createPortal } from 'react-dom';
 
-import s from './Modal.module.scss';
+import s from './index.module.scss';
+
 declare global {
   interface WindowEventMap {
     keydown: KeyboardEvent<Document>;
   }
 }
+
+const modalRoot = document.querySelector('#modal');
 
 interface IModalProps {
   className?: string;
@@ -40,18 +42,20 @@ const Modal: FC<IModalProps> = ({
     e.target === e.currentTarget && setIsModal(false);
   };
 
-  return (
-    <div
-      className={classNames(
-        s.backdrop,
-        background && s[background],
-        blur && s[`blur__${blur}`],
-      )}
-      onClick={handleBackdropClick}
-    >
-      <div className={classNames(s.modal, className)}>{children}</div>
-    </div>
-  );
+  if (modalRoot)
+    return createPortal(
+      <div
+        className={classNames(
+          s.backdrop,
+          background && s[background],
+          blur && s[`blur__${blur}`],
+        )}
+        onClick={handleBackdropClick}
+      >
+        <div className={classNames(s.modal, className)}>{children}</div>
+      </div>,
+      modalRoot,
+    );
 };
 
 export default Modal;
