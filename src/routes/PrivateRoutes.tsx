@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import OvalLoader from 'components/Loader';
+import OvalLoader from 'components/ui/Loader';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 // import { useAuth } from 'utils/hooks/useAuth';
 

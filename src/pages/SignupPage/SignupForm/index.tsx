@@ -1,4 +1,4 @@
-import InputRHF from 'components/InputRHF';
+import InputRhf from 'components/InputRhf';
 import Button from 'components/ui/Button';
 import H3 from 'components/ui/Typography/H3';
 import { Resolver, SubmitHandler, useForm } from 'react-hook-form';
@@ -40,7 +40,7 @@ const SignupForm = () => {
       </div>
 
       {inputFields.map(el => (
-        <InputRHF key={el} inputName={el} errors={errors} register={register} />
+        <InputRhf key={el} inputName={el} errors={errors} register={register} />
       ))}
 
       <Button type="submit" border="round" label="Submit" />

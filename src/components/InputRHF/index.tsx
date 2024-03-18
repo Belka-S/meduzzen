@@ -17,7 +17,7 @@ interface IInputProps<T extends FieldValues> {
   size?: 's' | 'm' | 'l';
 }
 
-const InputRHF = <T extends FieldValues>(props: IInputProps<T>) => {
+const InputRhf = <T extends FieldValues>(props: IInputProps<T>) => {
   const {
     className,
     inputName,
@@ -50,4 +50,4 @@ const InputRHF = <T extends FieldValues>(props: IInputProps<T>) => {
   );
 };
 
-export default InputRHF;
+export default InputRhf;

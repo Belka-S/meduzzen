@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import classNames from 'classnames';
-import Modal from 'components/Modal';
+import Modal from 'components/ui/Modal';
 
 // import { useAuth } from 'utils/hooks';
 import SigninForm from './SigninForm';
