@@ -8,7 +8,7 @@ const PublicRoutes = () => {
   const { state } = useLocation();
   // const { isLoggedIn, isRefreshing } = useAuth();
   // const shouldRedirect = !isLoggedIn && !isRefreshing;
-  const shouldRedirect = false;
+  const shouldRedirect = true;
 
   return shouldRedirect ? (
     <Suspense fallback={<OvalLoader />}>

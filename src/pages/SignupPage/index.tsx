@@ -17,7 +17,7 @@ const SignupPage = () => {
   // }, [user]);
 
   return (
-    <div className={classNames('container', s.sign)}>
+    <div className={classNames('container', s.screen)}>
       <SignupForm />
 
       {isModal && (

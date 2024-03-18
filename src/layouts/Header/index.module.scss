@@ -11,8 +11,9 @@
 
   border-bottom: 1px solid var(--border-color);
 
-  & a:has(:global(.active)),
-  a:global(.active) {
+  // & a:has(:global(.active))
+  & a:global(.active),
+  a:global(.active) + a {
     color: var(--hover-color);
   }
 }

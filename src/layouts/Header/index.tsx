@@ -12,10 +12,12 @@ const Header = () => {
         <SvgIcon svgId="menu-home" size={32} />
       </NavLink>
 
-      <NavLink to={'/signin'}>
-        <H5>Log In</H5>
+      <div>
         <NavLink to={'/signup'} />
-      </NavLink>
+        <NavLink to={'/signin'}>
+          <H5>Log In</H5>
+        </NavLink>
+      </div>
     </div>
   );
 };
