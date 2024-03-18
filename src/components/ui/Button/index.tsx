@@ -1,18 +1,15 @@
-'use client';
-
-import classNames from 'classnames';
 import { FC, MouseEvent, ReactElement } from 'react';
+import classNames from 'classnames';
 
-import styles from './Button.module.scss';
-
-type Size = 's' | 'm' | 'l';
+import s from './index.module.scss';
 
 interface IButtonProps {
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
   className?: string;
-  size?: Size;
+  size?: 's' | 'm' | 'l';
   type?: 'button' | 'submit' | 'reset';
   variant?: 'default' | 'outlined' | 'transparent' | 'disabled';
+  border?: 'orthogonal' | 'round';
   label?: string;
   children?: ReactElement;
 }
@@ -21,9 +18,10 @@ const Button: FC<IButtonProps> = props => {
   const {
     onClick,
     className,
-    size = 's',
+    size = 'm',
     type = 'button',
     variant = 'default',
+    border = 'orthogonal',
     label,
     children,
   } = props;
@@ -33,9 +31,10 @@ const Button: FC<IButtonProps> = props => {
       onClick={onClick}
       type={type}
       className={classNames(
-        styles.button,
-        styles[size],
-        styles[variant],
+        s.button,
+        s[size],
+        s[variant],
+        s[border],
         className,
       )}
     >

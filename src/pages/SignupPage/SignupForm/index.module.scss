@@ -1,0 +1,30 @@
+.form {
+  min-width: 400px;
+  padding: 40px;
+
+  display: grid;
+  gap: 20px;
+
+  background-color: var(--accent-color);
+  border-radius: var(--indent-s);
+  background-color: var(--white-color);
+  box-shadow: 0 3px 5px -1px rgb(0 0 0/20%), 0 6px 10px 0 rgb(0 0 0/14%),
+    0 1px 18px 0 rgb(0 0 0/12%);
+}
+
+.title__wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+
+  & .title {
+    font-family: var(--fontMontserrat);
+  }
+
+  & .navlink {
+    color: var(--hover-color);
+    text-decoration: underline;
+    font-size: 14px;
+    font-family: var(--fontRoboto);
+  }
+}

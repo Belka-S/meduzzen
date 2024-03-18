@@ -1,0 +1,45 @@
+.toast {
+  width: fit-content;
+
+  & button[aria-label='close'] {
+    & svg {
+      color: var(--placeholder-color);
+    }
+  }
+  .toast {
+    color: var(--black-color);
+  }
+
+  & .Toastify__toast--info {
+    .body {
+      & svg {
+        fill: var(--accent-color);
+      }
+    }
+    .progress {
+      background-color: var(--accent-color);
+    }
+  }
+
+  & .Toastify__toast--success {
+    .body {
+      & svg {
+        fill: var(--success-color);
+      }
+    }
+    .progress {
+      background-color: var(--success-color);
+    }
+  }
+
+  & .Toastify__toast--error {
+    .body {
+      & svg {
+        fill: var(--alert-color);
+      }
+    }
+    .progress {
+      background-color: var(--alert-color);
+    }
+  }
+}
