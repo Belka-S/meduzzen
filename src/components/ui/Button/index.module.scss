@@ -7,7 +7,6 @@
   cursor: pointer;
   background: none;
   font-weight: 700;
-  font-size: 18px;
 }
 
 //border
@@ -20,6 +19,7 @@
   height: var(--btn-height-s);
   padding: var(--btn-gap-s);
   gap: var(--btn-gap-s);
+  font-size: var(--btn-font-s);
 
   &.round {
     border-radius: calc(var(--btn-height-s) / 2);
@@ -30,6 +30,7 @@
   height: var(--btn-height-m);
   padding: var(--btn-gap-m);
   gap: var(--btn-gap-m);
+  font-size: var(--btn-font-m);
 
   &.round {
     border-radius: calc(var(--btn-height-m) / 2);
@@ -40,6 +41,7 @@
   height: var(--btn-height-l);
   padding: var(--btn-gap-l);
   gap: var(--btn-gap-l);
+  font-size: var(--btn-font-l);
 
   &.round {
     border-radius: calc(var(--btn-height-l) / 2);

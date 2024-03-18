@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import classNames from 'classnames';
-import CodeForm from 'components/CodeForm';
 import Modal from 'components/Modal';
 
 // import { useAuth } from 'utils/hooks';
@@ -20,11 +19,7 @@ const SignupPage = () => {
     <div className={classNames('container', s.screen)}>
       <SignupForm />
 
-      {isModal && (
-        <Modal setIsModal={setIsModal}>
-          <CodeForm />
-        </Modal>
-      )}
+      {isModal && <Modal setIsModal={setIsModal}>qwe</Modal>}
     </div>
   );
 };

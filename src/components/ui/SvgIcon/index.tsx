@@ -3,13 +3,13 @@ import classNames from 'classnames';
 
 import s from './index.module.scss';
 
-type SvgIconProps = {
+type TSvgIconProps = {
   svgId: string;
   size?: number;
   className?: string;
 };
 
-const SvgIcon = ({ svgId, size = 20, className = '' }: SvgIconProps) => {
+const SvgIcon = ({ svgId, size = 20, className = '' }: TSvgIconProps) => {
   return (
     <svg
       className={classNames(s.svgIcon, className)}

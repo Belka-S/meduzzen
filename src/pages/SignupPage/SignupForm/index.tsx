@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import InputRHF from 'components/InputRHF';
 import Button from 'components/ui/Button';
 import H3 from 'components/ui/Typography/H3';
 import { Resolver, SubmitHandler, useForm } from 'react-hook-form';
@@ -11,21 +11,21 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import s from './index.module.scss';
 
-type Inputs = InferType<typeof signupSchema>;
+type TInput = InferType<typeof signupSchema>;
 
-const inputFields = Object.keys(signupSchema.fields) as Array<keyof Inputs>;
+const inputFields = Object.keys(signupSchema.fields) as Array<keyof TInput>;
 
 const SignupForm = () => {
   // const router = useRouter();
-  const resolver: Resolver<Inputs> = yupResolver(signupSchema);
+  const resolver: Resolver<TInput> = yupResolver(signupSchema);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>({ mode: 'onChange', resolver });
+  } = useForm<TInput>({ mode: 'onChange', resolver });
 
-  const onSubmit: SubmitHandler<Inputs> = data => {
+  const onSubmit: SubmitHandler<TInput> = data => {
     console.log('data: ', data);
     // dispatch(registerThunk(data));
   };
@@ -34,27 +34,16 @@ const SignupForm = () => {
     <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
       <div className={s.title__wrap}>
         <H3 className={s.title}>Sign Up</H3>
-        <NavLink to={'/signin'} className={s.navlink} href="#">
+        <NavLink to={'/signin'} className={s.navlink}>
           Have an account?
         </NavLink>
       </div>
 
-      {inputFields.map(field => (
-        <label key={field}>
-          <span className={s.label}>{field}</span>
-          <span className={s.error}> {errors[field]?.message}</span>
-          <input
-            type={field}
-            placeholder=""
-            readOnly
-            onFocus={e => e.target.removeAttribute('readonly')}
-            className={classNames(s.input, errors[field] ? s.invalid : s.valid)}
-            {...register(field, { required: true })}
-          />
-        </label>
+      {inputFields.map(el => (
+        <InputRHF key={el} inputName={el} errors={errors} register={register} />
       ))}
 
-      <Button type="submit" border="round" size="m" label="Submit" />
+      <Button type="submit" border="round" label="Submit" />
     </form>
   );
 };

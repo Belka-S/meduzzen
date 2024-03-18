@@ -18,7 +18,7 @@ const Button: FC<IButtonProps> = props => {
   const {
     onClick,
     className,
-    size = 's',
+    size = 'm',
     type = 'button',
     variant = 'default',
     border = 'orthogonal',

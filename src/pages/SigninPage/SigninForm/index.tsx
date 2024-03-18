@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import InputRHF from 'components/InputRHF';
 import Button from 'components/ui/Button';
 import H3 from 'components/ui/Typography/H3';
 import { Resolver, SubmitHandler, useForm } from 'react-hook-form';
@@ -15,25 +15,25 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import s from './index.module.scss';
 
-type Inputs = InferType<typeof signinSchema>;
+type TInput = InferType<typeof signinSchema>;
 
-const inputFields = Object.keys(signinSchema.fields) as Array<keyof Inputs>;
+const inputFields = Object.keys(signinSchema.fields) as Array<keyof TInput>;
 
 const SigninForm = () => {
   // const { user } = useAuth();
 
-  const resolver: Resolver<Inputs> = yupResolver(signinSchema);
+  const resolver: Resolver<TInput> = yupResolver(signinSchema);
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>({
+  } = useForm<TInput>({
     resolver,
     mode: 'onChange',
     // defaultValues: { email: user.email },
   });
 
-  const onSubmit: SubmitHandler<Inputs> = data => {
+  const onSubmit: SubmitHandler<TInput> = data => {
     console.log('data: ', data);
     // dispatch(loginThunk(data))
     //   .unwrap()
@@ -50,22 +50,11 @@ const SigninForm = () => {
         </NavLink>
       </div>
 
-      {inputFields.map(field => (
-        <label key={field}>
-          <span className={s.label}>{field}</span>
-          <span className={s.error}> {errors[field]?.message}</span>
-          <input
-            type={field}
-            placeholder=""
-            readOnly
-            onFocus={e => e.target.removeAttribute('readonly')}
-            className={classNames(s.input, errors[field] ? s.invalid : s.valid)}
-            {...register(field, { required: true })}
-          />
-        </label>
+      {inputFields.map(el => (
+        <InputRHF key={el} inputName={el} errors={errors} register={register} />
       ))}
 
-      <Button type="submit" border="round" size="m" label="Submit" />
+      <Button type="submit" border="round" label="Submit" />
     </form>
   );
 };
