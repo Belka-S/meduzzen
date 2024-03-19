@@ -3,10 +3,10 @@ import { toast } from 'react-toastify';
 import { store } from 'store';
 import { authenticate } from 'store/auth';
 
-const { VITE_PROD_BACK_HTTP } = import.meta.env;
+// const { VITE_PROD_BACK_HTTP } = import.meta.env;
 
 // base URL
-export const baseURL = `${VITE_PROD_BACK_HTTP}/api`;
+export const baseURL = `https://mern-starter-ts.onrender.com/api`;
 
 // axios instance
 const apiClient = axios.create({ baseURL });
