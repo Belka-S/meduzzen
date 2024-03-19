@@ -3,11 +3,10 @@ import Button from 'components/ui/Button';
 import H3 from 'components/ui/Typography/H3';
 import { Resolver, SubmitHandler, useForm } from 'react-hook-form';
 import { NavLink } from 'react-router-dom';
-// import { toast } from 'react-toastify';
-// import { loginThunk } from 'store/auth/authThunks';
-// import { deleteElement, fetchElements } from 'store/elements/elementSlice';
-// import { fetchElementsThunk } from 'store/elements/elementThunks';
-// import { useAuth } from 'utils/hooks';
+import { toast } from 'react-toastify';
+import { useTAppDispatch } from 'store';
+import { loginThunk } from 'store/auth';
+import { useAuth } from 'utils/hooks';
 import { signinSchema } from 'utils/validation';
 import { InferType } from 'yup';
 
@@ -20,7 +19,8 @@ type TInput = InferType<typeof signinSchema>;
 const inputFields = Object.keys(signinSchema.fields) as Array<keyof TInput>;
 
 const SigninForm = () => {
-  // const { user } = useAuth();
+  const dispatch = useTAppDispatch();
+  const { user } = useAuth();
 
   const resolver: Resolver<TInput> = yupResolver(signinSchema);
   const {
@@ -30,15 +30,13 @@ const SigninForm = () => {
   } = useForm<TInput>({
     resolver,
     mode: 'onChange',
-    // defaultValues: { email: user.email },
+    defaultValues: { email: user.email },
   });
 
   const onSubmit: SubmitHandler<TInput> = data => {
-    console.log('data: ', data);
-    // dispatch(loginThunk(data))
-    //   .unwrap()
-    //   .then(pld => console.log(pld))
-    //   .catch(err => err.includes('401') && toast.error('Unauthorized'));
+    dispatch(loginThunk(data))
+      .unwrap()
+      .catch(err => toast.error(err.message));
   };
 
   return (

@@ -1,8 +1,7 @@
-import 'react-toastify/dist/ReactToastify.css';
-
 import { ToastContainer } from 'react-toastify';
 
-import s from './Toast.module.scss';
+import 'react-toastify/dist/ReactToastify.css';
+import s from './index.module.scss';
 
 const Toast = () => (
   <ToastContainer

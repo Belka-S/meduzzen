@@ -1,14 +1,12 @@
 import { Suspense } from 'react';
 import OvalLoader from 'components/ui/Loader';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-
-// import { useAuth } from 'utils/hooks/useAuth';
+import { useAuth } from 'utils/hooks/useAuth';
 
 const PublicRoutes = () => {
   const { state } = useLocation();
-  // const { isLoggedIn, isRefreshing } = useAuth();
-  // const shouldRedirect = !isLoggedIn && !isRefreshing;
-  const shouldRedirect = true;
+  const { isAuth, isLoading } = useAuth();
+  const shouldRedirect = !isAuth && !isLoading;
 
   return shouldRedirect ? (
     <Suspense fallback={<OvalLoader />}>

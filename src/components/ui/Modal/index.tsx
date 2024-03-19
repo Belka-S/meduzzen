@@ -12,15 +12,15 @@ declare global {
 
 const modalRoot = document.querySelector('#modal');
 
-interface IModalProps {
+type TModalProps = {
   className?: string;
   setIsModal: (isModal: boolean) => void;
   background?: 'default' | 'transparent';
   blur?: 'none';
   children: ReactNode;
-}
+};
 
-const Modal: FC<IModalProps> = ({
+const Modal: FC<TModalProps> = ({
   className,
   setIsModal,
   background = 'default',

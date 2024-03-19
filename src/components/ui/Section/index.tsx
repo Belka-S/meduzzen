@@ -3,12 +3,12 @@ import classNames from 'classnames';
 
 import s from './Section.module.scss';
 
-interface ISectionProps {
+type TSectionProps = {
   className?: string;
   children: ReactNode;
-}
+};
 
-const Section: FC<ISectionProps> = ({ className = '', children }) => {
+const Section: FC<TSectionProps> = ({ className = '', children }) => {
   return (
     <section className={classNames(s.section, className)}>{children}</section>
   );

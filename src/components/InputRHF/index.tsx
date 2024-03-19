@@ -8,16 +8,16 @@ import {
 
 import s from './index.module.scss';
 
-interface IInputProps<T extends FieldValues> {
+type TInputProps<T extends FieldValues> = {
   className?: string;
   inputName: Path<T>;
   errors: Record<string, GlobalError>;
   register: UseFormRegister<T>;
   placeholder?: string;
   size?: 's' | 'm' | 'l';
-}
+};
 
-const InputRhf = <T extends FieldValues>(props: IInputProps<T>) => {
+const InputRhf = <T extends FieldValues>(props: TInputProps<T>) => {
   const {
     className,
     inputName,
