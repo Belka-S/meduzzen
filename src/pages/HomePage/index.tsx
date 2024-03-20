@@ -16,7 +16,7 @@ const HomePage = () => {
   return (
     <Section className={classNames('container', s.screen)}>
       <H1>Home Page</H1>
-      <H2>{`Status ${server.status}`}</H2>
+      <H2>{`Status: ${server.status}`}</H2>
       <Button
         variant="outlined"
         label="Check Server Status"

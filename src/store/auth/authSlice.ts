@@ -9,19 +9,7 @@ import {
 
 import { TUserInitialState, userInitialState } from './initialState';
 
-const thunkArr = [
-  TNK.registerThunk,
-  TNK.loginThunk,
-  TNK.logoutThunk,
-
-  TNK.verifyEmailThunk,
-  TNK.forgotPassThunk,
-  TNK.resetPassThunk,
-
-  TNK.refreshUserThunk,
-  TNK.updateUserThunk,
-  TNK.deleteUserThunk,
-];
+const thunkArr = [TNK.registerThunk, TNK.loginThunk];
 
 const fn = (type: 'pending' | 'fulfilled' | 'rejected') =>
   thunkArr.map(el => {
@@ -36,14 +24,12 @@ const handleLoginSucsess = (
   action: PayloadAction<{ result: { user: TUserInitialState } }>,
 ) => action.payload.result.user;
 
-const handleLogoutSucsess = () => userInitialState;
-
 const handleAuthSucsess = (
   state: TUserInitialState,
   action: PayloadAction<{ result: { user: TUserInitialState } }>,
 ) => {
-  const { accessToken, refreshToken } = action.payload.result.user;
-  return { ...state, accessToken, refreshToken };
+  const { accessToken } = action.payload.result.user;
+  return { ...state, accessToken };
 };
 // auth
 const authUserSlice = createSlice({
@@ -56,18 +42,7 @@ const authUserSlice = createSlice({
     builder
       // auth
       .addCase(TNK.registerThunk.fulfilled, handleLoginSucsess)
-      .addCase(TNK.loginThunk.fulfilled, handleLoginSucsess)
-      .addCase(TNK.logoutThunk.fulfilled, handleLogoutSucsess)
-      // auth from localStorage
-      .addCase(TNK.refreshUserThunk.fulfilled, handleLoginSucsess)
-      // verify email
-      .addCase(TNK.verifyEmailThunk.fulfilled, handleLoginSucsess)
-      // reset password
-      .addCase(TNK.forgotPassThunk.fulfilled, handleLogoutSucsess)
-      .addCase(TNK.resetPassThunk.fulfilled, handleLogoutSucsess)
-      // update profile
-      .addCase(TNK.updateUserThunk.fulfilled, handleLoginSucsess)
-      .addCase(TNK.deleteUserThunk.fulfilled, handleLogoutSucsess);
+      .addCase(TNK.loginThunk.fulfilled, handleLoginSucsess);
   },
 });
 
