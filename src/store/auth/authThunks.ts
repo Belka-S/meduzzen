@@ -1,21 +1,6 @@
 import * as API from 'api/userApi';
 import { AxiosError } from 'axios';
-import { TAppDispatch, TRootState } from 'store';
-
-import { createAsyncThunk } from '@reduxjs/toolkit';
-
-export type TError = {
-  message: string;
-  description: string;
-  code: number | undefined;
-};
-
-const createAppAsyncThunk = createAsyncThunk.withTypes<{
-  state: TRootState;
-  dispatch: TAppDispatch;
-  rejectValue: TError;
-  extra: { s: string; n: number };
-}>();
+import { createAppAsyncThunk, TError } from 'store/types';
 
 // auth
 export const registerThunk = createAppAsyncThunk(

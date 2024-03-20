@@ -13,6 +13,7 @@ import storage from 'redux-persist/lib/storage';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
 import { authReducer } from './auth/authSlice';
+import { commonReducer } from './common/commonSlice';
 
 // ----------------persistReducer---------------- //
 
@@ -22,13 +23,14 @@ const authPersistConfig = {
   whitelist: ['user'],
 };
 
-const rootReducer = combineReducers({
+export const rootReducer = combineReducers({
+  common: commonReducer,
   auth: persistReducer(authPersistConfig, authReducer),
 });
 
 // ----------------configureStore---------------- //
 
-const makeStore = () => {
+export const makeStore = () => {
   return configureStore({
     reducer: rootReducer,
     middleware: getDefaultMiddleware =>
@@ -41,10 +43,6 @@ const makeStore = () => {
 };
 
 export const store = makeStore();
-
-export type TRootState = ReturnType<typeof rootReducer>; // without rootReducer -> TRootState = ReturnType<typeof store.getState>;
-export type TAppStore = ReturnType<typeof makeStore>;
-export type TAppDispatch = typeof store.dispatch;
 
 // -----------------persistStore----------------- //
 

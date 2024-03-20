@@ -1,7 +1,7 @@
 import { FC, ReactNode } from 'react';
 import classNames from 'classnames';
 
-import s from './Section.module.scss';
+import s from './index.module.scss';
 
 type TSectionProps = {
   className?: string;
