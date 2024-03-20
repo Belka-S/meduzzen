@@ -1,4 +1,4 @@
-import * as TNK from 'store/common/commonThunks';
+import * as TNK from 'store/server/serverThunks';
 
 import {
   combineReducers,
@@ -53,8 +53,8 @@ const commonSlice = createSlice({
 });
 
 // loading slice
-const authIsLoadingSlice = createSlice({
-  name: 'isLoading',
+const loadingSlice = createSlice({
+  name: 'loading',
   initialState: false,
   reducers: {},
   extraReducers: builder => {
@@ -66,7 +66,7 @@ const authIsLoadingSlice = createSlice({
 });
 
 // error slice
-const authErrorSlice = createSlice({
+const errorSlice = createSlice({
   name: 'error',
   initialState: false,
   reducers: {},
@@ -80,6 +80,6 @@ const authErrorSlice = createSlice({
 
 export const commonReducer = combineReducers({
   server: commonSlice.reducer,
-  isLoading: authIsLoadingSlice.reducer,
-  error: authErrorSlice.reducer,
+  loading: loadingSlice.reducer,
+  error: errorSlice.reducer,
 });

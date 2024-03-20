@@ -13,7 +13,7 @@ import storage from 'redux-persist/lib/storage';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
 import { authReducer } from './auth/authSlice';
-import { commonReducer } from './common/commonSlice';
+import { commonReducer } from './server/serverSlice';
 
 // ----------------persistReducer---------------- //
 

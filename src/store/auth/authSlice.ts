@@ -72,8 +72,8 @@ const authUserSlice = createSlice({
 });
 
 // loading slice
-const authIsLoadingSlice = createSlice({
-  name: 'isLoading',
+const authLoadingSlice = createSlice({
+  name: 'Loading',
   initialState: false,
   reducers: {},
   extraReducers: builder => {
@@ -99,7 +99,7 @@ const authErrorSlice = createSlice({
 
 export const authReducer = combineReducers({
   user: authUserSlice.reducer,
-  isLoading: authIsLoadingSlice.reducer,
+  loading: authLoadingSlice.reducer,
   error: authErrorSlice.reducer,
 });
 
