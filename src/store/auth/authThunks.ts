@@ -1,6 +1,6 @@
 import * as API from 'api/userApi';
-import { AxiosError } from 'axios';
-import { createAppAsyncThunk, TError } from 'store/types';
+import axios from 'axios';
+import { createAppAsyncThunk } from 'store';
 
 // auth
 export const registerThunk = createAppAsyncThunk(
@@ -9,11 +9,9 @@ export const registerThunk = createAppAsyncThunk(
     try {
       return await API.register(credentials);
     } catch (error) {
-      const err = error as AxiosError<TError>;
-      if (!err.response) {
-        throw error;
+      if (axios.isAxiosError(error)) {
+        return thunkAPI.rejectWithValue(error.response?.data);
       }
-      return thunkAPI.rejectWithValue(err.response.data);
     }
   },
 );
@@ -24,11 +22,9 @@ export const loginThunk = createAppAsyncThunk(
     try {
       return await API.login(credentials);
     } catch (error) {
-      const err = error as AxiosError<TError>;
-      if (!err.response) {
-        throw error;
+      if (axios.isAxiosError(error)) {
+        return thunkAPI.rejectWithValue(error.response?.data);
       }
-      return thunkAPI.rejectWithValue(err.response.data);
     }
   },
 );

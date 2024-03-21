@@ -1,6 +1,6 @@
 import * as API from 'api/commonApi';
-import { AxiosError } from 'axios';
-import { createAppAsyncThunk, TError } from 'store/types';
+import axios from 'axios';
+import { createAppAsyncThunk } from 'store';
 
 // common
 export const checkStatusThunk = createAppAsyncThunk(
@@ -9,11 +9,9 @@ export const checkStatusThunk = createAppAsyncThunk(
     try {
       return await API.checkStatus();
     } catch (error) {
-      const err = error as AxiosError<TError>;
-      if (!err.response) {
-        throw error;
+      if (axios.isAxiosError(error)) {
+        return thunkAPI.rejectWithValue(error.response?.data);
       }
-      return thunkAPI.rejectWithValue(err.response.data);
     }
   },
 );
@@ -24,11 +22,9 @@ export const getLogsThunk = createAppAsyncThunk(
     try {
       return await API.getLogs();
     } catch (error) {
-      const err = error as AxiosError<TError>;
-      if (!err.response) {
-        throw error;
+      if (axios.isAxiosError(error)) {
+        return thunkAPI.rejectWithValue(error.response?.data);
       }
-      return thunkAPI.rejectWithValue(err.response.data);
     }
   },
 );
@@ -39,11 +35,9 @@ export const pingThunk = createAppAsyncThunk(
     try {
       return await API.ping(val);
     } catch (error) {
-      const err = error as AxiosError<TError>;
-      if (!err.response) {
-        throw error;
+      if (axios.isAxiosError(error)) {
+        return thunkAPI.rejectWithValue(error.response?.data);
       }
-      return thunkAPI.rejectWithValue(err.response.data);
     }
   },
 );

@@ -1,10 +1,9 @@
-import InputRhf from 'components/InputRhf';
+import InputRhf from 'components/InputRHF';
 import Button from 'components/ui/Button';
 import H3 from 'components/ui/Typography/H3';
 import { Resolver, SubmitHandler, useForm } from 'react-hook-form';
 import { NavLink } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { useTAppDispatch } from 'store';
+import { useAppExtraDispatch } from 'store';
 import { loginThunk } from 'store/auth';
 import { useAuth } from 'utils/hooks';
 import { signinSchema } from 'utils/validation';
@@ -19,7 +18,7 @@ type TInput = InferType<typeof signinSchema>;
 const inputFields = Object.keys(signinSchema.fields) as Array<keyof TInput>;
 
 const SigninForm = () => {
-  const dispatch = useTAppDispatch();
+  const dispatch = useAppExtraDispatch();
   const { user } = useAuth();
 
   const resolver: Resolver<TInput> = yupResolver(signinSchema);
@@ -34,9 +33,7 @@ const SigninForm = () => {
   });
 
   const onSubmit: SubmitHandler<TInput> = data => {
-    dispatch(loginThunk(data))
-      .unwrap()
-      .catch(err => toast.error(err.message));
+    dispatch(loginThunk(data));
   };
 
   return (

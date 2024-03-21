@@ -1,10 +1,9 @@
-import InputRhf from 'components/InputRhf';
+import InputRhf from 'components/InputRHF';
 import Button from 'components/ui/Button';
 import H3 from 'components/ui/Typography/H3';
 import { Resolver, SubmitHandler, useForm } from 'react-hook-form';
 import { NavLink } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { useTAppDispatch } from 'store';
+import { useAppExtraDispatch } from 'store';
 import { registerThunk } from 'store/auth';
 import { signupSchema } from 'utils/validation';
 import { InferType } from 'yup';
@@ -18,7 +17,7 @@ type TInput = InferType<typeof signupSchema>;
 const inputFields = Object.keys(signupSchema.fields) as Array<keyof TInput>;
 
 const SignupForm = () => {
-  const dispatch = useTAppDispatch();
+  const dispatch = useAppExtraDispatch();
   const resolver: Resolver<TInput> = yupResolver(signupSchema);
 
   const {
@@ -28,10 +27,7 @@ const SignupForm = () => {
   } = useForm<TInput>({ mode: 'onChange', resolver });
 
   const onSubmit: SubmitHandler<TInput> = data => {
-    dispatch(registerThunk(data))
-      .unwrap() // .then(pld => setIsVM(!pld.result.user.verifiedEmail))
-      .then(pld => console.log(pld))
-      .catch(err => toast.error(err.message));
+    dispatch(registerThunk(data));
   };
 
   return (
