@@ -1,9 +1,8 @@
 import { useDispatch, useSelector, useStore } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
+import type { TAppStore, TRootState } from 'store';
 
 import { PayloadAction } from '@reduxjs/toolkit';
-
-import type { TAppStore, TRootState } from './store';
 
 export const useAppSelector = useSelector.withTypes<TRootState>();
 // export const useAppSelector: TypedUseSelectorHook<TRootState> = useSelector;

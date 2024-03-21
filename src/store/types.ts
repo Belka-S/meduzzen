@@ -1,4 +1,5 @@
-import { makeStore, rootReducer, store } from 'sto';
+
+import { makeStore, rootReducer, store } from 'store';
 
 import { createAsyncThunk } from '@reduxjs/toolkit';
 

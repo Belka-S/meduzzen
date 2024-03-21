@@ -13,14 +13,9 @@ const thunkArr = [TNK.registerThunk, TNK.loginThunk];
 
 const fn = (type: 'pending' | 'fulfilled' | 'rejected') =>
   thunkArr.map(el => {
-    switch (type) {
-      case 'pending':
-        return el.pending;
-      case 'rejected':
-        return el.rejected;
-      default:
-        return el.fulfilled;
-    }
+    if (type === 'pending') return el.pending;
+    if (type === 'fulfilled') return el.fulfilled;
+    else return el.rejected;
   });
 
 // fulfilled slice
@@ -52,8 +47,8 @@ const authUserSlice = createSlice({
 });
 
 // loading slice
-const authIsLoadingSlice = createSlice({
-  name: 'isLoading',
+const authLoadingSlice = createSlice({
+  name: 'Loading',
   initialState: false,
   reducers: {},
   extraReducers: builder => {
@@ -79,7 +74,7 @@ const authErrorSlice = createSlice({
 
 export const authReducer = combineReducers({
   user: authUserSlice.reducer,
-  isLoading: authIsLoadingSlice.reducer,
+  loading: authLoadingSlice.reducer,
   error: authErrorSlice.reducer,
 });
 
