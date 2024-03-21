@@ -18,7 +18,7 @@ const CompanyListPage = lazy(() => import('pages/CompanyListPage'));
 const CompanyPage = lazy(() => import('pages/CompanyPage'));
 
 const App = () => {
-  const { isLoading } = useAuth();
+  const { isLoading, isAuth } = useAuth();
 
   useEffect(() => {
     loadWebFonts();
@@ -26,7 +26,7 @@ const App = () => {
 
   return (
     <>
-      {!isLoading && (
+      {(!isLoading || isAuth) && (
         <Routes>
           <Route path="/" element={<SharedLayout />}>
             <Route index element={<HomePage />} />

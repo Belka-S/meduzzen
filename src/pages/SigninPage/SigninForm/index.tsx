@@ -4,8 +4,7 @@ import H3 from 'components/ui/Typography/H3';
 import { Resolver, SubmitHandler, useForm } from 'react-hook-form';
 import { NavLink } from 'react-router-dom';
 import { useAppExtraDispatch } from 'store';
-import { loginThunk } from 'store/auth';
-import { useAuth } from 'utils/hooks';
+import { authThunk, loginThunk } from 'store/auth';
 import { signinSchema } from 'utils/validation';
 import { InferType } from 'yup';
 
@@ -19,7 +18,6 @@ const inputFields = Object.keys(signinSchema.fields) as Array<keyof TInput>;
 
 const SigninForm = () => {
   const dispatch = useAppExtraDispatch();
-  const { user } = useAuth();
 
   const resolver: Resolver<TInput> = yupResolver(signinSchema);
   const {
@@ -29,11 +27,13 @@ const SigninForm = () => {
   } = useForm<TInput>({
     resolver,
     mode: 'onChange',
-    defaultValues: { email: user.email },
   });
 
   const onSubmit: SubmitHandler<TInput> = data => {
-    dispatch(loginThunk(data));
+    const { email: user_email, password: user_password } = data;
+    dispatch(authThunk({ user_email, user_password }))
+      .unwrap()
+      .then(() => dispatch(loginThunk()));
   };
 
   return (
@@ -49,7 +49,7 @@ const SigninForm = () => {
         <InputRhf key={el} inputName={el} errors={errors} register={register} />
       ))}
 
-      <Button type="submit" border="round" label="Submit" />
+      <Button type="submit" variant="smooth" label="Submit" />
     </form>
   );
 };

@@ -1,7 +1,7 @@
 import { regExp } from 'utils/constants';
 import * as Yup from 'yup';
 
-const pattern = (regExp: regExp.IRegExp): [RegExp, string] => {
+const pattern = (regExp: regExp.TRegExp): [RegExp, string] => {
   return [regExp.pattern, regExp.msg];
 };
 

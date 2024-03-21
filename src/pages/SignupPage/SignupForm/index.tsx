@@ -3,8 +3,8 @@ import Button from 'components/ui/Button';
 import H3 from 'components/ui/Typography/H3';
 import { Resolver, SubmitHandler, useForm } from 'react-hook-form';
 import { NavLink } from 'react-router-dom';
-import { useAppExtraDispatch } from 'store';
-import { registerThunk } from 'store/auth';
+// import { useAppExtraDispatch } from 'store';
+// import { registerThunk } from 'store/auth';
 import { signupSchema } from 'utils/validation';
 import { InferType } from 'yup';
 
@@ -17,7 +17,7 @@ type TInput = InferType<typeof signupSchema>;
 const inputFields = Object.keys(signupSchema.fields) as Array<keyof TInput>;
 
 const SignupForm = () => {
-  const dispatch = useAppExtraDispatch();
+  // const dispatch = useAppExtraDispatch();
   const resolver: Resolver<TInput> = yupResolver(signupSchema);
 
   const {
@@ -27,7 +27,8 @@ const SignupForm = () => {
   } = useForm<TInput>({ mode: 'onChange', resolver });
 
   const onSubmit: SubmitHandler<TInput> = data => {
-    dispatch(registerThunk(data));
+    console.log('data: ', data);
+    // dispatch(registerThunk(data));
   };
 
   return (
@@ -43,7 +44,7 @@ const SignupForm = () => {
         <InputRhf key={el} inputName={el} errors={errors} register={register} />
       ))}
 
-      <Button type="submit" border="round" label="Submit" />
+      <Button type="submit" variant="smooth" label="Submit" />
     </form>
   );
 };

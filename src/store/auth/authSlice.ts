@@ -7,9 +7,9 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit';
 
-import { TUserInitialState, userInitialState } from './initialState';
+import { TUser, userInitialState } from './initialState';
 
-const thunkArr = [TNK.registerThunk, TNK.loginThunk];
+const thunkArr = [TNK.authThunk, TNK.loginThunk];
 
 const fn = (type: 'pending' | 'fulfilled' | 'rejected') =>
   thunkArr.map(el => {
@@ -19,30 +19,29 @@ const fn = (type: 'pending' | 'fulfilled' | 'rejected') =>
   });
 
 // fulfilled slice
-const handleLoginSucsess = (
-  _: TUserInitialState,
-  action: PayloadAction<{ result: { user: TUserInitialState } }>,
-) => action.payload.result.user;
-
 const handleAuthSucsess = (
-  state: TUserInitialState,
-  action: PayloadAction<{ result: { user: TUserInitialState } }>,
-) => {
-  const { accessToken } = action.payload.result.user;
-  return { ...state, accessToken };
-};
+  state: TUser,
+  action: PayloadAction<{ result: TUser }>,
+) => ({ ...state, ...action.payload.result });
+
+// const handleLoginSucsess = (
+//   _: TUser,
+//   action: PayloadAction<{ result: { user: TUser } }>,
+// ) => action.payload.result.user;
+
 // auth
 const authUserSlice = createSlice({
   name: 'user',
   initialState: userInitialState,
   reducers: {
-    authenticate: handleAuthSucsess,
+    logout: () => userInitialState,
   },
   extraReducers: builder => {
     builder
       // auth
-      .addCase(TNK.registerThunk.fulfilled, handleLoginSucsess)
-      .addCase(TNK.loginThunk.fulfilled, handleLoginSucsess);
+      .addCase(TNK.authThunk.fulfilled, handleAuthSucsess)
+      .addCase(TNK.loginThunk.fulfilled, handleAuthSucsess);
+    // .addCase(TNK.registerThunk.fulfilled, handleLoginSucsess)
   },
 });
 
@@ -78,4 +77,4 @@ export const authReducer = combineReducers({
   error: authErrorSlice.reducer,
 });
 
-export const { authenticate } = authUserSlice.actions;
+export const { logout } = authUserSlice.actions;

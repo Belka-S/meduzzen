@@ -1,42 +1,28 @@
-import { FC, MouseEvent, ReactElement } from 'react';
+import { FC } from 'react';
 import classNames from 'classnames';
+
+import { TButtonProps } from './types';
 
 import s from './index.module.scss';
 
-type TButtonProps = {
-  onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
-  className?: string;
-  size?: 's' | 'm' | 'l';
-  type?: 'button' | 'submit' | 'reset';
-  variant?: 'default' | 'outlined' | 'transparent' | 'disabled';
-  border?: 'orthogonal' | 'round';
-  label?: string;
-  children?: ReactElement;
-};
-
 const Button: FC<TButtonProps> = props => {
   const {
-    onClick,
     className,
     size = 'm',
+    color = 'default',
+    variant = 'orthogonal',
     type = 'button',
-    variant = 'default',
-    border = 'orthogonal',
     label,
+
+    onClick,
     children,
   } = props;
 
   return (
     <button
-      onClick={onClick}
+      className={classNames(className, s.button, s[size], s[color], s[variant])}
       type={type}
-      className={classNames(
-        s.button,
-        s[size],
-        s[variant],
-        s[border],
-        className,
-      )}
+      onClick={onClick}
     >
       {label && label}
       {children}
