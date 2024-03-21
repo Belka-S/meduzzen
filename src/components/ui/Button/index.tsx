@@ -3,7 +3,7 @@ import classNames from 'classnames';
 
 import s from './index.module.scss';
 
-interface IButtonProps {
+type TButtonProps = {
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
   className?: string;
   size?: 's' | 'm' | 'l';
@@ -12,9 +12,9 @@ interface IButtonProps {
   border?: 'orthogonal' | 'round';
   label?: string;
   children?: ReactElement;
-}
+};
 
-const Button: FC<IButtonProps> = props => {
+const Button: FC<TButtonProps> = props => {
   const {
     onClick,
     className,

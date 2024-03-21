@@ -7,13 +7,26 @@
 
   align-items: center;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 20px;
 
   border-bottom: 1px solid var(--border-color);
 
-  // & a:has(:global(.active))
-  & a:global(.active),
-  a:global(.active) + a {
+  & a {
+    font-weight: 600;
+  }
+
+  & a:global(.active) {
     color: var(--hover-color);
   }
+}
+
+.login {
+  margin-left: auto;
+
+  a:global(.active) + a,
+  & a:global(.active) {
+    color: var(--hover-color);
+  }
+  // & a:has(:global(.active))
 }

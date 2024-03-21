@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import s from './index.module.scss';
 
-const UserPage = () => {
+const ClusterPage = () => {
   const { id } = useParams();
 
   return (
@@ -14,4 +14,4 @@ const UserPage = () => {
   );
 };
 
-export default UserPage;
+export default ClusterPage;

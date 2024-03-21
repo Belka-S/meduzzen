@@ -1,1 +1,1 @@
-export * as regExp from 'utils/constants/regExp';
+export * as regExp from './regExp';
