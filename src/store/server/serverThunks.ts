@@ -2,7 +2,6 @@ import * as API from 'api/commonApi';
 import axios from 'axios';
 import { createAppAsyncThunk } from 'store';
 
-// common
 export const checkStatusThunk = createAppAsyncThunk(
   'common/check',
   async (_, thunkAPI) => {

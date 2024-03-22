@@ -2,7 +2,7 @@ import { apiClient, token } from './apiHttp';
 
 export type TCredentials = {
   user_email: string;
-  user_password?: string;
+  user_password: string;
 };
 
 export const auth = async (credentials: TCredentials) => {

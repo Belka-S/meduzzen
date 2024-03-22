@@ -7,7 +7,6 @@ const PublicRoutes = () => {
   const { state } = useLocation();
   const { isAuth, isLoading } = useAuth();
   const shouldRedirect = !isAuth && !isLoading;
-  console.log('isAuth: ', isAuth);
 
   return shouldRedirect ? (
     <Suspense fallback={<OvalLoader />}>

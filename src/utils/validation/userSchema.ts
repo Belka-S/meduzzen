@@ -6,14 +6,16 @@ const pattern = (regExp: regExp.TRegExp): [RegExp, string] => {
 };
 
 // Name, Email, Password
-const name = Yup.string()
+const firstName = Yup.string()
   .min(4, 'is too short')
   .required('is required')
   .matches(...pattern(regExp.NAME));
+const lastName = firstName;
 const email = Yup.string()
   .required('is required')
   .matches(...pattern(regExp.EMAIL));
 const password = Yup.string().min(6, 'is too short').required('is required');
+const confirmPass = password.oneOf([Yup.ref('password')], 'must match');
 const code = Yup.string().required('is required');
 
 // Avatar
@@ -28,7 +30,13 @@ const code = Yup.string().required('is required');
 //     !file ? true : file.type.includes('image'),
 //   );
 
-export const signupSchema = Yup.object().shape({ name, email, password });
+export const signupSchema = Yup.object().shape({
+  ['first name']: firstName,
+  ['last name']: lastName,
+  email,
+  password,
+  ['confirm password']: confirmPass,
+});
 export const signinSchema = Yup.object().shape({ email, password });
 export const verifySchema = Yup.object().shape({ verificationCode: code });
 export const forgotSchema = Yup.object().shape({ email });
@@ -38,7 +46,8 @@ export const resetSchema = Yup.object().shape({
 });
 
 export const profileSchema = Yup.object().shape({
-  name,
+  firstName,
+  lastName,
   email,
   whatsApp: Yup.string().matches(...pattern(regExp.PHONE)),
   telegram: Yup.string().matches(...pattern(regExp.TELEGRAM)),

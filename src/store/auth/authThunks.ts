@@ -3,7 +3,6 @@ import axios from 'axios';
 import { store } from 'store';
 import { createAppAsyncThunk } from 'store';
 
-// auth
 export const authThunk = createAppAsyncThunk(
   'auth/token',
   async (credentials: API.TCredentials, thunkAPI) => {
@@ -30,16 +29,3 @@ export const loginThunk = createAppAsyncThunk(
     }
   },
 );
-
-// export const registerThunk = createAppAsyncThunk(
-//   'auth/register',
-//   async (credentials: API.TCredentials, thunkAPI) => {
-//     try {
-//       return await API.register(credentials);
-//     } catch (error) {
-//       if (axios.isAxiosError(error)) {
-//         return thunkAPI.rejectWithValue(error.response?.data);
-//       }
-//     }
-//   },
-// );
