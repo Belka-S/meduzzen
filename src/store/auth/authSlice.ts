@@ -21,13 +21,14 @@ const fn = (type: 'pending' | 'fulfilled' | 'rejected') =>
 // fulfilled slice
 const handleAuthSucsess = (
   state: TUser,
-  action: PayloadAction<{ result: TUser }>,
+  action: PayloadAction<{ result: Partial<TUser> }>,
 ) => ({ ...state, ...action.payload.result });
 
 const authUserSlice = createSlice({
   name: 'user',
   initialState: userInitialState,
   reducers: {
+    login: handleAuthSucsess,
     logout: () => userInitialState,
   },
   extraReducers: builder => {
@@ -69,4 +70,4 @@ export const authReducer = combineReducers({
   error: authErrorSlice.reducer,
 });
 
-export const { logout } = authUserSlice.actions;
+export const { login, logout } = authUserSlice.actions;

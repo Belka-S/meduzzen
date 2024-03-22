@@ -8,6 +8,8 @@ import PublicRoutes from 'routes/PublicRoutes';
 import { loadWebFonts } from 'styles/loadWebFonts';
 import { useAuth } from 'utils/hooks';
 
+import { useAuth0 } from '@auth0/auth0-react';
+
 const HomePage = lazy(() => import('pages/HomePage'));
 const AboutPage = lazy(() => import('pages/AboutPage'));
 const SignupPage = lazy(() => import('pages/SignupPage'));
@@ -19,6 +21,8 @@ const CompanyPage = lazy(() => import('pages/CompanyPage'));
 
 const App = () => {
   const { isLoading, isAuth } = useAuth();
+  const { isAuthenticated } = useAuth0();
+  const isLoggedin = isAuth || isAuthenticated;
 
   useEffect(() => {
     loadWebFonts();
@@ -26,7 +30,7 @@ const App = () => {
 
   return (
     <>
-      {(!isLoading || isAuth) && (
+      {(!isLoading || isLoggedin) && (
         <Routes>
           <Route path="/" element={<SharedLayout />}>
             <Route index element={<HomePage />} />

@@ -11,6 +11,7 @@
     "sprite": "npx svg-symbol-sprite -p '' -i ./src/assets/svg -o ./src/assets/sprite.svg"
   },
   "dependencies": {
+    "@auth0/auth0-react": "^2.2.4",
     "@hookform/resolvers": "^3.3.4",
     "@reduxjs/toolkit": "^2.2.1",
     "axios": "^1.6.8",

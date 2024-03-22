@@ -1,14 +1,17 @@
 import classNames from 'classnames';
+import ProfileBtn from 'components/ProfileBtn';
 import SvgIcon from 'components/ui/SvgIcon';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from 'utils/hooks';
 
-import ProfileBtn from './ProfileBtn';
+import { useAuth0 } from '@auth0/auth0-react';
 
 import s from './index.module.scss';
 
 const Header = () => {
   const { isAuth, user } = useAuth();
+  const { isAuthenticated } = useAuth0();
+  const isLoggedin = isAuth || isAuthenticated;
 
   return (
     <header className={s.header}>
@@ -18,14 +21,14 @@ const Header = () => {
         </NavLink>
         <NavLink to={'/about'}>About</NavLink>
 
-        {isAuth && <NavLink to={'/cluster'}>Cluster</NavLink>}
-        {isAuth && <NavLink to={'/company'}>Company</NavLink>}
+        {isLoggedin && <NavLink to={'/cluster'}>Cluster</NavLink>}
+        {isLoggedin && <NavLink to={'/company'}>Company</NavLink>}
 
         <div className={s.login}>
-          {!isAuth && <NavLink to={'/signup'} />}
-          {!isAuth && <NavLink to={'/signin'}>Log In</NavLink>}
-          {isAuth && <span>{user.user_email}</span>}
-          {isAuth && <ProfileBtn />}
+          {!isLoggedin && <NavLink to={'/signup'} />}
+          {!isLoggedin && <NavLink to={'/signin'}>Log in</NavLink>}
+          {isLoggedin && <span>{user.user_email}</span>}
+          {isLoggedin && <ProfileBtn />}
         </div>
       </div>
     </header>
