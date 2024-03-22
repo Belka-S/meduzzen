@@ -14,6 +14,7 @@ import 'styles/styles.scss';
 const { BASE_URL } = import.meta.env;
 const domain = import.meta.env.VITE_AUTH0_DOMAIN;
 const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID;
+const audience = import.meta.env.VITE_AUTH0_AUDIENCE;
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -21,9 +22,13 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <PersistGate loading={null} persistor={persistor}>
         <BrowserRouter basename={BASE_URL}>
           <Auth0Provider
+            onRedirectCallback={() => console.log('qwe')}
             domain={domain}
             clientId={clientId}
-            authorizationParams={{ redirect_uri: window.location.origin }}
+            authorizationParams={{
+              audience: audience,
+              redirect_uri: window.location.origin,
+            }}
           >
             <App />
           </Auth0Provider>

@@ -1,7 +1,6 @@
 import classNames from 'classnames';
 import Section from 'components/ui/Section';
 
-// import { useAuth } from 'utils/hooks';
 import SigninForm from './SigninForm';
 
 import s from './index.module.scss';

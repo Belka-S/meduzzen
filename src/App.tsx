@@ -5,6 +5,8 @@ import SharedLayout from 'layouts/SharedLayout';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import PrivateRoutes from 'routes/PrivateRoutes';
 import PublicRoutes from 'routes/PublicRoutes';
+import { useAppDispatch } from 'store';
+import { login } from 'store/auth';
 import { loadWebFonts } from 'styles/loadWebFonts';
 import { useAuth } from 'utils/hooks';
 
@@ -20,17 +22,24 @@ const CompanyListPage = lazy(() => import('pages/CompanyListPage'));
 const CompanyPage = lazy(() => import('pages/CompanyPage'));
 
 const App = () => {
+  const dispatch = useAppDispatch();
   const { isLoading, isAuth } = useAuth();
-  const { isAuthenticated } = useAuth0();
-  const isLoggedin = isAuth || isAuthenticated;
+  const { getAccessTokenSilently, isAuthenticated } = useAuth0();
 
   useEffect(() => {
     loadWebFonts();
   }, []);
 
+  useEffect(() => {
+    isAuthenticated &&
+      getAccessTokenSilently().then(access_token =>
+        dispatch(login({ result: { access_token } })),
+      );
+  }, [dispatch, getAccessTokenSilently, isAuthenticated]);
+
   return (
     <>
-      {(!isLoading || isLoggedin) && (
+      {(!isLoading || isAuth) && (
         <Routes>
           <Route path="/" element={<SharedLayout />}>
             <Route index element={<HomePage />} />

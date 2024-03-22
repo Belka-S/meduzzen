@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import Button from 'components/ui/Button';
 import Modal from 'components/ui/Modal';
-import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from 'store';
 import { login, logout } from 'store/auth';
 import { getAbbreviation } from 'utils/helpers';
@@ -13,22 +12,22 @@ import s from './index.module.scss';
 
 const ProfileBtn = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const { user } = useAuth();
   const { user: userAuth0 } = useAuth0();
   const [isModal, setIsModal] = useState(false);
 
   useEffect(() => {
-    dispatch(
-      login({
-        result: {
-          user_email: userAuth0?.email ?? userAuth0?.email,
-          user_firstname: userAuth0?.given_name ?? userAuth0?.given_name,
-          user_lastname: userAuth0?.family_name ?? userAuth0?.family_name,
-          user_avatar: userAuth0?.picture ?? userAuth0?.picture,
-        },
-      }),
-    );
+    userAuth0 &&
+      dispatch(
+        login({
+          result: {
+            user_email: userAuth0?.email ?? userAuth0?.email,
+            user_firstname: userAuth0?.given_name ?? userAuth0?.given_name,
+            user_lastname: userAuth0?.family_name ?? userAuth0?.family_name,
+            user_avatar: userAuth0?.picture ?? userAuth0?.picture,
+          },
+        }),
+      );
   }, [dispatch, userAuth0]);
 
   const { user_firstname, user_lastname, user_avatar } = user;
@@ -57,7 +56,6 @@ const ProfileBtn = () => {
   const handleLogout = () => {
     dispatch(logout());
     logoutAuth0();
-    navigate('/', { replace: true });
   };
 
   return (
