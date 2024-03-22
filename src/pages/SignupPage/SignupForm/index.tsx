@@ -55,12 +55,16 @@ const SignupForm = () => {
 
       <Button type="submit" variant="smooth" label="Sign up" />
       <Button
-        onClick={() => loginWithRedirect()}
+        onClick={() =>
+          loginWithRedirect({
+            authorizationParams: { screen_hint: 'signup' },
+          })
+        }
         color="outlined"
         variant="smooth"
         label="Continue with"
       >
-        <SvgIcon svgId="auth0" size={140} />
+        <SvgIcon svgId="auth0" size={125} />
       </Button>
     </form>
   );

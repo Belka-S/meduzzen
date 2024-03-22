@@ -22,13 +22,12 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <PersistGate loading={null} persistor={persistor}>
         <BrowserRouter basename={BASE_URL}>
           <Auth0Provider
-            onRedirectCallback={() => console.log('qwe')}
             domain={domain}
             clientId={clientId}
             authorizationParams={{
               audience: audience,
-              redirect_uri: window.location.origin,
-            }}
+              redirect_uri: `${window.location.origin}/meduzzen/about`,
+            }} // onRedirectCallback={() => console.log('qwe')}
           >
             <App />
           </Auth0Provider>

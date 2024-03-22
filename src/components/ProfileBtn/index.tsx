@@ -64,7 +64,12 @@ const ProfileBtn = () => {
 
       {isModal && (
         <Modal setIsModal={switchIsModal}>
-          <Button onClick={handleLogout} variant="smooth" label="Log Out" />
+          <Button
+            onClick={handleLogout}
+            variant="smooth"
+            size="l"
+            label="Log Out"
+          />
         </Modal>
       )}
     </>

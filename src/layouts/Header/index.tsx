@@ -22,7 +22,7 @@ const Header = () => {
 
         <div className={s.login}>
           {!isAuth && <NavLink to={'/signup'} />}
-          {!isAuth && <NavLink to={'/signin'}>Log In</NavLink>}
+          {!isAuth && <NavLink to={'/signin'}>Log in</NavLink>}
           {isAuth && <span>{user.user_email}</span>}
           {isAuth && <ProfileBtn />}
         </div>

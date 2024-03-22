@@ -59,7 +59,7 @@ const SigninForm = () => {
         variant="smooth"
         label="Continue with"
       >
-        <SvgIcon svgId="auth0" size={140} />
+        <SvgIcon svgId="auth0" size={125} />
       </Button>
     </form>
   );
