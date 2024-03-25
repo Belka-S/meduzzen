@@ -3,9 +3,9 @@ import Button from 'components/ui/Button';
 import SvgIcon from 'components/ui/SvgIcon';
 import H3 from 'components/ui/Typography/H3';
 import { Resolver, SubmitHandler, useForm } from 'react-hook-form';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useAppExtraDispatch } from 'store';
-import { registerThunk } from 'store/user';
+import { registerThunk } from 'store/auth';
 import { signupSchema } from 'utils/validation';
 import { InferType } from 'yup';
 
@@ -20,6 +20,7 @@ const inputFields = Object.keys(signupSchema.fields) as Array<keyof TInput>;
 
 const SignupForm = () => {
   const dispatch = useAppExtraDispatch();
+  const navigate = useNavigate();
   const { loginWithRedirect } = useAuth0();
   const resolver: Resolver<TInput> = yupResolver(signupSchema);
 
@@ -37,7 +38,9 @@ const SignupForm = () => {
       user_password: data.password,
       user_password_repeat: data['confirm password'],
     };
-    dispatch(registerThunk(credentials));
+    dispatch(registerThunk(credentials))
+      .unwrap()
+      .then(() => navigate('/signin', { replace: true }));
   };
 
   return (

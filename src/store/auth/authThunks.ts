@@ -29,3 +29,16 @@ export const loginThunk = createAppAsyncThunk(
     }
   },
 );
+
+export const registerThunk = createAppAsyncThunk(
+  'users/register',
+  async (credentials: API.ICredentials, thunkAPI) => {
+    try {
+      return await API.register(credentials);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return thunkAPI.rejectWithValue(error.response?.data);
+      }
+    }
+  },
+);

@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios';
 import { useDispatch, useSelector, useStore } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import type { TAppDispatch, TAppStore, TRootState } from 'store';
@@ -16,6 +17,6 @@ type TThunk = {
   state: TRootState;
   dispatch: TAppDispatch;
   rejectValue: Error;
-  extra: { s: string; n: number };
+  extra: AxiosError;
 };
 export const createAppAsyncThunk = createAsyncThunk.withTypes<TThunk>();

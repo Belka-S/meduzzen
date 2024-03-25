@@ -1,8 +1,9 @@
 import classNames from 'classnames';
-import ProfileBtn from 'components/ProfileBtn';
-import SvgIcon from 'components/ui/SvgIcon';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from 'utils/hooks';
+
+import LogoutBtn from './LogoutBtn';
+import SiteNav from './SiteNav';
 
 import s from './index.module.scss';
 
@@ -12,19 +13,13 @@ const Header = () => {
   return (
     <header className={s.header}>
       <div className={classNames('container', s.header__wrap)}>
-        <NavLink to={'/'}>
-          <SvgIcon svgId="menu-home" size={32} />
-        </NavLink>
-        <NavLink to={'/about'}>About</NavLink>
-
-        {isAuth && <NavLink to={'/cluster'}>Cluster</NavLink>}
-        {isAuth && <NavLink to={'/company'}>Company</NavLink>}
+        <SiteNav />
 
         <div className={s.login}>
           {!isAuth && <NavLink to={'/signup'} />}
           {!isAuth && <NavLink to={'/signin'}>Log in</NavLink>}
           {isAuth && <span>{user.user_email}</span>}
-          {isAuth && <ProfileBtn />}
+          {isAuth && <LogoutBtn />}
         </div>
       </div>
     </header>

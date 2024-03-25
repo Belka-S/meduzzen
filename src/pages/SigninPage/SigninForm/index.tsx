@@ -6,6 +6,7 @@ import { Resolver, SubmitHandler, useForm } from 'react-hook-form';
 import { NavLink } from 'react-router-dom';
 import { useAppExtraDispatch } from 'store';
 import { authThunk, loginThunk } from 'store/auth';
+import { useAuth } from 'utils/hooks';
 import { signinSchema } from 'utils/validation';
 import { InferType } from 'yup';
 
@@ -20,6 +21,7 @@ const inputFields = Object.keys(signinSchema.fields) as Array<keyof TInput>;
 
 const SigninForm = () => {
   const dispatch = useAppExtraDispatch();
+  const { user } = useAuth();
   const { loginWithRedirect } = useAuth0();
 
   const resolver: Resolver<TInput> = yupResolver(signinSchema);
@@ -30,6 +32,7 @@ const SigninForm = () => {
   } = useForm<TInput>({
     resolver,
     mode: 'onChange',
+    defaultValues: { email: user.user_email ?? '' },
   });
 
   const onSubmit: SubmitHandler<TInput> = data => {

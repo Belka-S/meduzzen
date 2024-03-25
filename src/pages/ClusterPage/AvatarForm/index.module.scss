@@ -1,0 +1,53 @@
+.form {
+  display: flex;
+}
+
+.avatar {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin-left: 20px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-weight: 600;
+  font-size: 70px;
+
+  border-radius: 50%;
+  background-color: white;
+  // background-image: ${({ url }) => `url(${url})`};
+  background-size: cover;
+  background-position: center;
+  color: transparent;
+  cursor: pointer;
+  outline: 3px solid transparent;
+  transition: outline-color 250ms;
+
+  &:hover,
+  &:focus {
+    outline-color: var(--secondary-bg-color);
+  }
+
+  &::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 150px;
+    height: 150px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 50%;
+    font-family: var(--fontMontserrat);
+    text-transform: uppercase;
+  }
+
+  // &::-webkit-file-upload-button
+  &::file-selector-button {
+    display: none;
+  }
+}

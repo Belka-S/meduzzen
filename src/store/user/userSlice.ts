@@ -1,4 +1,5 @@
-import { TUser } from 'store/auth/initialState';
+import { toast } from 'react-toastify';
+import { TUser } from 'store/user/initialState';
 import * as TNK from 'store/user/userThunks';
 
 import {
@@ -8,9 +9,20 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit';
 
-import { userLisInitialState } from './initialState';
+import {
+  paginationInitialState,
+  TPagination,
+  userInitialState,
+  usersInitialState,
+} from './initialState';
 
-const thunkArr = [TNK.registerThunk];
+const thunkArr = [
+  TNK.getAllUsersThunk,
+  TNK.getUserThunk,
+  TNK.updateUserInfoThunk,
+  TNK.updatePasswordThunk,
+  TNK.deleteUserThunk,
+];
 
 const fn = (type: 'pending' | 'fulfilled' | 'rejected') =>
   thunkArr.map(el => {
@@ -20,25 +32,73 @@ const fn = (type: 'pending' | 'fulfilled' | 'rejected') =>
   });
 
 // fulfilled slice
-const handleRegisterSucsess = (
+
+// users
+const handleGetAllUsersSucsess = (
   state: TUser[],
-  action: PayloadAction<{ result: Partial<TUser> }>,
+  action: PayloadAction<{ result: { users: TUser[] } }>,
+) => state.concat(action.payload.result.users);
+
+const usersSlice = createSlice({
+  name: 'users',
+  initialState: usersInitialState,
+  reducers: {},
+  extraReducers: builder => {
+    builder.addCase(TNK.getAllUsersThunk.fulfilled, handleGetAllUsersSucsess);
+  },
+});
+
+// pagination
+const handlePaginationSucsess = (
+  _: TPagination,
+  action: PayloadAction<{ result: { pagination: TPagination } }>,
+) => action.payload.result.pagination;
+
+const paginationSlice = createSlice({
+  name: 'users/pagination',
+  initialState: paginationInitialState,
+  reducers: {},
+  extraReducers: builder => {
+    builder.addCase(TNK.getAllUsersThunk.fulfilled, handlePaginationSucsess);
+  },
+});
+
+// active
+const handleGetUserSucsess = (
+  state: TUser,
+  action: PayloadAction<{ result: TUser }>,
 ) => ({ ...state, ...action.payload.result });
 
-const userListSlice = createSlice({
-  name: 'userList',
-  initialState: userLisInitialState,
+const handleUpdateActiveUserSucsess = (
+  state: TUser,
+  action: PayloadAction<Partial<TUser>>,
+) => ({ ...state, ...action.payload });
+
+const handleUpdatePasswordSucsess = () => {
+  toast.success('Updated');
+};
+const handleDeleteUserSucsess = () => {
+  toast.success('Deleted');
+};
+
+const activeUserSlice = createSlice({
+  name: 'users/active',
+  initialState: userInitialState,
   reducers: {
-    logout: () => userLisInitialState,
+    editActiveUser: handleUpdateActiveUserSucsess,
   },
   extraReducers: builder => {
-    builder.addCase(TNK.registerThunk.fulfilled, handleRegisterSucsess);
+    builder
+      .addCase(TNK.getUserThunk.fulfilled, handleGetUserSucsess)
+      .addCase(TNK.updateUserInfoThunk.fulfilled, handleUpdateActiveUserSucsess)
+      .addCase(TNK.updatePasswordThunk.fulfilled, handleUpdatePasswordSucsess)
+      .addCase(TNK.deleteUserThunk.fulfilled, handleDeleteUserSucsess);
   },
 });
 
 // loading slice
-const userListLoadingSlice = createSlice({
-  name: 'Loading',
+const usersLoadingSlice = createSlice({
+  name: 'loading',
   initialState: false,
   reducers: {},
   extraReducers: builder => {
@@ -50,7 +110,7 @@ const userListLoadingSlice = createSlice({
 });
 
 // error slice
-const userListErrorSlice = createSlice({
+const usersErrorSlice = createSlice({
   name: 'error',
   initialState: false,
   reducers: {},
@@ -62,10 +122,12 @@ const userListErrorSlice = createSlice({
   },
 });
 
-export const userListReducer = combineReducers({
-  userList: userListSlice.reducer,
-  loading: userListLoadingSlice.reducer,
-  error: userListErrorSlice.reducer,
+export const usersReducer = combineReducers({
+  userList: usersSlice.reducer,
+  pagination: paginationSlice.reducer,
+  active: activeUserSlice.reducer,
+  loading: usersLoadingSlice.reducer,
+  error: usersErrorSlice.reducer,
 });
 
-export const { logout } = userListSlice.actions;
+export const { editActiveUser } = activeUserSlice.actions;

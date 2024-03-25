@@ -14,7 +14,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
 import { authReducer } from './auth';
 import { commonReducer } from './server';
-import { userListReducer } from './user';
+import { usersReducer } from './user';
 
 // ----------------persistReducer---------------- //
 
@@ -27,7 +27,7 @@ const authPersistConfig = {
 export const rootReducer = combineReducers({
   common: commonReducer,
   auth: persistReducer(authPersistConfig, authReducer),
-  users: userListReducer,
+  users: usersReducer,
 });
 
 // ----------------configureStore---------------- //
