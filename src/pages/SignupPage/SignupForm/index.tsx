@@ -31,14 +31,7 @@ const SignupForm = () => {
   } = useForm<TInput>({ mode: 'onChange', resolver });
 
   const onSubmit: SubmitHandler<TInput> = data => {
-    const credentials = {
-      user_email: data.email,
-      user_firstname: data['first name'],
-      user_lastname: data['last name'],
-      user_password: data.password,
-      user_password_repeat: data['confirm password'],
-    };
-    dispatch(registerThunk(credentials))
+    dispatch(registerThunk(data))
       .unwrap()
       .then(() => navigate('/signin', { replace: true }));
   };

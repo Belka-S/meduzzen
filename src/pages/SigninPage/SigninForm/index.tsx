@@ -32,12 +32,11 @@ const SigninForm = () => {
   } = useForm<TInput>({
     resolver,
     mode: 'onChange',
-    defaultValues: { email: user.user_email ?? '' },
+    defaultValues: { ...user },
   });
 
   const onSubmit: SubmitHandler<TInput> = data => {
-    const { email: user_email, password: user_password } = data;
-    dispatch(authThunk({ user_email, user_password }))
+    dispatch(authThunk(data))
       .unwrap()
       .then(() => dispatch(loginThunk()));
   };

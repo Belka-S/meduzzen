@@ -5,6 +5,7 @@ import {
   Path,
   UseFormRegister,
 } from 'react-hook-form';
+import { normalizeText } from 'utils/helpers';
 
 import s from './index.module.scss';
 
@@ -18,20 +19,14 @@ type TInputProps<T extends FieldValues> = {
 };
 
 const InputRhf = <T extends FieldValues>(props: TInputProps<T>) => {
-  const {
-    className,
-    inputName,
-    errors,
-    register,
-    placeholder = '',
-    size = 'm',
-  } = props;
-
-  const normalInputName = inputName;
+  const { errors, register, className } = props;
+  const { inputName, placeholder = '', size = 'm' } = props;
 
   return (
     <label className={className}>
-      <span className={classNames(s.label, s[size])}>{normalInputName}</span>
+      <span className={classNames(s.label, s[size])}>
+        {normalizeText(inputName)}
+      </span>
       &nbsp;
       <span className={classNames(s.error, s[size])}>
         {errors[inputName]?.message}

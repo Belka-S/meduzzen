@@ -27,7 +27,7 @@ const phone = Yup.string()
   .transform(value => (value ? value : null));
 
 // address
-const city = Yup.string()
+const address = Yup.string()
   .matches(...pattern(regExp.ADDRESS))
   .nullable()
   .transform(value => (value ? value : null));
@@ -73,32 +73,41 @@ const file = Yup.mixed<FileList>().test(
 //   .test('type', 'invalid file type', (file: any) =>
 //     !file ? true : file.type.includes('image'),
 //   );
-export const signinSchema = Yup.object().shape({ email, password });
+export const signinSchema = Yup.object().shape({
+  user_email: email,
+  user_password: password,
+});
 
 export const signupSchema = Yup.object().shape({
-  ['first name']: firstName,
-  ['last name']: lastName,
-  email,
-  password,
-  ['confirm password']: password.oneOf([Yup.ref('password')], 'must match'),
+  user_firstname: firstName,
+  user_lastname: lastName,
+  user_email: email,
+  user_password: password,
+  user_password_repeat: password.oneOf(
+    [Yup.ref('user_password')],
+    'must match',
+  ),
 });
 
 export const passwordSchema = Yup.object().shape({
-  ['new password']: password,
-  ['confirm password']: password.oneOf([Yup.ref('new password')], 'must match'),
+  user_password: password,
+  user_password_repeat: password.oneOf(
+    [Yup.ref('user_password')],
+    'must match',
+  ),
 });
 
 export const profileSchema = Yup.object().shape({
-  ['first name']: firstName,
-  ['last name']: lastName,
-  phone,
-  city,
-  status,
-  ['1_link']: link,
-  ['2_link']: link,
-  ['3_link']: link,
-  ['4_link']: link,
-  ['5_link']: link,
+  user_firstname: firstName,
+  user_lastname: lastName,
+  user_phone: phone,
+  user_city: address,
+  user_status: status,
+  a_link: link,
+  b_link: link,
+  c_link: link,
+  d_link: link,
+  e_link: link,
 });
 
 export const avatarSchema = Yup.object().shape({ file });

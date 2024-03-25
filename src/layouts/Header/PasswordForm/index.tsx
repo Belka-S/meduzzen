@@ -21,7 +21,7 @@ const inputFields = Object.keys(passwordSchema.fields) as Array<keyof TInput>;
 const PasswordForm: FC<TPasswordForm> = ({ setIsModal }) => {
   const dispatch = useAppExtraDispatch();
   const { user } = useAuth();
-
+  const { user_id } = user;
   const resolver: Resolver<TInput> = yupResolver(passwordSchema);
 
   const {
@@ -31,12 +31,7 @@ const PasswordForm: FC<TPasswordForm> = ({ setIsModal }) => {
   } = useForm<TInput>({ mode: 'onChange', resolver });
 
   const onSubmit: SubmitHandler<TInput> = data => {
-    const credentials = {
-      user_password: data['new password'],
-      user_password_repeat: data['confirm password'],
-    };
-
-    dispatch(updatePasswordThunk({ ...credentials, user_id: user.user_id }))
+    dispatch(updatePasswordThunk({ ...data, user_id }))
       .unwrap()
       .then(res => console.log(res))
       .then(() => setIsModal());
