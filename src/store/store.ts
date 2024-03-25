@@ -12,8 +12,9 @@ import storage from 'redux-persist/lib/storage';
 
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
-import { authReducer } from './auth/authSlice';
-import { commonReducer } from './server/serverSlice';
+import { authReducer } from './auth';
+import { commonReducer } from './server';
+import { userListReducer } from './user';
 
 // ----------------persistReducer---------------- //
 
@@ -26,6 +27,7 @@ const authPersistConfig = {
 export const rootReducer = combineReducers({
   common: commonReducer,
   auth: persistReducer(authPersistConfig, authReducer),
+  users: userListReducer,
 });
 
 // ----------------configureStore---------------- //

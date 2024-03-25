@@ -35,7 +35,7 @@ const InputRhf = <T extends FieldValues>(props: TInputProps<T>) => {
         {errors[inputName]?.message}
       </span>
       <input
-        type={inputName}
+        type={inputName.includes('password') ? 'password' : inputName}
         placeholder={placeholder}
         readOnly
         onFocus={e => e.target.removeAttribute('readonly')}

@@ -1,4 +1,5 @@
-import * as TNK from 'store/auth/authThunks';
+import { TUser } from 'store/auth/initialState';
+import * as TNK from 'store/user/userThunks';
 
 import {
   combineReducers,
@@ -7,9 +8,9 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit';
 
-import { TUser, userInitialState } from './initialState';
+import { userLisInitialState } from './initialState';
 
-const thunkArr = [TNK.authThunk, TNK.loginThunk];
+const thunkArr = [TNK.registerThunk];
 
 const fn = (type: 'pending' | 'fulfilled' | 'rejected') =>
   thunkArr.map(el => {
@@ -19,27 +20,24 @@ const fn = (type: 'pending' | 'fulfilled' | 'rejected') =>
   });
 
 // fulfilled slice
-const handleAuthSucsess = (
-  state: TUser,
+const handleRegisterSucsess = (
+  state: TUser[],
   action: PayloadAction<{ result: Partial<TUser> }>,
 ) => ({ ...state, ...action.payload.result });
 
-const authUserSlice = createSlice({
-  name: 'user',
-  initialState: userInitialState,
+const userListSlice = createSlice({
+  name: 'userList',
+  initialState: userLisInitialState,
   reducers: {
-    login: handleAuthSucsess,
-    logout: () => userInitialState,
+    logout: () => userLisInitialState,
   },
   extraReducers: builder => {
-    builder
-      .addCase(TNK.authThunk.fulfilled, handleAuthSucsess)
-      .addCase(TNK.loginThunk.fulfilled, handleAuthSucsess);
+    builder.addCase(TNK.registerThunk.fulfilled, handleRegisterSucsess);
   },
 });
 
 // loading slice
-const authLoadingSlice = createSlice({
+const userListLoadingSlice = createSlice({
   name: 'Loading',
   initialState: false,
   reducers: {},
@@ -52,7 +50,7 @@ const authLoadingSlice = createSlice({
 });
 
 // error slice
-const authErrorSlice = createSlice({
+const userListErrorSlice = createSlice({
   name: 'error',
   initialState: false,
   reducers: {},
@@ -64,10 +62,10 @@ const authErrorSlice = createSlice({
   },
 });
 
-export const authReducer = combineReducers({
-  user: authUserSlice.reducer,
-  loading: authLoadingSlice.reducer,
-  error: authErrorSlice.reducer,
+export const userListReducer = combineReducers({
+  userList: userListSlice.reducer,
+  loading: userListLoadingSlice.reducer,
+  error: userListErrorSlice.reducer,
 });
 
-export const { login, logout } = authUserSlice.actions;
+export const { logout } = userListSlice.actions;

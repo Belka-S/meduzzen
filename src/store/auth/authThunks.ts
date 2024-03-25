@@ -1,34 +1,31 @@
-import * as API from 'api/userApi';
-import { AxiosError } from 'axios';
-import { createAppAsyncThunk, TError } from 'store/types';
+import * as API from 'api/authApi';
+import axios from 'axios';
+import { store } from 'store';
+import { createAppAsyncThunk } from 'store';
 
-// auth
-export const registerThunk = createAppAsyncThunk(
-  'auth/register',
+export const authThunk = createAppAsyncThunk(
+  'auth/token',
   async (credentials: API.TCredentials, thunkAPI) => {
     try {
-      return await API.register(credentials);
+      return await API.auth(credentials);
     } catch (error) {
-      const err = error as AxiosError<TError>;
-      if (!err.response) {
-        throw error;
+      if (axios.isAxiosError(error)) {
+        return thunkAPI.rejectWithValue(error.response?.data);
       }
-      return thunkAPI.rejectWithValue(err.response.data);
     }
   },
 );
 
 export const loginThunk = createAppAsyncThunk(
   'auth/login',
-  async (credentials: API.TCredentials, thunkAPI) => {
+  async (_, thunkAPI) => {
+    const { access_token } = store.getState().auth.user;
     try {
-      return await API.login(credentials);
+      return await API.login(access_token);
     } catch (error) {
-      const err = error as AxiosError<TError>;
-      if (!err.response) {
-        throw error;
+      if (axios.isAxiosError(error)) {
+        return thunkAPI.rejectWithValue(error.response?.data);
       }
-      return thunkAPI.rejectWithValue(err.response.data);
     }
   },
 );
