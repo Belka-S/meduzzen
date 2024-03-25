@@ -2,10 +2,11 @@ import * as API from 'api/authApi';
 import axios from 'axios';
 import { store } from 'store';
 import { createAppAsyncThunk } from 'store';
+import { TUser } from 'store/user';
 
 export const authThunk = createAppAsyncThunk(
   'auth/token',
-  async (credentials: API.TCredentials, thunkAPI) => {
+  async (credentials: Partial<TUser>, thunkAPI) => {
     try {
       return await API.auth(credentials);
     } catch (error) {
@@ -21,7 +22,9 @@ export const loginThunk = createAppAsyncThunk(
   async (_, thunkAPI) => {
     const { access_token } = store.getState().auth.user;
     try {
-      return await API.login(access_token);
+      if (access_token) {
+        return await API.login(access_token);
+      }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         return thunkAPI.rejectWithValue(error.response?.data);
@@ -32,7 +35,7 @@ export const loginThunk = createAppAsyncThunk(
 
 export const registerThunk = createAppAsyncThunk(
   'users/register',
-  async (credentials: API.ICredentials, thunkAPI) => {
+  async (credentials: Partial<TUser>, thunkAPI) => {
     try {
       return await API.register(credentials);
     } catch (error) {

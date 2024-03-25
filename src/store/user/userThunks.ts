@@ -9,7 +9,9 @@ export const getAllUsersThunk = createAppAsyncThunk(
   async (params: API.TParams, thunkAPI) => {
     const { access_token } = store.getState().auth.user;
     try {
-      return await API.getAllUsers(access_token, params);
+      if (access_token) {
+        return await API.getAllUsers(access_token, params);
+      }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         return thunkAPI.rejectWithValue(error.response?.data);
@@ -23,7 +25,9 @@ export const getUserThunk = createAppAsyncThunk(
   async (id: number, thunkAPI) => {
     const { access_token } = store.getState().auth.user;
     try {
-      return await API.getUser(access_token, id);
+      if (access_token) {
+        return await API.getUser(access_token, id);
+      }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         return thunkAPI.rejectWithValue(error.response?.data);
@@ -37,7 +41,9 @@ export const deleteUserThunk = createAppAsyncThunk(
   async (id: number, thunkAPI) => {
     const { access_token } = store.getState().auth.user;
     try {
-      return await API.deleteUser(access_token, id);
+      if (access_token) {
+        return await API.deleteUser(access_token, id);
+      }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         return thunkAPI.rejectWithValue(error.response?.data);
@@ -51,7 +57,9 @@ export const updateUserInfoThunk = createAppAsyncThunk(
   async (user: Partial<TUser>, thunkAPI) => {
     const { access_token } = store.getState().auth.user;
     try {
-      return await API.updateUserInfo(access_token, user);
+      if (access_token) {
+        return await API.updateUserInfo(access_token, user);
+      }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         return thunkAPI.rejectWithValue(error.response?.data);
@@ -61,11 +69,13 @@ export const updateUserInfoThunk = createAppAsyncThunk(
 );
 
 export const updatePasswordThunk = createAppAsyncThunk(
-  'users/updateInfo',
+  'users/updatePassword',
   async (user: Partial<TUser>, thunkAPI) => {
     const { access_token } = store.getState().auth.user;
     try {
-      return await API.updatePassword(access_token, user);
+      if (access_token) {
+        return await API.updatePassword(access_token, user);
+      }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         return thunkAPI.rejectWithValue(error.response?.data);

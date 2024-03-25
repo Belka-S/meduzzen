@@ -50,12 +50,19 @@ const UserItem: FC<TUserProps> = ({ user }) => {
   };
 
   const isActive = user_id === activeUser.user_id;
+  const isOwner = user_id === owner.user_id;
   const isLastName = user_firstname !== user_lastname;
 
   return (
     <NavLink
       to={`/cluster/${user_id}`}
-      className={classNames(s.item, s.hover, isActive && s.active)}
+      id={isActive ? 'active-user' : ''}
+      className={classNames(
+        s.item,
+        s.hover,
+        isActive && s.active,
+        isOwner && s.owner,
+      )}
     >
       <ProfileBtn
         className={s.avatar}

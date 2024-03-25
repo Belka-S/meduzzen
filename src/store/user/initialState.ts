@@ -7,13 +7,17 @@ export type TUser = {
   user_status: string | null;
   user_city: string | null;
   user_phone: string | null;
-  user_links: string[] | null;
+  user_links: string[];
   is_superuser: boolean;
 
   edit?: false | 'avatar' | 'data';
-};
 
-export const usersInitialState: TUser[] = [];
+  access_token: string;
+  token_type: string;
+
+  user_password: string;
+  user_password_repeat: string;
+};
 
 export type TPagination = {
   current_page: number;
@@ -21,23 +25,12 @@ export type TPagination = {
   total_results: number;
 };
 
+export const userInitialState: Partial<TUser> = {};
+
+export const usersInitialState: TUser[] = [];
+
 export const paginationInitialState: TPagination = {
   current_page: 0,
   total_page: 0,
   total_results: 0,
-};
-
-export const userInitialState: TUser = {
-  user_id: NaN,
-  user_email: '',
-  user_firstname: '',
-  user_lastname: '',
-  user_avatar: '',
-  user_status: '',
-  user_city: '',
-  user_phone: '',
-  user_links: [],
-  is_superuser: false,
-
-  edit: false,
 };

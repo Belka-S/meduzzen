@@ -1,4 +1,5 @@
 import * as TNK from 'store/auth/authThunks';
+import { TUser, userInitialState } from 'store/user';
 
 import {
   combineReducers,
@@ -6,8 +7,6 @@ import {
   isAnyOf,
   PayloadAction,
 } from '@reduxjs/toolkit';
-
-import { authorisedUserInitialState, TAutorisedUser } from './initialState';
 
 const thunkArr = [TNK.authThunk, TNK.loginThunk, TNK.registerThunk];
 
@@ -20,18 +19,18 @@ const fn = (type: 'pending' | 'fulfilled' | 'rejected') =>
 
 // fulfilled slice
 const handleAuthSucsess = (
-  state: TAutorisedUser,
-  action: PayloadAction<{ result: Partial<TAutorisedUser> }>,
+  state: Partial<TUser>,
+  action: PayloadAction<{ result: Partial<TUser> }>,
 ) => {
   return { ...state, ...action.payload.result };
 };
 
 const authUserSlice = createSlice({
   name: 'user',
-  initialState: authorisedUserInitialState,
+  initialState: userInitialState,
   reducers: {
     login: handleAuthSucsess,
-    logout: () => authorisedUserInitialState,
+    logout: () => userInitialState,
   },
   extraReducers: builder => {
     builder

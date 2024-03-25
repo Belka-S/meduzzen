@@ -21,8 +21,7 @@ const token = {
 apiClient.interceptors.response.use(
   res => {
     const { detail, result } = res.data;
-    const isToast = !Object.keys(result).includes('is_superuser');
-    toast.success(isToast && detail);
+    toast.success(!result.user_id && detail);
     return res;
   },
   async err => {

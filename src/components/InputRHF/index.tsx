@@ -27,9 +27,11 @@ const InputRhf = <T extends FieldValues>(props: TInputProps<T>) => {
     size = 'm',
   } = props;
 
+  const normalInputName = inputName;
+
   return (
     <label className={className}>
-      <span className={classNames(s.label, s[size])}>{inputName}</span>
+      <span className={classNames(s.label, s[size])}>{normalInputName}</span>
       &nbsp;
       <span className={classNames(s.error, s[size])}>
         {errors[inputName]?.message}

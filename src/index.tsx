@@ -24,7 +24,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           clientId={clientId}
           authorizationParams={{
             audience: audience,
-            redirect_uri: `${window.location.origin}/meduzzen/about`,
+            redirect_uri: `${window.location.origin}`,
           }} // onRedirectCallback={() => console.log('qwe')}
         >
           <App />

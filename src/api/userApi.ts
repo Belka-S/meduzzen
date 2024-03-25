@@ -29,7 +29,7 @@ export const updateUserInfo = async (
   const { user_id, ...credentials } = user;
   token.set(accessToken);
   const { data } = await apiClient.put(
-    `/user/${user_id}/update_info`,
+    `/user/${user_id}/update_info/`,
     credentials,
   );
   return data;
@@ -41,8 +41,9 @@ export const updatePassword = async (
 ) => {
   const { user_id, ...credentials } = user;
   token.set(accessToken);
+
   const { data } = await apiClient.put(
-    `/user/${user_id}/update_password`,
+    `/user/${user_id}/update_password/`,
     credentials,
   );
   return data;

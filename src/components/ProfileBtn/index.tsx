@@ -6,7 +6,7 @@ import { getAbbreviation, getRandomColor } from 'utils/helpers';
 import s from './index.module.scss';
 
 type TUserProps = {
-  user: TUser;
+  user: Partial<TUser>;
   size?: 's' | 'm' | 'l' | 'xl';
   onClick?: () => void;
   className?: string;

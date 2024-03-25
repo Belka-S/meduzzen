@@ -18,7 +18,15 @@ const ClusterListPage = () => {
   const { users, pagination } = useUser();
 
   const { current_page: page, total_page } = pagination;
-  const page_size = 20;
+  const page_size = 30;
+
+  useEffect(() => {
+    const activeFileEl = document.getElementById('active-user');
+    const scrollOnActive = () => {
+      activeFileEl?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    };
+    scrollOnActive();
+  }, []);
 
   useEffect(() => {
     dispatch(editActiveUser({ edit: false }));

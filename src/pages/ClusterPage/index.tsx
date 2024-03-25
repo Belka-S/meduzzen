@@ -34,8 +34,8 @@ const ClusterPage = () => {
 
   const getUserName = () => {
     const isLastName = user_firstname !== user_lastname;
-    const firstname = trimName(user_firstname);
-    const lastname = trimName(user_lastname);
+    const firstname = trimName(user_firstname ?? '');
+    const lastname = trimName(user_lastname ?? '');
 
     return isLastName ? `${firstname} ${lastname}` : firstname;
   };
@@ -48,7 +48,7 @@ const ClusterPage = () => {
     }
   };
 
-  const isRedyToRender = !isLoading && id === user_id.toString();
+  const isRedyToRender = !isLoading && id === user_id?.toString();
 
   if (!isRedyToRender) return <OvalLoader />;
   return (

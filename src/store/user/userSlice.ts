@@ -65,12 +65,12 @@ const paginationSlice = createSlice({
 
 // active
 const handleGetUserSucsess = (
-  state: TUser,
+  state: Partial<TUser>,
   action: PayloadAction<{ result: TUser }>,
 ) => ({ ...state, ...action.payload.result });
 
 const handleUpdateActiveUserSucsess = (
-  state: TUser,
+  state: Partial<TUser>,
   action: PayloadAction<Partial<TUser>>,
 ) => ({ ...state, ...action.payload });
 
