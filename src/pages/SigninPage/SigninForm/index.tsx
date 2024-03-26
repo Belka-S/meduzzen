@@ -44,7 +44,7 @@ const SigninForm = () => {
   return (
     <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
       <div className={s.title__wrap}>
-        <H3 className={s.title}>Sign in</H3>
+        <H3 className={s.title}>Sign In</H3>
         <NavLink to={'/signup'} className={s.navlink}>
           Don`t have an account?
         </NavLink>
@@ -54,12 +54,12 @@ const SigninForm = () => {
         <InputRhf key={el} inputName={el} errors={errors} register={register} />
       ))}
 
-      <Button type="submit" variant="smooth" label="Sign in" />
+      <Button type="submit" variant="smooth" label="Sign In" />
       <Button
         onClick={() => loginWithRedirect()}
         color="outlined"
         variant="smooth"
-        label="Continue with"
+        label="Continue With"
       >
         <SvgIcon svgId="auth0" size={125} />
       </Button>

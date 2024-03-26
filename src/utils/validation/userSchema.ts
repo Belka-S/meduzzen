@@ -103,11 +103,11 @@ export const profileSchema = Yup.object().shape({
   user_phone: phone,
   user_city: address,
   user_status: status,
+  link: link,
   a_link: link,
   b_link: link,
   c_link: link,
   d_link: link,
-  e_link: link,
 });
 
 export const avatarSchema = Yup.object().shape({ file });

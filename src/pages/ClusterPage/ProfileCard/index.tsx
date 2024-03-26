@@ -14,7 +14,6 @@ const ProfileCard = () => {
       { phone: user_phone },
       { city: user_city },
       { status: user_status },
-      { links: user_links },
     ].filter(el => Object.values(el)[0] && el);
     return data;
   };
@@ -24,6 +23,12 @@ const ProfileCard = () => {
         <div key={Object.keys(el)[0]} className={s.main__info}>
           <span>{Object.keys(el)[0]}:</span>
           <span>{Object.values(el)[0]}</span>
+        </div>
+      ))}
+      {user_links?.map(el => (
+        <div key={el} className={s.main__info}>
+          <span>Link:</span>
+          <span>{el}</span>
         </div>
       ))}
     </>

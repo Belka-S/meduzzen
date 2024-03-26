@@ -46,7 +46,7 @@ const LogoutBtn = () => {
               onClick={handleUpdatePassword}
               variant="smooth"
               size="l"
-              label="Change password"
+              label="Change Password"
             />
           )}
 
