@@ -1,14 +1,12 @@
 import SvgIcon from 'components/ui/SvgIcon';
 import { NavLink, useLocation } from 'react-router-dom';
-import { useAuth, useUser } from 'utils/hooks';
+import { useUser } from 'utils/hooks';
 
 import s from './index.module.scss';
 
 const SiteNav = () => {
   const { pathname } = useLocation();
-  const { isAuth } = useAuth();
-  const { activeUser, isLoading } = useUser();
-  const { user_firstname } = activeUser;
+  const { owner, user, isLoading } = useUser();
 
   const isHome = pathname === '/';
   const isAbout = pathname === '/about';
@@ -25,7 +23,7 @@ const SiteNav = () => {
         About
       </NavLink>
 
-      {isAuth && (
+      {owner && (
         <>
           <NavLink to={'/cluster'} className={isUser ? s.active : ''}>
             Users
@@ -37,7 +35,7 @@ const SiteNav = () => {
       )}
 
       {isUserPage && (
-        <span className={s.active}>{`Profile of ${user_firstname}`}</span>
+        <span className={s.active}>{`Profile of ${user?.user_firstname}`}</span>
       )}
     </>
   );

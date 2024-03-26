@@ -5,7 +5,7 @@ import { Resolver, SubmitHandler, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppExtraDispatch } from 'store';
-import { editActiveUser, getUserThunk, updateUserInfoThunk } from 'store/user';
+import { editUser, getUserThunk, updateUserInfoThunk } from 'store/user';
 import { useUser } from 'utils/hooks';
 import { profileSchema } from 'utils/validation';
 import { InferType } from 'yup';
@@ -22,7 +22,7 @@ const ProfileForm = () => {
   const dispatch = useAppDispatch();
   const dispatchExtra = useAppExtraDispatch();
   const { id } = useParams();
-  const { activeUser } = useUser();
+  const { user } = useUser();
 
   // user links
   const allLinks = inputFields.filter(el => el.includes('link'));
@@ -37,14 +37,14 @@ const ProfileForm = () => {
       };
     });
   // const initialLinks = allLinks.reduce(function (acc, el, i) {
-  //   const value = activeUser.user_links[i];
+  //   const value = user.user_links[i];
   //   if (value) { acc[el] = value; }
   //   return acc; }, {});
   const initialLinks = allLinks
     .map((el, i) => {
-      if (activeUser.user_links && activeUser.user_links[i]) {
+      if (user.user_links && user.user_links[i]) {
         return {
-          [el]: activeUser.user_links[i],
+          [el]: user.user_links[i],
         };
       }
     })
@@ -52,7 +52,7 @@ const ProfileForm = () => {
 
   let hiddenLinks = allLinks
     .map((el, i) => {
-      if (activeUser.user_links && !activeUser.user_links[i]) {
+      if (user.user_links && !user.user_links[i]) {
         return el;
       }
     })
@@ -73,7 +73,7 @@ const ProfileForm = () => {
     resolver,
     mode: 'onChange',
     defaultValues: {
-      ...activeUser,
+      ...user,
       ...initialLinks[0],
       ...initialLinks[1],
       ...initialLinks[2],
@@ -99,7 +99,7 @@ const ProfileForm = () => {
     dispatchExtra(updateUserInfoThunk({ ...data, user_id, user_links }))
       .then(() => dispatchExtra(getUserThunk(user_id)))
       .then(res => toast.success(res.payload.detail))
-      .finally(() => dispatch(editActiveUser({ edit: false })));
+      .finally(() => dispatch(editUser(false)));
   };
 
   return (

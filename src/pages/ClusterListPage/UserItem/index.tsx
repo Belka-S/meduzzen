@@ -7,9 +7,9 @@ import { NavLink } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppExtraDispatch } from 'store';
 import { logout } from 'store/auth';
-import { deleteUserThunk, editActiveUser, TUser } from 'store/user';
+import { deleteUserThunk, editUser, TUser } from 'store/user';
 import { trimName } from 'utils/helpers';
-import { useAuth, useUser } from 'utils/hooks';
+import { useUser } from 'utils/hooks';
 
 import s from './index.module.scss';
 
@@ -17,12 +17,11 @@ type TUserProps = {
   user: TUser;
 };
 
-const UserItem: FC<TUserProps> = ({ user }) => {
-  const { user_id, user_email, user_firstname, user_lastname } = user;
+const UserItem: FC<TUserProps> = ({ user: userProps }) => {
+  const { user_id, user_email, user_firstname, user_lastname } = userProps;
   const dispatch = useAppDispatch();
   const dispatchExtra = useAppExtraDispatch();
-  const { activeUser } = useUser();
-  const { user: owner } = useAuth();
+  const { user, owner } = useUser();
 
   const handleDeleteUser = () => {
     if (confirm(`Are you sure you want to delete user: ${user_email}`)) {
@@ -33,9 +32,9 @@ const UserItem: FC<TUserProps> = ({ user }) => {
     }
   };
 
-  const handleeditActiveUserAvatar = () => {
+  const handleUpdateUserAvatar = () => {
     if (owner.is_superuser || owner.user_id === user_id) {
-      dispatch(editActiveUser({ edit: 'avatar' }));
+      dispatch(editUser('avatar'));
     } else {
       toast.error("It's not your account");
     }
@@ -43,13 +42,13 @@ const UserItem: FC<TUserProps> = ({ user }) => {
 
   const handleUpdateUserInfo = () => {
     if (owner.is_superuser || owner.user_id === user_id) {
-      dispatch(editActiveUser({ edit: 'data' }));
+      dispatch(editUser('data'));
     } else {
       toast.error("It's not your account");
     }
   };
 
-  const isActive = user_id === activeUser.user_id;
+  const isActive = user_id === user?.user_id;
   const isOwner = user_id === owner.user_id;
   const isLastName = user_firstname !== user_lastname;
 
@@ -66,8 +65,8 @@ const UserItem: FC<TUserProps> = ({ user }) => {
     >
       <ProfileBtn
         className={s.avatar}
-        user={user}
-        onClick={handleeditActiveUserAvatar}
+        user={userProps}
+        onClick={handleUpdateUserAvatar}
       />
 
       <span>{user_email}</span>

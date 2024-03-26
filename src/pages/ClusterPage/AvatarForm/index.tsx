@@ -2,7 +2,7 @@ import Button from 'components/ui/Button';
 import { Resolver, SubmitHandler, useForm } from 'react-hook-form';
 import { useAppDispatch, useAppExtraDispatch } from 'store';
 import { updateAvatarThunk } from 'store/user';
-import { editActiveUser } from 'store/user';
+import { editUser } from 'store/user';
 // import { useAuth } from 'utils/hooks';
 import { avatarSchema } from 'utils/validation';
 import { InferType } from 'yup';
@@ -34,14 +34,13 @@ const AvatarForm = () => {
       formData.append('file', data.file[0]);
     }
 
-    for (const [key, value] of formData) {
-      console.log(`${key}: ${value}`);
-    }
+    // for (const [key, value] of formData) {
+    //   console.log(`${key}: ${value}`);
+    // }
 
     dispatchExtra(updateAvatarThunk(formData))
       .unwrap()
-      .catch(err => console.log(err.detail))
-      .finally(() => dispatch(editActiveUser({ edit: false })));
+      .finally(() => dispatch(editUser(false)));
   };
 
   return (

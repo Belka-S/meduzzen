@@ -7,9 +7,9 @@ import PrivateRoutes from 'routes/PrivateRoutes';
 import PublicRoutes from 'routes/PublicRoutes';
 import { useAppDispatch, useAppExtraDispatch } from 'store';
 import { login } from 'store/auth';
-import { loginThunk } from 'store/auth';
+import { getMeThunk } from 'store/user';
 import { loadWebFonts } from 'styles/loadWebFonts';
-import { useAuth } from 'utils/hooks';
+import { useUser } from 'utils/hooks';
 
 import { useAuth0 } from '@auth0/auth0-react';
 
@@ -25,7 +25,7 @@ const CompanyPage = lazy(() => import('pages/CompanyPage'));
 const App = () => {
   const dispatch = useAppDispatch();
   const dispatchExtra = useAppExtraDispatch();
-  const { isLoading, isAuth } = useAuth();
+  const { isLoading, owner } = useUser();
   const { getAccessTokenSilently, isAuthenticated } = useAuth0();
 
   useEffect(() => {
@@ -33,15 +33,16 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    isAuthenticated &&
+    if (isAuthenticated && !owner) {
       getAccessTokenSilently()
         .then(access_token => dispatch(login({ result: { access_token } })))
-        .then(() => dispatchExtra(loginThunk()));
-  }, [dispatch, dispatchExtra, getAccessTokenSilently, isAuthenticated]);
+        .then(() => dispatchExtra(getMeThunk()));
+    }
+  }, [dispatch, dispatchExtra, getAccessTokenSilently, isAuthenticated, owner]);
 
   return (
     <>
-      {(!isLoading || isAuth) && (
+      {(!isLoading || owner) && (
         <Routes>
           <Route path="/" element={<SharedLayout />}>
             <Route index element={<HomePage />} />

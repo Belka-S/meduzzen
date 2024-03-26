@@ -9,28 +9,41 @@ export type TUser = {
   user_phone: string | null;
   user_links: string[];
   is_superuser: boolean;
-
-  edit?: false | 'avatar' | 'data';
-
-  access_token: string;
-  token_type: string;
-
-  user_password: string;
-  user_password_repeat: string;
 };
 
 export type TPagination = {
   current_page: number;
   total_page: number;
-  total_results: number;
+  total_results?: number;
 };
 
-export const userInitialState: Partial<TUser> = {};
+export type TEdit = false | 'avatar' | 'data';
 
-export const usersInitialState: TUser[] = [];
-
-export const paginationInitialState: TPagination = {
-  current_page: 0,
-  total_page: 0,
-  total_results: 0,
+export type TInitialState = {
+  owner: TUser;
+  user: TUser;
+  edit: TEdit;
+  userList: TUser[];
+  pagination: TPagination;
 };
+
+export const initialState: TInitialState = {
+  owner: null,
+  user: null,
+  edit: false,
+  userList: [],
+  pagination: { current_page: 0, total_page: 0 },
+};
+
+// export const user: TUser = {
+//   user_id: NaN,
+//   user_email: '',
+//   user_firstname: '',
+//   user_lastname: '',
+//   user_avatar: '',
+//   user_status: '',
+//   user_city: '',
+//   user_phone: '',
+//   user_links: [],
+//   is_superuser: false,
+// };

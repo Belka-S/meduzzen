@@ -1,13 +1,14 @@
 import { Suspense } from 'react';
 import OvalLoader from 'components/ui/Loader';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { useAuth } from 'utils/hooks/useAuth';
+import { useUser } from 'utils/hooks';
 
 const PrivateRoutes = () => {
   const location = useLocation();
-  const { isAuth } = useAuth();
+  const { owner } = useUser();
+  const isPrivate = owner;
 
-  return isAuth ? (
+  return isPrivate ? (
     <Suspense fallback={<OvalLoader />}>
       <Outlet />
     </Suspense>

@@ -5,7 +5,7 @@ import Section from 'components/ui/Section';
 import H1 from 'components/ui/Typography/H1';
 import H4 from 'components/ui/Typography/H4';
 import { useAppExtraDispatch } from 'store';
-import { loginThunk } from 'store/auth';
+import { getMeThunk } from 'store/user';
 
 import s from './index.module.scss';
 
@@ -14,7 +14,7 @@ const AboutPage = () => {
   const [email, setEmail] = useState('?');
 
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
-    dispatch(loginThunk()).then(res => setEmail(res.payload.result.user_email));
+    dispatch(getMeThunk()).then(res => setEmail(res.payload.result.user_email));
 
     e.currentTarget.blur();
   };
