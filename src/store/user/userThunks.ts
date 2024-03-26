@@ -83,3 +83,20 @@ export const updatePasswordThunk = createAppAsyncThunk(
     }
   },
 );
+
+export const updateAvatarThunk = createAppAsyncThunk(
+  'users/updateAvatar',
+  async (formData: FormData, thunkAPI) => {
+    const { access_token } = store.getState().auth.user;
+    const { user_id } = store.getState().auth.user;
+    try {
+      if (access_token && user_id) {
+        return await API.updateAvatar(access_token, user_id, formData);
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return thunkAPI.rejectWithValue(error.response?.data);
+      }
+    }
+  },
+);

@@ -25,8 +25,8 @@ const ProfileCard = () => {
           <span>{Object.values(el)[0]}</span>
         </div>
       ))}
-      {user_links?.map(el => (
-        <div key={el} className={s.main__info}>
+      {user_links?.map((el, i) => (
+        <div key={el + i} className={s.main__info}>
           <span>Link:</span>
           <span>{el}</span>
         </div>

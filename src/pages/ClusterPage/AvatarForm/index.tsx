@@ -1,7 +1,8 @@
 import Button from 'components/ui/Button';
 import { Resolver, SubmitHandler, useForm } from 'react-hook-form';
-// import { useAppDispatch, useAppExtraDispatch } from 'store';
-// import { editActiveUser } from 'store/user';
+import { useAppDispatch, useAppExtraDispatch } from 'store';
+import { updateAvatarThunk } from 'store/user';
+import { editActiveUser } from 'store/user';
 // import { useAuth } from 'utils/hooks';
 import { avatarSchema } from 'utils/validation';
 import { InferType } from 'yup';
@@ -12,13 +13,10 @@ import s from './index.module.scss';
 
 type TInput = InferType<typeof avatarSchema>;
 
-const inputFields = Object.keys(avatarSchema.fields) as Array<keyof TInput>;
-
 const AvatarForm = () => {
-  // const dispatch = useAppDispatch();
-  // const dispatchExtra = useAppExtraDispatch();
+  const dispatch = useAppDispatch();
+  const dispatchExtra = useAppExtraDispatch();
   // const { user } = useAuth();
-  console.log(inputFields[0]);
 
   const resolver: Resolver<TInput> = yupResolver(avatarSchema);
   const {
@@ -28,19 +26,22 @@ const AvatarForm = () => {
   } = useForm<TInput>({
     resolver,
     mode: 'onChange',
-    // defaultValues: { email: user.user_email ?? '' },
   });
 
   const onSubmit: SubmitHandler<TInput> = data => {
-    console.log('data: ', data);
     const formData = new FormData();
-    // const file = new File([''], 'file');
-    formData.append('file', data.file);
-    console.log('formData: ', formData);
+    if (data.file && data.file[0]) {
+      formData.append('file', data.file[0]);
+    }
 
-    // dispatchExtra(authThunk({ user_email, user_password }))
-    //   .unwrap()
-    //   .then(() => dispatch(editActiveUser({ edit: false })));
+    for (const [key, value] of formData) {
+      console.log(`${key}: ${value}`);
+    }
+
+    dispatchExtra(updateAvatarThunk(formData))
+      .unwrap()
+      .catch(err => console.log(err.detail))
+      .finally(() => dispatch(editActiveUser({ edit: false })));
   };
 
   return (

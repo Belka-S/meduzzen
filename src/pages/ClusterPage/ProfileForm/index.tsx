@@ -19,10 +19,9 @@ type TInput = InferType<typeof profileSchema>;
 const inputFields = Object.keys(profileSchema.fields) as Array<keyof TInput>;
 
 const ProfileForm = () => {
-  const { id } = useParams();
-
   const dispatch = useAppDispatch();
   const dispatchExtra = useAppExtraDispatch();
+  const { id } = useParams();
   const { activeUser } = useUser();
 
   // user links
@@ -51,7 +50,7 @@ const ProfileForm = () => {
     })
     .filter(el => el && el);
 
-  const hiddenLinks = allLinks
+  let hiddenLinks = allLinks
     .map((el, i) => {
       if (activeUser.user_links && !activeUser.user_links[i]) {
         return el;
@@ -59,6 +58,11 @@ const ProfileForm = () => {
     })
     .filter(el => el && el)
     .slice(1);
+
+  hiddenLinks =
+    hiddenLinks.length > 0
+      ? hiddenLinks
+      : inputFields.filter(el => el.includes('_link'));
 
   const resolver: Resolver<TInput> = yupResolver(profileSchema);
   const {
@@ -92,18 +96,17 @@ const ProfileForm = () => {
     const user_id = Number(id);
     const user_links = allLinks.map(el => data[el]).filter(el => el && el);
 
-    const { link, a_link, b_link, c_link, d_link, ...userData } = data;
-
     dispatchExtra(updateUserInfoThunk({ ...data, user_id, user_links }))
       .then(() => dispatchExtra(getUserThunk(user_id)))
-      .then(res => toast.success(res.payload.detail));
+      .then(res => toast.success(res.payload.detail))
+      .finally(() => dispatch(editActiveUser({ edit: false })));
   };
 
   return (
     <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
-      {inputFields.map((el, i) => (
+      {inputFields.map(el => (
         <InputRhf
-          key={el + i}
+          key={el}
           style={{ display: hiddenLinks.includes(el) ? 'none' : 'block' }}
           inputName={el}
           errors={errors}

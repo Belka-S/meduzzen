@@ -48,3 +48,17 @@ export const updatePassword = async (
   );
   return data;
 };
+
+export const updateAvatar = async (
+  accessToken: string,
+  user_id: number,
+  formData: FormData,
+) => {
+  token.set(accessToken);
+
+  const { data } = await apiClient.put(
+    `/user/${user_id}/update_avatar/`,
+    formData,
+  );
+  return data;
+};

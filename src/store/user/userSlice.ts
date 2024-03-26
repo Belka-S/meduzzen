@@ -21,6 +21,7 @@ const thunkArr = [
   TNK.getUserThunk,
   TNK.updateUserInfoThunk,
   TNK.updatePasswordThunk,
+  TNK.updateAvatarThunk,
   TNK.deleteUserThunk,
 ];
 
@@ -74,10 +75,10 @@ const handleUpdateActiveUserSucsess = (
   action: PayloadAction<Partial<TUser>>,
 ) => ({ ...state, ...action.payload });
 
-const handleUpdatePasswordSucsess = () => {
+const handleUpdateSucsess = () => {
   toast.success('Updated');
 };
-const handleDeleteUserSucsess = () => {
+const handleDeleteSucsess = () => {
   toast.success('Deleted');
 };
 
@@ -91,8 +92,9 @@ const activeUserSlice = createSlice({
     builder
       .addCase(TNK.getUserThunk.fulfilled, handleGetUserSucsess)
       .addCase(TNK.updateUserInfoThunk.fulfilled, handleUpdateActiveUserSucsess)
-      .addCase(TNK.updatePasswordThunk.fulfilled, handleUpdatePasswordSucsess)
-      .addCase(TNK.deleteUserThunk.fulfilled, handleDeleteUserSucsess);
+      .addCase(TNK.updatePasswordThunk.fulfilled, handleUpdateSucsess)
+      .addCase(TNK.updateAvatarThunk.fulfilled, handleUpdateSucsess)
+      .addCase(TNK.deleteUserThunk.fulfilled, handleDeleteSucsess);
   },
 });
 
