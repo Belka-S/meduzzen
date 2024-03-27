@@ -45,13 +45,14 @@ const ClusterPage = () => {
   };
 
   const isRedyToRender = !isLoading && id === user?.user_id.toString();
+  const isAvatarForm = edit === 'avatar' || id === owner.user_id.toString();
 
   if (!isRedyToRender) return <OvalLoader />;
   return (
     <Section className={classNames('container', s.screen)}>
       <div>
         <div className={s.main}>
-          {edit === 'avatar' ? (
+          {isAvatarForm ? (
             <AvatarForm />
           ) : (
             <ProfileBtn

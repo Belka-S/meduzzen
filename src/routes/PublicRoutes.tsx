@@ -1,12 +1,13 @@
 import { Suspense } from 'react';
 import OvalLoader from 'components/ui/Loader';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { useUser } from 'utils/hooks';
+import { useAuth, useUser } from 'utils/hooks';
 
 const PublicRoutes = () => {
   const { state } = useLocation();
-  const { owner, isLoading } = useUser();
-  const isPublic = !owner && !isLoading;
+  const { isAuth } = useAuth();
+  const { isLoading } = useUser();
+  const isPublic = !isAuth && !isLoading;
 
   return isPublic ? (
     <Suspense fallback={<OvalLoader />}>

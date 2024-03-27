@@ -55,7 +55,12 @@ const SigninForm = () => {
         <InputRhf key={el} inputName={el} errors={errors} register={register} />
       ))}
 
-      <Button type="submit" variant="smooth" label="Sign In" />
+      <Button
+        type="submit"
+        variant="smooth"
+        label="Sign In"
+        onClick={e => e.currentTarget.blur()}
+      />
       <Button
         onClick={() => loginWithRedirect()}
         color="outlined"

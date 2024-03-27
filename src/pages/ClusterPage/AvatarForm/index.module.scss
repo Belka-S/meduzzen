@@ -6,7 +6,7 @@
   position: relative;
   width: 150px;
   height: 150px;
-  margin-left: 20px;
+  margin-inline: 20px;
 
   display: flex;
   justify-content: center;
@@ -16,8 +16,7 @@
   font-size: 70px;
 
   border-radius: 50%;
-  background-color: white;
-  // background-image: ${({ url }) => `url(${url})`};
+  // background-color: var(--hover-color);
   background-size: cover;
   background-position: center;
   color: transparent;
@@ -50,4 +49,27 @@
   &::file-selector-button {
     display: none;
   }
+
+  &.border__error {
+    outline-color: var(--alert-color);
+  }
+}
+
+.border__success {
+  outline-color: var(--success-color) !important;
+}
+
+.error {
+  position: absolute;
+  top: 50%;
+  left: 190px;
+
+  transform: translateY(-50%);
+  color: var(--alert-color);
+}
+
+.button {
+  position: absolute;
+  top: 0;
+  left: 188px;
 }

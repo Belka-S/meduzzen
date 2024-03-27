@@ -21,6 +21,7 @@ export const register = async (credentials: IRegisterCredentials) => {
 export const getMe = async (accessToken: string) => {
   token.set(accessToken);
   const { data } = await apiClient.get('/auth/me/');
+
   return data;
 };
 

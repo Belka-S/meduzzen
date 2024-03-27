@@ -38,7 +38,7 @@ const fn = (type: 'pending' | 'fulfilled' | 'rejected') =>
 const handleGetUserSucsess = (
   state: TUser,
   action: PayloadAction<{ result: TUser }>,
-) => ({ ...state, ...action.payload.result });
+) => ({ ...state, ...action.payload?.result });
 
 const ownerSlice = createSlice({
   name: 'owner',
@@ -56,17 +56,22 @@ const ownerSlice = createSlice({
 // user
 const handleUpdateUserSucsess = (
   state: TUser,
-  action: PayloadAction<TUser>,
-) => ({ ...state, ...action.payload });
+  action: PayloadAction<{ result: TUser }>,
+) => ({ ...state, ...action.payload.result });
 
 const handleSucsess = () => {
   toast.success('Sucsess');
 };
 
+const handleAvatarPreviewSucsess = (
+  state: TUser,
+  action: PayloadAction<Pick<TUser, 'user_avatar'>>,
+) => ({ ...state, ...action.payload });
+
 const userSlice = createSlice({
   name: 'user',
   initialState: initialState.user,
-  reducers: {},
+  reducers: { updateAvatarPreview: handleAvatarPreviewSucsess },
   extraReducers: builder => {
     builder
       .addCase(TNK.getUserThunk.fulfilled, handleGetUserSucsess)
@@ -155,3 +160,4 @@ export const usersReducer = combineReducers({
 
 export const { editUser } = editSlice.actions;
 export const { cleanOwner } = ownerSlice.actions;
+export const { updateAvatarPreview } = userSlice.actions;

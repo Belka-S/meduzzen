@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { NavLink } from 'react-router-dom';
-import { useUser } from 'utils/hooks';
+import { useAuth, useUser } from 'utils/hooks';
 
 import LogoutBtn from './LogoutBtn';
 import SiteNav from './SiteNav';
@@ -8,6 +8,7 @@ import SiteNav from './SiteNav';
 import s from './index.module.scss';
 
 const Header = () => {
+  const { isAuth } = useAuth();
   const { owner } = useUser();
 
   return (
@@ -16,10 +17,10 @@ const Header = () => {
         <SiteNav />
 
         <div className={s.login}>
-          {!owner && <NavLink to={'/signup'} />}
-          {!owner && <NavLink to={'/signin'}>Log in</NavLink>}
-          {owner && <span>{owner.user_email}</span>}
-          {owner && <LogoutBtn />}
+          {(!isAuth || !owner) && <NavLink to={'/signup'} />}
+          {(!isAuth || !owner) && <NavLink to={'/signin'}>Log in</NavLink>}
+          {isAuth && owner && <span>{owner.user_email}</span>}
+          {isAuth && owner && <LogoutBtn />}
         </div>
       </div>
     </header>

@@ -8,7 +8,7 @@ const ProfileCard = () => {
   const { user_status, user_city, user_email, user_phone } = user;
 
   const info = [{ user_email }, { user_phone }, { user_city }, { user_status }];
-  const infoToRender = info.filter(el => Object.values(el)[0] && el);
+  const infoToRender = info.filter(el => Object.values(el)[0]?.trim() && el);
 
   return (
     <>
@@ -21,7 +21,9 @@ const ProfileCard = () => {
       {user.user_links?.map((el, i) => (
         <div key={el + i} className={s.main__info}>
           <span>Link:</span>
-          <span>{el}</span>
+          <a href={el} target="blank">
+            {el}
+          </a>
         </div>
       ))}
     </>

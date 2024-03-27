@@ -25,4 +25,16 @@
       }
     }
   }
+
+  & a {
+    padding-block: 8px;
+    text-align: start;
+    font-size: 18px;
+    text-decoration: underline;
+    transition: color 250ms;
+
+    &:hover {
+      color: var(--hover-color);
+    }
+  }
 }

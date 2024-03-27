@@ -24,37 +24,13 @@ const ProfileForm = () => {
   const { id } = useParams();
   const { user } = useUser();
 
-  // user links
+  // all link inputs
   const allLinks = inputFields.filter(el => el.includes('link'));
-  const linkElObj = inputFields
-    .filter(el => el.includes('link'))
-    .map(el => {
-      const inputEl = document.querySelector(`input[name="${el}"]`);
-      const labelEl = inputEl?.closest('label');
-      return {
-        input: inputEl as HTMLInputElement,
-        label: labelEl as HTMLLabelElement,
-      };
-    });
-  // const initialLinks = allLinks.reduce(function (acc, el, i) {
-  //   const value = user.user_links[i];
-  //   if (value) { acc[el] = value; }
-  //   return acc; }, {});
-  const initialLinks = allLinks
-    .map((el, i) => {
-      if (user.user_links && user.user_links[i]) {
-        return {
-          [el]: user.user_links[i],
-        };
-      }
-    })
-    .filter(el => el && el);
 
+  // hidden link inputs
   let hiddenLinks = allLinks
     .map((el, i) => {
-      if (user.user_links && !user.user_links[i]) {
-        return el;
-      }
+      if (user.user_links && !user.user_links[i]) return el;
     })
     .filter(el => el && el)
     .slice(1);
@@ -64,33 +40,55 @@ const ProfileForm = () => {
       ? hiddenLinks
       : inputFields.filter(el => el.includes('_link'));
 
+  // initial link inputs
+  const initialLinks = allLinks.reduce((acc, el, i) => {
+    if (user.user_links && user.user_links[i]) {
+      return { ...acc, [el]: user.user_links[i] };
+    } else return acc;
+  }, {});
+
   const resolver: Resolver<TInput> = yupResolver(profileSchema);
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    watch,
+
+    formState: { errors, isValid, touchedFields },
   } = useForm<TInput>({
     resolver,
+
     mode: 'onChange',
-    defaultValues: {
-      ...user,
-      ...initialLinks[0],
-      ...initialLinks[1],
-      ...initialLinks[2],
-      ...initialLinks[3],
-      ...initialLinks[4],
-    },
+    defaultValues: { ...user, ...initialLinks },
   });
 
+  // automaticly open new link input
+  allLinks.map(el => watch(el));
+
+  // show / hide inputs
   useEffect(() => {
+    const linkElObj = inputFields
+      .filter(el => el.includes('link'))
+      .map(el => {
+        const inputEl = document.querySelector(`input[name="${el}"]`);
+        const labelEl = inputEl?.closest('label');
+        return {
+          input: inputEl as HTMLInputElement,
+          label: labelEl as HTMLLabelElement,
+        };
+      });
+
     if (linkElObj && linkElObj[0].input) {
       for (let i = 0; i < linkElObj.length - 1; i += 1) {
         if (linkElObj[i].input.value) {
           linkElObj[i + 1].label.style.display = 'block';
+        } else {
+          linkElObj[i + 1].label.style.display = 'none';
         }
       }
     }
-  }, [linkElObj, initialLinks]);
+  }, [initialLinks]);
+
+  console.log(touchedFields);
 
   const onSubmit: SubmitHandler<TInput> = data => {
     const user_id = Number(id);
@@ -102,6 +100,8 @@ const ProfileForm = () => {
       .finally(() => dispatch(editUser(false)));
   };
 
+  const isDisabled = !isValid || Object.keys(touchedFields).length === 0;
+
   return (
     <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
       {inputFields.map(el => (
@@ -110,11 +110,18 @@ const ProfileForm = () => {
           style={{ display: hiddenLinks.includes(el) ? 'none' : 'block' }}
           inputName={el}
           errors={errors}
+          watch={watch}
           register={register}
         />
       ))}
 
-      <Button type="submit" color="outlined" variant="smooth" label="Submit" />
+      <Button
+        type="submit"
+        color={isDisabled ? 'disabled' : 'outlined'}
+        variant="smooth"
+        label="Submit"
+        onClick={e => e.currentTarget.blur()}
+      />
     </form>
   );
 };
