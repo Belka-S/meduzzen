@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import Button from 'components/ui/Button';
 import Section from 'components/ui/Section';
 import { useAppDispatch, useAppExtraDispatch } from 'store';
-import { editActiveUser, TUser } from 'store/user';
+import { editUser } from 'store/user';
 import { getAllUsersThunk } from 'store/user';
 import { useUser } from 'utils/hooks';
 
@@ -15,7 +15,7 @@ import s from './index.module.scss';
 const ClusterListPage = () => {
   const dispatch = useAppDispatch();
   const dispatchExtra = useAppExtraDispatch();
-  const { users, pagination } = useUser();
+  const { userList, pagination } = useUser();
 
   const { current_page: page, total_page } = pagination;
   const page_size = 30;
@@ -29,13 +29,13 @@ const ClusterListPage = () => {
   }, []);
 
   useEffect(() => {
-    dispatch(editActiveUser({ edit: false }));
+    dispatch(editUser(false));
   }, [dispatch]);
 
   useEffect(() => {
-    users.length === 0 &&
+    userList.length === 0 &&
       dispatchExtra(getAllUsersThunk({ page: page + 1, page_size }));
-  }, [dispatchExtra, page, users.length]);
+  }, [dispatchExtra, page, userList.length]);
 
   const handleLoadMore = (e: MouseEvent<HTMLButtonElement>) => {
     dispatchExtra(getAllUsersThunk({ page: page + 1, page_size }));
@@ -47,7 +47,7 @@ const ClusterListPage = () => {
   return (
     <Section className={classNames('container', s.screen)}>
       <TableHead />
-      {users.map((el: TUser) => (
+      {userList.map(el => (
         <UserItem key={el.user_id} user={el} />
       ))}
 

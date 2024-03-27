@@ -21,13 +21,19 @@ import { usersReducer } from './user';
 const authPersistConfig = {
   key: 'auth',
   storage,
-  whitelist: ['user'],
+  whitelist: ['token'],
+};
+
+const usersPersistConfig = {
+  key: 'users',
+  storage,
+  whitelist: ['owner'],
 };
 
 export const rootReducer = combineReducers({
   common: commonReducer,
   auth: persistReducer(authPersistConfig, authReducer),
-  users: usersReducer,
+  users: persistReducer(usersPersistConfig, usersReducer),
 });
 
 // ----------------configureStore---------------- //

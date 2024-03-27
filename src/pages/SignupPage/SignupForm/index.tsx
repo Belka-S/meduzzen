@@ -5,7 +5,7 @@ import H3 from 'components/ui/Typography/H3';
 import { Resolver, SubmitHandler, useForm } from 'react-hook-form';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAppExtraDispatch } from 'store';
-import { registerThunk } from 'store/auth';
+import { registerThunk } from 'store/user';
 import { signupSchema } from 'utils/validation';
 import { InferType } from 'yup';
 
@@ -49,7 +49,12 @@ const SignupForm = () => {
         <InputRhf key={el} inputName={el} errors={errors} register={register} />
       ))}
 
-      <Button type="submit" variant="smooth" label="Sign Up" />
+      <Button
+        type="submit"
+        variant="smooth"
+        label="Sign Up"
+        onClick={e => e.currentTarget.blur()}
+      />
       <Button
         onClick={() =>
           loginWithRedirect({

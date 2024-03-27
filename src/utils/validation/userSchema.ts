@@ -44,35 +44,18 @@ const link = Yup.string()
   .nullable()
   .transform(value => (value ? value : null));
 
-// const links = Yup.array()
-//   .min(1, "You can't leave this blank.")
-//   .required("You can't leave this blank.")
-//   .nullable();
-
 // file
 const MAX_SIZE = 1024 * 1024;
 const MB = 1024 * 1024; // const kB = 1024;
 
-const file = Yup.mixed<FileList>().test(
+const avatar = Yup.mixed().test(
   'size',
-  `You need to provide a file, max size: ${MAX_SIZE / MB}MB`,
-  async files => {
-    if (files) return true;
-    // if (files) return files[0].size <= MAX_SIZE;
-    return false;
-  },
+  ` max file size: ${MAX_SIZE / MB}MB`,
+  (file: any) => (!file ? true : file.size <= MAX_SIZE),
 );
+// .test('type', 'invalid file type', (file: any) =>
+//   !file ? true : file.type.includes('image'), );
 
-// const MAX_SIZE = 1024 * 1024;
-// const MB = 1024 * 1024; // const kB = 1024;
-
-// const file = Yup.mixed()
-//   .test('size', ` max file size: ${MAX_SIZE / MB}MB`, (file: any) =>
-//     !file ? true : file.size <= MAX_SIZE,
-//   )
-//   .test('type', 'invalid file type', (file: any) =>
-//     !file ? true : file.type.includes('image'),
-//   );
 export const signinSchema = Yup.object().shape({
   user_email: email,
   user_password: password,
@@ -110,4 +93,4 @@ export const profileSchema = Yup.object().shape({
   d_link: link,
 });
 
-export const avatarSchema = Yup.object().shape({ file });
+export const avatarSchema = Yup.object().shape({ avatar });

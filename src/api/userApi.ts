@@ -1,12 +1,27 @@
 import { TUser } from 'store/user';
 
 import { apiClient, token } from './apiHttp';
+import { IAuthCredentials } from './authApi';
 
-export type TParams = { page: number; page_size: number };
+export interface IRegisterCredentials extends IAuthCredentials {
+  user_firstname: string;
+  user_lastname: string;
+  user_password_repeat: string;
+}
 
-export const getAllUsers = async (accessToken: string, params: TParams) => {
+export type TPaginationParams = { page: number; page_size: number };
+
+export const register = async (credentials: IRegisterCredentials) => {
+  const { data } = await apiClient.post('/user/', credentials);
+  const user_email = credentials.user_email;
+  data.result = { ...data.result, user_email };
+  return data;
+};
+
+export const getMe = async (accessToken: string) => {
   token.set(accessToken);
-  const { data } = await apiClient.get('/users', { params });
+  const { data } = await apiClient.get('/auth/me/');
+
   return data;
 };
 
@@ -60,5 +75,14 @@ export const updateAvatar = async (
     `/user/${user_id}/update_avatar/`,
     formData,
   );
+  return data;
+};
+
+export const getAllUsers = async (
+  accessToken: string,
+  params: TPaginationParams,
+) => {
+  token.set(accessToken);
+  const { data } = await apiClient.get('/users', { params });
   return data;
 };

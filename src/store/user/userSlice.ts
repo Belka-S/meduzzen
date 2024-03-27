@@ -1,5 +1,10 @@
 import { toast } from 'react-toastify';
-import { TUser } from 'store/user/initialState';
+import {
+  initialState,
+  TEdit,
+  TPagination,
+  TUser,
+} from 'store/user/initialState';
 import * as TNK from 'store/user/userThunks';
 
 import {
@@ -9,20 +14,15 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit';
 
-import {
-  paginationInitialState,
-  TPagination,
-  userInitialState,
-  usersInitialState,
-} from './initialState';
-
 const thunkArr = [
-  TNK.getAllUsersThunk,
+  TNK.registerThunk,
+  TNK.getMeThunk,
   TNK.getUserThunk,
+  TNK.deleteUserThunk,
   TNK.updateUserInfoThunk,
   TNK.updatePasswordThunk,
   TNK.updateAvatarThunk,
-  TNK.deleteUserThunk,
+  TNK.getAllUsersThunk,
 ];
 
 const fn = (type: 'pending' | 'fulfilled' | 'rejected') =>
@@ -34,15 +34,73 @@ const fn = (type: 'pending' | 'fulfilled' | 'rejected') =>
 
 // fulfilled slice
 
-// users
+// owner
+const handleGetUserSucsess = (
+  state: TUser,
+  action: PayloadAction<{ result: TUser }>,
+) => ({ ...state, ...action.payload?.result });
+
+const ownerSlice = createSlice({
+  name: 'owner',
+  initialState: initialState.owner,
+  reducers: {
+    cleanOwner: () => initialState.owner,
+  },
+  extraReducers: builder => {
+    builder
+      .addCase(TNK.registerThunk.fulfilled, handleGetUserSucsess)
+      .addCase(TNK.getMeThunk.fulfilled, handleGetUserSucsess);
+  },
+});
+
+// user
+const handleUpdateUserSucsess = (
+  state: TUser,
+  action: PayloadAction<{ result: TUser }>,
+) => ({ ...state, ...action.payload.result });
+
+const handleSucsess = () => {
+  toast.success('Sucsess');
+};
+
+const handleAvatarPreviewSucsess = (
+  state: TUser,
+  action: PayloadAction<Pick<TUser, 'user_avatar'>>,
+) => ({ ...state, ...action.payload });
+
+const userSlice = createSlice({
+  name: 'user',
+  initialState: initialState.user,
+  reducers: { updateAvatarPreview: handleAvatarPreviewSucsess },
+  extraReducers: builder => {
+    builder
+      .addCase(TNK.getUserThunk.fulfilled, handleGetUserSucsess)
+      .addCase(TNK.updateUserInfoThunk.fulfilled, handleUpdateUserSucsess)
+      .addCase(TNK.updatePasswordThunk.fulfilled, handleSucsess)
+      .addCase(TNK.updateAvatarThunk.fulfilled, handleSucsess)
+      .addCase(TNK.deleteUserThunk.fulfilled, handleSucsess);
+  },
+});
+
+// edit user
+const handleEditUserSucsess = (_: TEdit, action: PayloadAction<TEdit>) =>
+  action.payload;
+
+const editSlice = createSlice({
+  name: 'edit',
+  initialState: initialState.edit,
+  reducers: { editUser: handleEditUserSucsess },
+});
+
+// userList
 const handleGetAllUsersSucsess = (
   state: TUser[],
   action: PayloadAction<{ result: { users: TUser[] } }>,
 ) => state.concat(action.payload.result.users);
 
-const usersSlice = createSlice({
-  name: 'users',
-  initialState: usersInitialState,
+const userListSlice = createSlice({
+  name: 'userList',
+  initialState: initialState.userList,
   reducers: {},
   extraReducers: builder => {
     builder.addCase(TNK.getAllUsersThunk.fulfilled, handleGetAllUsersSucsess);
@@ -56,45 +114,11 @@ const handlePaginationSucsess = (
 ) => action.payload.result.pagination;
 
 const paginationSlice = createSlice({
-  name: 'users/pagination',
-  initialState: paginationInitialState,
+  name: 'pagination',
+  initialState: initialState.pagination,
   reducers: {},
   extraReducers: builder => {
     builder.addCase(TNK.getAllUsersThunk.fulfilled, handlePaginationSucsess);
-  },
-});
-
-// active
-const handleGetUserSucsess = (
-  state: Partial<TUser>,
-  action: PayloadAction<{ result: TUser }>,
-) => ({ ...state, ...action.payload.result });
-
-const handleUpdateActiveUserSucsess = (
-  state: Partial<TUser>,
-  action: PayloadAction<Partial<TUser>>,
-) => ({ ...state, ...action.payload });
-
-const handleUpdateSucsess = () => {
-  toast.success('Updated');
-};
-const handleDeleteSucsess = () => {
-  toast.success('Deleted');
-};
-
-const activeUserSlice = createSlice({
-  name: 'users/active',
-  initialState: userInitialState,
-  reducers: {
-    editActiveUser: handleUpdateActiveUserSucsess,
-  },
-  extraReducers: builder => {
-    builder
-      .addCase(TNK.getUserThunk.fulfilled, handleGetUserSucsess)
-      .addCase(TNK.updateUserInfoThunk.fulfilled, handleUpdateActiveUserSucsess)
-      .addCase(TNK.updatePasswordThunk.fulfilled, handleUpdateSucsess)
-      .addCase(TNK.updateAvatarThunk.fulfilled, handleUpdateSucsess)
-      .addCase(TNK.deleteUserThunk.fulfilled, handleDeleteSucsess);
   },
 });
 
@@ -125,11 +149,15 @@ const usersErrorSlice = createSlice({
 });
 
 export const usersReducer = combineReducers({
-  userList: usersSlice.reducer,
+  owner: ownerSlice.reducer,
+  user: userSlice.reducer,
+  userList: userListSlice.reducer,
   pagination: paginationSlice.reducer,
-  active: activeUserSlice.reducer,
+  edit: editSlice.reducer,
   loading: usersLoadingSlice.reducer,
   error: usersErrorSlice.reducer,
 });
 
-export const { editActiveUser } = activeUserSlice.actions;
+export const { editUser } = editSlice.actions;
+export const { cleanOwner } = ownerSlice.actions;
+export const { updateAvatarPreview } = userSlice.actions;

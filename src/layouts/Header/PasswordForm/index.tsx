@@ -33,7 +33,6 @@ const PasswordForm: FC<TPasswordForm> = ({ setIsModal }) => {
   const onSubmit: SubmitHandler<TInput> = data => {
     dispatch(updatePasswordThunk({ ...data, user_id }))
       .unwrap()
-      .then(res => console.log(res))
       .then(() => setIsModal());
   };
 

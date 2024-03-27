@@ -4,7 +4,8 @@ import Button from 'components/ui/Button';
 import Modal from 'components/ui/Modal';
 import { useAppDispatch } from 'store';
 import { logout } from 'store/auth';
-import { useAuth } from 'utils/hooks';
+import { cleanOwner } from 'store/user';
+import { useUser } from 'utils/hooks';
 
 import { useAuth0 } from '@auth0/auth0-react';
 
@@ -14,7 +15,7 @@ import s from './index.module.scss';
 
 const LogoutBtn = () => {
   const dispatch = useAppDispatch();
-  const { user } = useAuth();
+  const { owner } = useUser();
   const { logout: logoutAuth0 } = useAuth0();
   const [isModal, setIsModal] = useState(false);
   const [isForm, setIsForm] = useState(false);
@@ -30,12 +31,13 @@ const LogoutBtn = () => {
 
   const handleLogout = () => {
     dispatch(logout());
+    dispatch(cleanOwner());
     logoutAuth0();
   };
 
   return (
     <>
-      <ProfileBtn user={user} onClick={switchIsModal} />
+      <ProfileBtn user={owner} onClick={switchIsModal} />
 
       {isModal && (
         <Modal className={s.modal} setIsModal={switchIsModal}>
