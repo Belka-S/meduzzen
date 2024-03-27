@@ -52,7 +52,6 @@ const ProfileForm = () => {
     register,
     handleSubmit,
     watch,
-
     formState: { errors, isValid, touchedFields },
   } = useForm<TInput>({
     resolver,

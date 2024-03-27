@@ -27,6 +27,11 @@
   &:hover,
   &:focus {
     outline-color: var(--secondary-bg-color);
+
+    & ~ .validation {
+      border-color: var(--accent-color);
+      fill: var(--hover-color);
+    }
   }
 
   &::after {
@@ -72,4 +77,40 @@
   position: absolute;
   top: 0;
   left: 188px;
+}
+
+// validation icons
+.validation {
+  position: absolute;
+  bottom: 15px;
+  left: 140px;
+  width: 28px;
+  height: 28px;
+  padding: 3px;
+
+  border: 1px solid;
+  border-radius: 50%;
+  background-color: var(--white-color);
+  cursor: pointer;
+  pointer-events: all;
+  transition: border-color 250ms;
+
+  &:hover,
+  &:focus {
+    border-color: var(--accent-color);
+    fill: var(--hover-color);
+  }
+
+  &.exclamation {
+    border-color: var(--alert-color);
+    fill: var(--alert-color);
+  }
+  &.check {
+    border-color: var(--success-color);
+    fill: var(--success-color);
+  }
+  &.plus {
+    border-color: var(--icon-color);
+    fill: var(--placeholder-color);
+  }
 }

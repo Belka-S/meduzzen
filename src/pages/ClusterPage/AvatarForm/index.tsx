@@ -1,6 +1,7 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import Button from 'components/ui/Button';
+import SvgIcon from 'components/ui/SvgIcon';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppExtraDispatch } from 'store';
@@ -21,6 +22,8 @@ const AvatarForm = () => {
   const { user } = useUser();
 
   const [avatarError, setAvatarError] = useState('');
+  const [activeIcon, setActiveIcon] = useState(false);
+  console.log('activeIcon: ', activeIcon);
 
   const {
     register,
@@ -30,8 +33,6 @@ const AvatarForm = () => {
 
   // avatar preview
   const setAvatar = async (e: Event | ChangeEvent) => {
-    setAvatarError('');
-
     const target = e.target as HTMLInputElement;
     const avatar = (target.files as FileList)[0];
 
@@ -82,8 +83,15 @@ const AvatarForm = () => {
       .finally(() => dispatch(editUser(false)));
   };
 
+  // input validation
   const errorMessage = avatarError === 'noError' ? '' : avatarError;
   const isDisabled = errorMessage || Object.keys(touchedFields).length === 0;
+
+  const onMouseOver = () => setActiveIcon(true);
+  const onMouseOut = (e: MouseEvent<HTMLInputElement>) => {
+    setActiveIcon(false);
+    e.currentTarget.blur();
+  };
 
   return (
     <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
@@ -100,17 +108,43 @@ const AvatarForm = () => {
           accept="image/*"
           {...register('file', { required: true })}
           onChange={e => setAvatar(e)}
+          onMouseOut={onMouseOut}
+          onMouseOver={onMouseOver}
         />
+
+        {avatarError && avatarError !== 'noError' && (
+          <SvgIcon
+            className={classNames(s.validation, s.exclamation)}
+            svgId="ui-exclamation"
+            size={24}
+          />
+        )}
+        {avatarError === 'noError' && (
+          <SvgIcon
+            className={classNames(s.validation, s.check)}
+            svgId="ui-check"
+            size={24}
+          />
+        )}
+        {activeIcon && (
+          <SvgIcon
+            className={classNames(s.validation, s.plus)}
+            svgId="ui-plus"
+            size={24}
+          />
+        )}
       </label>
 
-      <Button
-        className={s.button}
-        type="submit"
-        color={isDisabled ? 'disabled' : 'outlined'}
-        variant="smooth"
-        label="Submit"
-        onClick={e => e.currentTarget.blur()}
-      />
+      {Object.keys(touchedFields).length > 0 && (
+        <Button
+          className={s.button}
+          type="submit"
+          color={isDisabled ? 'disabled' : 'outlined'}
+          variant="smooth"
+          label="Submit"
+          onClick={e => e.currentTarget.blur()}
+        />
+      )}
     </form>
   );
 };
