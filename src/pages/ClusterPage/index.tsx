@@ -37,15 +37,15 @@ const ClusterPage = () => {
   };
 
   const handleUpdateUserAvatar = () => {
-    if (owner.is_superuser || owner.user_id === user?.user_id) {
+    if (owner?.is_superuser || owner?.user_id === user?.user_id) {
       dispatch(editUser('avatar'));
     } else {
       toast.error("It's not your account");
     }
   };
 
-  const isRedyToRender = !isLoading && id === user?.user_id.toString();
-  const isAvatarForm = edit === 'avatar' || id === owner.user_id.toString();
+  const isRedyToRender = !isLoading && id === user?.user_id?.toString();
+  const isAvatarForm = edit === 'avatar' || id === owner?.user_id?.toString();
 
   if (!isRedyToRender) return <OvalLoader />;
   return (

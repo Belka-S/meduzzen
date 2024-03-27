@@ -48,7 +48,7 @@ const link = Yup.string()
 const MAX_SIZE = 1024 * 1024;
 const MB = 1024 * 1024; // const kB = 1024;
 
-const avatar = Yup.mixed().test(
+const file = Yup.mixed().test(
   'size',
   ` max file size: ${MAX_SIZE / MB}MB`,
   (file: any) => (!file ? true : file.size <= MAX_SIZE),
@@ -93,4 +93,4 @@ export const profileSchema = Yup.object().shape({
   d_link: link,
 });
 
-export const avatarSchema = Yup.object().shape({ avatar });
+export const avatarSchema = Yup.object().shape({ file });

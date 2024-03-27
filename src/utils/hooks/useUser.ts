@@ -8,8 +8,24 @@ export const useUser = () => {
   const userList = useAppSelector(selectors.selectUserList);
   const pagination = useAppSelector(selectors.selectPagination);
 
+  const profileInfo = [
+    ['email', user?.user_email],
+    ['phone', user?.user_phone],
+    ['city', user?.user_city],
+    ['status', user?.user_status],
+  ];
+
   const isLoading = useAppSelector(selectors.selectLoading);
   const error = useAppSelector(selectors.selectError);
 
-  return { owner, user, edit, userList, pagination, isLoading, error };
+  return {
+    owner,
+    user,
+    profileInfo,
+    edit,
+    userList,
+    pagination,
+    isLoading,
+    error,
+  };
 };

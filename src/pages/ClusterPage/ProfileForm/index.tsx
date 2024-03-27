@@ -30,7 +30,7 @@ const ProfileForm = () => {
   // hidden link inputs
   let hiddenLinks = allLinks
     .map((el, i) => {
-      if (user.user_links && !user.user_links[i]) return el;
+      if (user?.user_links && !user.user_links[i]) return el;
     })
     .filter(el => el && el)
     .slice(1);
@@ -42,8 +42,8 @@ const ProfileForm = () => {
 
   // initial link inputs
   const initialLinks = allLinks.reduce((acc, el, i) => {
-    if (user.user_links && user.user_links[i]) {
-      return { ...acc, [el]: user.user_links[i] };
+    if (user?.user_links && user?.user_links[i]) {
+      return { ...acc, [el]: user?.user_links[i] };
     } else return acc;
   }, {});
 
@@ -56,7 +56,6 @@ const ProfileForm = () => {
     formState: { errors, isValid, touchedFields },
   } = useForm<TInput>({
     resolver,
-
     mode: 'onChange',
     defaultValues: { ...user, ...initialLinks },
   });
@@ -88,13 +87,14 @@ const ProfileForm = () => {
     }
   }, [initialLinks]);
 
-  console.log(touchedFields);
-
   const onSubmit: SubmitHandler<TInput> = data => {
     const user_id = Number(id);
-    const user_links = allLinks.map(el => data[el]).filter(el => el && el);
+    const getUsetLinks = () => {
+      const user_links = allLinks.map(el => data[el]).filter(el => el && el);
+      return user_links ? { ...user_links } : {};
+    };
 
-    dispatchExtra(updateUserInfoThunk({ ...data, user_id, user_links }))
+    dispatchExtra(updateUserInfoThunk({ user_id, ...data, ...getUsetLinks() }))
       .then(() => dispatchExtra(getUserThunk(user_id)))
       .then(res => toast.success(res.payload.detail))
       .finally(() => dispatch(editUser(false)));

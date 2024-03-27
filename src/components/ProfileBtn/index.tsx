@@ -6,7 +6,7 @@ import { getAbbreviation, getRandomColor } from 'utils/helpers';
 import s from './index.module.scss';
 
 type TUserProps = {
-  user: TUser;
+  user: TUser | null;
   size?: 's' | 'm' | 'l' | 'xl';
   onClick?: () => void;
   className?: string;
@@ -18,26 +18,26 @@ const ProfileBtn: FC<TUserProps> = ({
   onClick,
   className,
 }) => {
-  const { user_id, user_firstname, user_lastname, user_avatar } = user;
-
   // profile button styles
-  const btnId = `profile-${user_id}`;
+  const btnId = `profile-${user?.user_id}`;
   const color = getRandomColor(60);
 
   useEffect(() => {
-    if (user_avatar) {
+    if (user?.user_avatar) {
       document.styleSheets[0].insertRule(
-        `#${btnId} {background-image: url(${user_avatar})}`,
+        `#${btnId} {background-image: url(${user?.user_avatar})}`,
         0,
       );
-    } else if (user_firstname || user_lastname) {
-      const abbr = getAbbreviation(`${user_firstname} ${user_lastname}`);
+    } else if (user?.user_firstname || user?.user_lastname) {
+      const abbr = getAbbreviation(
+        `${user?.user_firstname} ${user?.user_lastname}`,
+      );
       // document.styleSheets[0].deleteRule(0);
       document.styleSheets[0].insertRule(
         `#${btnId}::after { background-color: ${color}; color: #ffffff; content: '${abbr}'}`,
       );
     }
-  }, [btnId, color, user_avatar, user_firstname, user_lastname]);
+  }, [btnId, color, user]);
 
   return (
     <>

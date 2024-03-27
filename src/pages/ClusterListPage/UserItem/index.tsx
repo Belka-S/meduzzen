@@ -7,7 +7,7 @@ import { NavLink } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppExtraDispatch } from 'store';
 import { logout } from 'store/auth';
-import { deleteUserThunk, editUser, TUser } from 'store/user';
+import { cleanOwner, deleteUserThunk, editUser, TUser } from 'store/user';
 import { trimName } from 'utils/helpers';
 import { useUser } from 'utils/hooks';
 
@@ -25,15 +25,18 @@ const UserItem: FC<TUserProps> = ({ user: userProps }) => {
 
   const handleDeleteUser = () => {
     if (confirm(`Are you sure you want to delete user: ${user_email}`)) {
-      dispatchExtra(deleteUserThunk(user_id));
-      if (owner.user_id === user_id) {
+      if (user_id) {
+        dispatchExtra(deleteUserThunk(user_id))
+          .unwrap()
+          .then(() => dispatch(cleanOwner()));
+      } else if (owner?.user_id === user_id) {
         dispatch(logout());
       }
     }
   };
 
   const handleUpdateUserAvatar = () => {
-    if (owner.is_superuser || owner.user_id === user_id) {
+    if (owner?.is_superuser || owner?.user_id === user_id) {
       dispatch(editUser('avatar'));
     } else {
       toast.error("It's not your account");
@@ -41,7 +44,7 @@ const UserItem: FC<TUserProps> = ({ user: userProps }) => {
   };
 
   const handleUpdateUserInfo = () => {
-    if (owner.is_superuser || owner.user_id === user_id) {
+    if (owner?.is_superuser || owner?.user_id === user_id) {
       dispatch(editUser('data'));
     } else {
       toast.error("It's not your account");
@@ -49,7 +52,7 @@ const UserItem: FC<TUserProps> = ({ user: userProps }) => {
   };
 
   const isActive = user_id === user?.user_id;
-  const isOwner = user_id === owner.user_id;
+  const isOwner = user_id === owner?.user_id;
   const isLastName = user_firstname !== user_lastname;
 
   return (
@@ -70,8 +73,8 @@ const UserItem: FC<TUserProps> = ({ user: userProps }) => {
       />
 
       <span>{user_email}</span>
-      <span>{trimName(user_firstname)}</span>
-      <span>{isLastName && trimName(user_lastname)}</span>
+      <span>{trimName(user_firstname ?? '')}</span>
+      <span>{isLastName && trimName(user_lastname ?? '')}</span>
 
       <Button
         className={s.button}

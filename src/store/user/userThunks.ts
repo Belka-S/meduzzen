@@ -101,7 +101,7 @@ export const updateAvatarThunk = createAppAsyncThunk(
   'users/updateAvatar',
   async (formData: FormData, thunkAPI) => {
     const { access_token } = store.getState().auth.token;
-    const { user_id } = store.getState().users.user;
+    const user_id = store.getState().users.user?.user_id;
     try {
       if (access_token && user_id) {
         return await API.updateAvatar(access_token, user_id, formData);

@@ -35,8 +35,8 @@ const fn = (type: 'pending' | 'fulfilled' | 'rejected') =>
 // fulfilled slice
 
 // owner
-const handleGetUserSucsess = (
-  state: TUser,
+const handleGetUserSuccess = (
+  state: TUser | null,
   action: PayloadAction<{ result: TUser }>,
 ) => ({ ...state, ...action.payload?.result });
 
@@ -48,52 +48,52 @@ const ownerSlice = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addCase(TNK.registerThunk.fulfilled, handleGetUserSucsess)
-      .addCase(TNK.getMeThunk.fulfilled, handleGetUserSucsess);
+      .addCase(TNK.registerThunk.fulfilled, handleGetUserSuccess)
+      .addCase(TNK.getMeThunk.fulfilled, handleGetUserSuccess);
   },
 });
 
 // user
-const handleUpdateUserSucsess = (
-  state: TUser,
+const handleUpdateUserSuccess = (
+  state: TUser | null,
   action: PayloadAction<{ result: TUser }>,
 ) => ({ ...state, ...action.payload.result });
 
-const handleSucsess = () => {
-  toast.success('Sucsess');
+const handleSuccess = () => {
+  toast.success('Success');
 };
 
-const handleAvatarPreviewSucsess = (
-  state: TUser,
+const handleAvatarPreviewSuccess = (
+  state: TUser | null,
   action: PayloadAction<Pick<TUser, 'user_avatar'>>,
 ) => ({ ...state, ...action.payload });
 
 const userSlice = createSlice({
   name: 'user',
   initialState: initialState.user,
-  reducers: { updateAvatarPreview: handleAvatarPreviewSucsess },
+  reducers: { updateAvatarPreview: handleAvatarPreviewSuccess },
   extraReducers: builder => {
     builder
-      .addCase(TNK.getUserThunk.fulfilled, handleGetUserSucsess)
-      .addCase(TNK.updateUserInfoThunk.fulfilled, handleUpdateUserSucsess)
-      .addCase(TNK.updatePasswordThunk.fulfilled, handleSucsess)
-      .addCase(TNK.updateAvatarThunk.fulfilled, handleSucsess)
-      .addCase(TNK.deleteUserThunk.fulfilled, handleSucsess);
+      .addCase(TNK.getUserThunk.fulfilled, handleGetUserSuccess)
+      .addCase(TNK.updateUserInfoThunk.fulfilled, handleUpdateUserSuccess)
+      .addCase(TNK.updatePasswordThunk.fulfilled, handleSuccess)
+      .addCase(TNK.updateAvatarThunk.fulfilled, handleSuccess)
+      .addCase(TNK.deleteUserThunk.fulfilled, () => initialState.user);
   },
 });
 
 // edit user
-const handleEditUserSucsess = (_: TEdit, action: PayloadAction<TEdit>) =>
+const handleEditUserSuccess = (_: TEdit, action: PayloadAction<TEdit>) =>
   action.payload;
 
 const editSlice = createSlice({
   name: 'edit',
   initialState: initialState.edit,
-  reducers: { editUser: handleEditUserSucsess },
+  reducers: { editUser: handleEditUserSuccess },
 });
 
 // userList
-const handleGetAllUsersSucsess = (
+const handleGetAllUsersSuccess = (
   state: TUser[],
   action: PayloadAction<{ result: { users: TUser[] } }>,
 ) => state.concat(action.payload.result.users);
@@ -103,12 +103,12 @@ const userListSlice = createSlice({
   initialState: initialState.userList,
   reducers: {},
   extraReducers: builder => {
-    builder.addCase(TNK.getAllUsersThunk.fulfilled, handleGetAllUsersSucsess);
+    builder.addCase(TNK.getAllUsersThunk.fulfilled, handleGetAllUsersSuccess);
   },
 });
 
 // pagination
-const handlePaginationSucsess = (
+const handlePaginationSuccess = (
   _: TPagination,
   action: PayloadAction<{ result: { pagination: TPagination } }>,
 ) => action.payload.result.pagination;
@@ -118,7 +118,7 @@ const paginationSlice = createSlice({
   initialState: initialState.pagination,
   reducers: {},
   extraReducers: builder => {
-    builder.addCase(TNK.getAllUsersThunk.fulfilled, handlePaginationSucsess);
+    builder.addCase(TNK.getAllUsersThunk.fulfilled, handlePaginationSuccess);
   },
 });
 
