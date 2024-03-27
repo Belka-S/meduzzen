@@ -5,8 +5,9 @@ import SharedLayout from 'layouts/SharedLayout';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import PrivateRoutes from 'routes/PrivateRoutes';
 import PublicRoutes from 'routes/PublicRoutes';
-import { useAppDispatch } from 'store';
+import { useAppDispatch, useAppExtraDispatch } from 'store';
 import { login } from 'store/auth';
+import { loginThunk } from 'store/auth';
 import { loadWebFonts } from 'styles/loadWebFonts';
 import { useAuth } from 'utils/hooks';
 
@@ -23,6 +24,7 @@ const CompanyPage = lazy(() => import('pages/CompanyPage'));
 
 const App = () => {
   const dispatch = useAppDispatch();
+  const dispatchExtra = useAppExtraDispatch();
   const { isLoading, isAuth } = useAuth();
   const { getAccessTokenSilently, isAuthenticated } = useAuth0();
 
@@ -32,10 +34,10 @@ const App = () => {
 
   useEffect(() => {
     isAuthenticated &&
-      getAccessTokenSilently().then(access_token =>
-        dispatch(login({ result: { access_token } })),
-      );
-  }, [dispatch, getAccessTokenSilently, isAuthenticated]);
+      getAccessTokenSilently()
+        .then(access_token => dispatch(login({ result: { access_token } })))
+        .then(() => dispatchExtra(loginThunk()));
+  }, [dispatch, dispatchExtra, getAccessTokenSilently, isAuthenticated]);
 
   return (
     <>

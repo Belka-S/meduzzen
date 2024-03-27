@@ -1,9 +1,10 @@
 .header {
   width: 100%;
-  padding-block: 10px;
+  padding-block: 6px;
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 100;
 
   background-color: var(--primary-bg-color);
   border-bottom: 1px solid var(--border-color);
@@ -15,22 +16,23 @@
   justify-content: flex-start;
   gap: var(--indent-m);
 
-  span {
-    font-size: 16px;
-    font-weight: 600;
-  }
-
   & a {
+    font-size: 20px;
     font-weight: 600;
     transition: color 250ms;
+
+    &:nth-of-type(1) {
+      margin-left: 15px;
+    }
 
     &:hover {
       color: var(--placeholder-color);
     }
   }
 
-  & a:global(.active) {
-    color: var(--hover-color);
+  & span {
+    font-size: 20px;
+    font-weight: 600;
   }
 }
 

@@ -1,3 +1,4 @@
+import { FC, MouseEvent } from 'react';
 import sprite from 'assets/sprite.svg';
 import classNames from 'classnames';
 
@@ -7,9 +8,10 @@ type TSvgIconProps = {
   svgId: string;
   size?: number;
   className?: string;
+  onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
 };
 
-const SvgIcon = ({ svgId, size = 20, className = '' }: TSvgIconProps) => {
+const SvgIcon: FC<TSvgIconProps> = ({ svgId, size = 20, className = '' }) => {
   return (
     <svg
       className={classNames(s.svgIcon, className)}

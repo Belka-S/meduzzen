@@ -1,4 +1,3 @@
-import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -17,22 +16,20 @@ const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID;
 const audience = import.meta.env.VITE_AUTH0_AUDIENCE;
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <BrowserRouter basename={BASE_URL}>
-          <Auth0Provider
-            domain={domain}
-            clientId={clientId}
-            authorizationParams={{
-              audience: audience,
-              redirect_uri: `${window.location.origin}/meduzzen/about`,
-            }} // onRedirectCallback={() => console.log('qwe')}
-          >
-            <App />
-          </Auth0Provider>
-        </BrowserRouter>
-      </PersistGate>
-    </Provider>
-  </React.StrictMode>,
+  <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
+      <BrowserRouter basename={BASE_URL}>
+        <Auth0Provider
+          domain={domain}
+          clientId={clientId}
+          authorizationParams={{
+            audience: audience,
+            redirect_uri: `${window.location.origin}`,
+          }} // onRedirectCallback={() => console.log('qwe')}
+        >
+          <App />
+        </Auth0Provider>
+      </BrowserRouter>
+    </PersistGate>
+  </Provider>,
 );

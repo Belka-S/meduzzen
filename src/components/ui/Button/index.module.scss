@@ -95,6 +95,11 @@
 .transparent {
   border: none;
   color: var(--black-color);
+
+  &:hover,
+  &:focus {
+    background-color: var(--border-color);
+  }
 }
 
 .disabled {

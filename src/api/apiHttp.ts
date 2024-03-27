@@ -2,7 +2,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 // base URL
-export const baseURL = import.meta.env.VITE_PROD_BACK_HTTP;
+const baseURL = import.meta.env.VITE_PROD_BACK_HTTP;
 
 // axios instance
 const apiClient = axios.create({ baseURL });
@@ -20,13 +20,14 @@ const token = {
 // response interseptor
 apiClient.interceptors.response.use(
   res => {
-    toast.success(res.data.detail);
+    const { detail, result } = res.data;
+    toast.success(!result.user_id && detail);
     return res;
   },
   async err => {
-    toast.error(err.message.includes('401') ? 'Unauthorized' : err.message);
+    toast.error(err.response.data.detail);
     return Promise.reject(err);
   },
 );
 
-export { apiClient, token };
+export { apiClient, baseURL, token };

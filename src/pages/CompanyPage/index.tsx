@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import Section from 'components/ui/Section';
 import H1 from 'components/ui/Typography/H1';
 import { useParams } from 'react-router-dom';
 
@@ -8,9 +9,9 @@ const CompanyPage = () => {
   const { id } = useParams();
 
   return (
-    <H1 className={classNames('container', s.screen)}>
-      {`Company ${id ? id : ''} Page`}
-    </H1>
+    <Section className={classNames('container', s.screen)}>
+      <H1>{`Company ${id ? id : ''} Page`}</H1>
+    </Section>
   );
 };
 
