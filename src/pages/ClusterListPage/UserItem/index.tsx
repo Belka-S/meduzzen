@@ -26,10 +26,10 @@ const UserItem: FC<TUserProps> = ({ user: userProps }) => {
   const handleDeleteUser = () => {
     if (confirm(`Are you sure you want to delete user: ${user_email}`)) {
       if (user_id) {
-        dispatchExtra(deleteUserThunk(user_id))
-          .unwrap()
-          .then(() => dispatch(cleanOwner()));
-      } else if (owner?.user_id === user_id) {
+        dispatchExtra(deleteUserThunk(user_id)).then(() => {
+          document.location.reload();
+        });
+        dispatch(cleanOwner());
         dispatch(logout());
       }
     }

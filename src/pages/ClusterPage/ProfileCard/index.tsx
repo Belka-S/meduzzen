@@ -4,17 +4,19 @@ import s from './index.module.scss';
 
 const ProfileCard = () => {
   const { user, profileInfo } = useUser();
+  console.log('user: ', user);
 
-  const notEmptyProfileInfo = profileInfo.filter(el => el[1] && el);
+  const notEmptyProfileInfo = profileInfo?.filter(el => el[1] && el);
 
   return (
     <>
-      {notEmptyProfileInfo.map(el => (
-        <div key={el[0]} className={s.main__info}>
-          <span>{el[0]}:</span>
-          <span>{el[1]}</span>
-        </div>
-      ))}
+      {user &&
+        notEmptyProfileInfo.map(el => (
+          <div key={el[0]} className={s.main__info}>
+            <span>{el[0]}:</span>
+            <span>{el[1]}</span>
+          </div>
+        ))}
       {user?.user_links?.map((el, i) => (
         <div key={el + i} className={s.main__info}>
           <span>Link:</span>

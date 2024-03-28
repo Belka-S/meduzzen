@@ -60,7 +60,7 @@ const ProfileForm = () => {
   });
 
   // automaticly open new link input
-  allLinks.map(el => watch(el));
+  inputFields.map(el => watch(el));
 
   // show / hide inputs
   useEffect(() => {
@@ -92,8 +92,14 @@ const ProfileForm = () => {
       const user_links = allLinks.map(el => data[el]).filter(el => el && el);
       return user_links ? { ...user_links } : {};
     };
-
-    dispatchExtra(updateUserInfoThunk({ user_id, ...data, ...getUsetLinks() }))
+    dispatchExtra(
+      updateUserInfoThunk({
+        user_id,
+        ...data,
+        user_status: undefined,
+        ...getUsetLinks(),
+      }),
+    )
       .then(() => dispatchExtra(getUserThunk(user_id)))
       .then(res => toast.success(res.payload.detail))
       .finally(() => dispatch(editUser(false)));
@@ -120,6 +126,7 @@ const ProfileForm = () => {
         variant="smooth"
         label="Submit"
         onClick={e => e.currentTarget.blur()}
+        onMouseOver={e => e.currentTarget.focus()}
       />
     </form>
   );

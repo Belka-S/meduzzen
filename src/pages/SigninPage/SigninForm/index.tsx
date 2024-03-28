@@ -22,7 +22,7 @@ const inputFields = Object.keys(signinSchema.fields) as Array<keyof TInput>;
 
 const SigninForm = () => {
   const dispatch = useAppExtraDispatch();
-  const { user } = useUser();
+  const { owner } = useUser();
   const { loginWithRedirect } = useAuth0();
 
   const resolver: Resolver<TInput> = yupResolver(signinSchema);
@@ -33,7 +33,7 @@ const SigninForm = () => {
   } = useForm<TInput>({
     resolver,
     mode: 'onChange',
-    defaultValues: { ...user },
+    defaultValues: { ...owner },
   });
 
   const onSubmit: SubmitHandler<TInput> = data => {

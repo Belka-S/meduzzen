@@ -5,7 +5,7 @@ import H3 from 'components/ui/Typography/H3';
 import { Resolver, SubmitHandler, useForm } from 'react-hook-form';
 import { useAppExtraDispatch } from 'store';
 import { updatePasswordThunk } from 'store/user';
-import { useAuth } from 'utils/hooks';
+import { useUser } from 'utils/hooks';
 import { passwordSchema } from 'utils/validation';
 import { InferType } from 'yup';
 
@@ -20,10 +20,9 @@ const inputFields = Object.keys(passwordSchema.fields) as Array<keyof TInput>;
 
 const PasswordForm: FC<TPasswordForm> = ({ setIsModal }) => {
   const dispatch = useAppExtraDispatch();
-  const { user } = useAuth();
-  const { user_id } = user;
-  const resolver: Resolver<TInput> = yupResolver(passwordSchema);
+  const { owner } = useUser();
 
+  const resolver: Resolver<TInput> = yupResolver(passwordSchema);
   const {
     register,
     handleSubmit,
@@ -31,7 +30,7 @@ const PasswordForm: FC<TPasswordForm> = ({ setIsModal }) => {
   } = useForm<TInput>({ mode: 'onChange', resolver });
 
   const onSubmit: SubmitHandler<TInput> = data => {
-    dispatch(updatePasswordThunk({ ...data, user_id }))
+    dispatch(updatePasswordThunk({ ...data, user_id: owner?.user_id }))
       .unwrap()
       .then(() => setIsModal());
   };

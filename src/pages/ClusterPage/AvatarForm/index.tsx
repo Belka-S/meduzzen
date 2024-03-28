@@ -23,7 +23,6 @@ const AvatarForm = () => {
 
   const [avatarError, setAvatarError] = useState('');
   const [activeIcon, setActiveIcon] = useState(false);
-  console.log('activeIcon: ', activeIcon);
 
   const {
     register,
@@ -52,12 +51,13 @@ const AvatarForm = () => {
   };
 
   // profile button styles
-  const random = (Math.random() * 1000).toFixed();
+  const random = (Math.random() * 10000).toFixed();
   const btnId = `profile-${user?.user_id}${random}`;
   const color = getRandomColor(60);
 
   useEffect(() => {
     if (user?.user_avatar) {
+      // document.styleSheets[0].deleteRule(0);
       document.styleSheets[0].insertRule(
         `#${btnId} {background-image: url(${user?.user_avatar})}`,
         0,
@@ -72,14 +72,19 @@ const AvatarForm = () => {
     }
   }, [btnId, color, user]);
 
-  const onSubmit: SubmitHandler<TInput> = data => {
+  const onSubmit: SubmitHandler<TInput> = async data => {
     const formData = new FormData(); // for (const [key, value] of formData) { console.log(`${key}: ${value}`); }
     const file = (data.file as FileList)[0];
     formData.append('file', file);
 
+    for (const [key, value] of formData) {
+      console.log(`${key}: ${value}`);
+    }
+
     dispatchExtra(updateAvatarThunk(formData))
       .unwrap()
       .then(() => dispatchExtra(getMeThunk()))
+      .then(() => document.location.reload())
       .finally(() => dispatch(editUser(false)));
   };
 

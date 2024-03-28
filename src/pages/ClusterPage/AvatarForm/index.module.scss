@@ -92,7 +92,7 @@
   border-radius: 50%;
   background-color: var(--white-color);
   cursor: pointer;
-  pointer-events: all;
+  // pointer-events: all;
   transition: border-color 250ms;
 
   &:hover,

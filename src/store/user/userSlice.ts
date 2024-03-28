@@ -77,7 +77,7 @@ const userSlice = createSlice({
       .addCase(TNK.getUserThunk.fulfilled, handleGetUserSuccess)
       .addCase(TNK.updateUserInfoThunk.fulfilled, handleUpdateUserSuccess)
       .addCase(TNK.updatePasswordThunk.fulfilled, handleSuccess)
-      .addCase(TNK.updateAvatarThunk.fulfilled, handleSuccess)
+      .addCase(TNK.updateAvatarThunk.fulfilled, () => null)
       .addCase(TNK.deleteUserThunk.fulfilled, () => initialState.user);
   },
 });

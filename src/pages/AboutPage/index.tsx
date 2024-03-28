@@ -16,7 +16,7 @@ const AboutPage = () => {
   const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
     dispatch(getMeThunk())
       .unwrap()
-      .then(res => setEmail(res.payload.result.user_email))
+      .then(res => setEmail(res.result.user_email))
       .catch(err => console.log(err));
 
     e.currentTarget.blur();
