@@ -70,8 +70,27 @@ const CompanyItem: FC<TCompanyProps> = ({ props }) => {
         <SvgIcon className={s.icon_svg} svgId="ui-trash" />
       </Button>
 
-      {is_visible && <SvgIcon className={s.vision_svg} svgId="ui-visible" />}
-      {!is_visible && <SvgIcon className={s.vision_svg} svgId="ui-invisible" />}
+      {is_visible && (
+        <Button
+          className={s.button}
+          variant="round"
+          color="transparent"
+          onClick={handleDelete}
+        >
+          <SvgIcon className={s.vision_svg} svgId="ui-visible" />
+        </Button>
+      )}
+
+      {!is_visible && (
+        <Button
+          className={s.button}
+          variant="round"
+          color="transparent"
+          onClick={handleDelete}
+        >
+          <SvgIcon className={s.vision_svg} svgId="ui-invisible" />
+        </Button>
+      )}
 
       <span>{company_id}</span>
     </NavLink>
