@@ -23,6 +23,12 @@ const ClusterPage = () => {
   const { id } = useParams();
   const { user, profileInfo, edit, owner, isLoading } = useUser();
 
+  useEffect(() => {
+    dispatchExtra(getUserThunk(Number(id)));
+  }, [dispatchExtra, id]);
+
+  if (!user) return;
+
   const isMyAccount = owner?.user_id === id;
   const isRedyToRender = !isLoading && id === user?.user_id?.toString();
   const isAvatarForm = edit === 'avatar' || id === owner?.user_id?.toString();
@@ -33,12 +39,9 @@ const ClusterPage = () => {
     url: user?.user_avatar,
     name: `${user?.user_firstname} ${user?.user_lastname}`,
   };
-  const info = profileInfo.filter(el => el[1] && el);
-  const links = user?.user_links;
 
-  useEffect(() => {
-    dispatchExtra(getUserThunk(Number(id)));
-  }, [dispatchExtra, id]);
+  const info = profileInfo.filter(el => Object.values(el)[0] && el);
+  const links = user.user_links ? user.user_links : [];
 
   const getUserName = () => {
     const isLastName = user?.user_firstname !== user?.user_lastname;

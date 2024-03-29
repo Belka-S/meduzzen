@@ -7,12 +7,17 @@ export const useCompany = () => {
   const pagination = useAppSelector(selectors.selectPagination);
   const edit = useAppSelector(selectors.selectEdit);
 
+  const owner = useAppSelector(selectors.selectCompanyOwner);
+  const title = useAppSelector(selectors.selectCompanyTitle);
+  const city = useAppSelector(selectors.selectCompanyCity);
+  const phone = useAppSelector(selectors.selectCompanyPhone);
+  const description = useAppSelector(selectors.selectCompanyDescription);
   const profileInfo = [
-    ['owner', company?.company_owner?.user_email ?? ''],
-    ['title', company?.company_title ?? ''],
-    ['city', company?.company_city ?? ''],
-    ['phone', company?.company_phone ?? ''],
-    ['description', company?.company_description ?? ''],
+    { owner },
+    { title },
+    { city },
+    { phone },
+    { description },
   ];
 
   const isLoading = useAppSelector(selectors.selectLoading);

@@ -22,6 +22,7 @@ const CompanyPage = () => {
   const { id } = useParams();
   const { owner } = useUser();
   const { company, profileInfo, edit, isLoading } = useCompany();
+  console.log('profileInfo: ', profileInfo);
 
   useEffect(() => {
     dispatchExtra(getCompanyThunk(Number(id)));
@@ -39,8 +40,9 @@ const CompanyPage = () => {
     url: company?.company_avatar,
     name: company?.company_name,
   };
-  const info = profileInfo.filter(el => el[1] && el);
-  const links = company?.company_links;
+
+  const info = profileInfo.filter(el => Object.values(el)[0] && el);
+  const links = company.company_links ? company.company_links : [];
 
   const handleUpdateAvatar = (e: MouseEvent<HTMLDivElement>) => {
     if (!owner?.is_superuser) {
@@ -83,3 +85,22 @@ const CompanyPage = () => {
 };
 
 export default CompanyPage;
+
+// ------------------------------ draft ------------------------------ //
+
+// const fields = [
+//   'company_title',
+//   'company_city',
+//   'company_phone',
+//   'company_description',
+// ];
+// const arr = (Object.keys(company) as Array<keyof typeof company>)
+//   .reduce((acc, key) => {
+//     company[key] && acc.push({ [key]: company[key] });
+//     return acc;
+//   }, [] as (typeof company)[keyof typeof company][])
+//   .filter(el => el && el);
+
+// const info = arr.filter(el => el && fields.includes(Object.keys(el)[0]));
+
+// ------------------------------ draft ------------------------------ //

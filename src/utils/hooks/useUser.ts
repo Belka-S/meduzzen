@@ -8,12 +8,11 @@ export const useUser = () => {
   const pagination = useAppSelector(selectors.selectPagination);
   const edit = useAppSelector(selectors.selectEdit);
 
-  const profileInfo = [
-    ['email', user?.user_email ?? ''],
-    ['phone', user?.user_phone ?? ''],
-    ['city', user?.user_city ?? ''],
-    ['status', user?.user_status ?? ''],
-  ];
+  const email = useAppSelector(selectors.selectUserEmail);
+  const city = useAppSelector(selectors.selectUserCity);
+  const phone = useAppSelector(selectors.selectUserPhone);
+  const status = useAppSelector(selectors.selectUserStatus);
+  const profileInfo = [{ email }, { city }, { phone }, { status }];
 
   const isLoading = useAppSelector(selectors.selectLoading);
   const error = useAppSelector(selectors.selectError);
