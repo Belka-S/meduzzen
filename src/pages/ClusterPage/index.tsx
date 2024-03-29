@@ -4,7 +4,7 @@ import ProfileBtn from 'components/ProfileBtn';
 import ProfileCard from 'components/ProfileCard';
 import OvalLoader from 'components/ui/Loader';
 import Section from 'components/ui/Section';
-import H1 from 'components/ui/Typography/H1';
+import H2 from 'components/ui/Typography/H2';
 import AvatarForm from 'pages/ClusterPage/AvatarForm';
 import ProfileForm from 'pages/ClusterPage/ProfileForm';
 import { useParams } from 'react-router-dom';
@@ -76,7 +76,7 @@ const ClusterPage = () => {
             />
           )}
 
-          <H1 className={s.name}>{getUserName()}</H1>
+          <H2 className={s.name}>{getUserName()}</H2>
         </div>
 
         {isProfileForm && <ProfileForm />}

@@ -32,14 +32,13 @@ const CompanyItem: FC<TCompanyProps> = ({ props }) => {
   const handleDelete = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.currentTarget.blur();
-    if (confirm(`Are you sure you want to delete user: ${company_name}`)) {
+    if (confirm(`Are you sure you want to delete company: ${company_name}`)) {
       dispatchExtra(deleteCompanyThunk(company_id))
         .unwrap()
         .then(res => toast.success(res.detail));
     }
   };
 
-  const handleUpdateAvatar = () => dispatch(editCompany('avatar'));
   const handleUpdateInfo = () => dispatch(editCompany('data'));
 
   return (
@@ -48,11 +47,10 @@ const CompanyItem: FC<TCompanyProps> = ({ props }) => {
       id={isActive ? 'active-company' : ''}
       className={classNames(s.item, s.hover, isActive && s.active)}
     >
-      <ProfileBtn className={s.avatar} ava={ava} onClick={handleUpdateAvatar} />
+      <ProfileBtn className={s.avatar} ava={ava} />
 
       <span>{company_name}</span>
       <span>{company_title}</span>
-      <span>{String(is_visible)}</span>
 
       <Button
         className={s.button}
@@ -60,16 +58,20 @@ const CompanyItem: FC<TCompanyProps> = ({ props }) => {
         color="transparent"
         onClick={handleUpdateInfo}
       >
-        <SvgIcon className={s.trash} svgId="ui-edit" />
+        <SvgIcon className={s.icon_svg} svgId="ui-edit" />
       </Button>
+
       <Button
         className={s.button}
         variant="round"
         color="transparent"
         onClick={handleDelete}
       >
-        <SvgIcon className={s.trash} svgId="ui-trash" />
+        <SvgIcon className={s.icon_svg} svgId="ui-trash" />
       </Button>
+
+      {is_visible && <SvgIcon className={s.vision_svg} svgId="ui-visible" />}
+      {!is_visible && <SvgIcon className={s.vision_svg} svgId="ui-invisible" />}
 
       <span>{company_id}</span>
     </NavLink>

@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import { useLocation } from 'react-router-dom';
 
 import CompanyEditBar from './CompanyEditBar';
+import UserEditBar from './UserEditBar';
 
 import s from './index.module.scss';
 
@@ -9,6 +10,7 @@ const Footer = () => {
   const { pathname } = useLocation();
 
   const isCompanyEditBar = pathname.includes('/company');
+  const isUserEditBar = pathname.includes('/cluster');
 
   return (
     <footer className={s.footer}>
@@ -18,6 +20,7 @@ const Footer = () => {
         </a>
 
         {isCompanyEditBar && <CompanyEditBar />}
+        {isUserEditBar && <UserEditBar />}
       </div>
     </footer>
   );

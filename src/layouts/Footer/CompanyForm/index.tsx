@@ -4,10 +4,10 @@ import InputRhf from 'components/InputRhf';
 import Button from 'components/ui/Button';
 import H3 from 'components/ui/Typography/H3';
 import { Resolver, SubmitHandler, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useAppDispatch, useAppExtraDispatch } from 'store';
-import { addCompanyToList, createCompanyThunk } from 'store/company';
-import { useCompany } from 'utils/hooks';
+import { useAppExtraDispatch } from 'store';
+import { createCompanyThunk } from 'store/company';
 import { companySchema } from 'utils/validation';
 import { InferType } from 'yup';
 
@@ -21,9 +21,8 @@ type TCompanyForm = { setIsModal: () => void };
 const inputFields = Object.keys(companySchema.fields) as Array<keyof TInput>;
 
 const CompanyForm: FC<TCompanyForm> = ({ setIsModal }) => {
-  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const dispatchExtra = useAppExtraDispatch();
-  const { companyList } = useCompany();
   const [company_name, is_visible] = inputFields;
 
   const resolver: Resolver<TInput> = yupResolver(companySchema);
@@ -38,14 +37,11 @@ const CompanyForm: FC<TCompanyForm> = ({ setIsModal }) => {
   });
 
   const onSubmit: SubmitHandler<TInput> = data => {
-    const last_id = [...companyList].reverse().at(0)?.company_id;
-    const company_id = last_id ? last_id + 1 : 1;
-
     dispatchExtra(createCompanyThunk(data))
       .unwrap()
       .then(res => toast.success(res?.detail))
-      .then(() => dispatch(addCompanyToList({ ...data, company_id })))
-      .then(() => setIsModal());
+      .then(() => setIsModal())
+      .finally(() => navigate('/company', { replace: true }));
   };
 
   return (

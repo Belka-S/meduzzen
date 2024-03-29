@@ -44,25 +44,14 @@ const UserItem: FC<TUserProps> = ({ props }) => {
       }
     }
     if (confirm(`Are you sure you want to delete user: ${user_email}`)) {
-      if (isMyAccount) {
-        dispatch(cleanOwner());
-        dispatch(logout());
-      }
+      user_id &&
+        dispatchExtra(deleteUserThunk(user_id))
+          .unwrap()
+          .then(res => toast.success(res?.detail));
+      dispatch(cleanOwner());
+      dispatch(logout());
       navigate('/cluster', { replace: true });
-      dispatchExtra(deleteUserThunk(user_id));
     }
-  };
-
-  const handleUpdateAvatar = (e: MouseEvent<HTMLDivElement>) => {
-    if (!owner?.is_superuser) {
-      if (!isMyAccount) {
-        e.preventDefault();
-        e.currentTarget.blur();
-        toast.error("It's not your account");
-        return;
-      }
-    }
-    return dispatch(editUser('avatar'));
   };
 
   const handleUpdateInfo = (e: MouseEvent<HTMLButtonElement>) => {
@@ -88,7 +77,7 @@ const UserItem: FC<TUserProps> = ({ props }) => {
         isOwner && s.owner,
       )}
     >
-      <ProfileBtn className={s.avatar} ava={ava} onClick={handleUpdateAvatar} />
+      <ProfileBtn className={s.avatar} ava={ava} />
 
       <span>{user_email}</span>
       <span>{trimName(user_firstname ?? '')}</span>
@@ -100,7 +89,7 @@ const UserItem: FC<TUserProps> = ({ props }) => {
         color="transparent"
         onClick={handleUpdateInfo}
       >
-        <SvgIcon className={s.trash} svgId="ui-edit" />
+        <SvgIcon className={s.icon_svg} svgId="ui-edit" />
       </Button>
       <Button
         className={s.button}
@@ -108,7 +97,7 @@ const UserItem: FC<TUserProps> = ({ props }) => {
         color="transparent"
         onClick={handleDelete}
       >
-        <SvgIcon className={s.trash} svgId="ui-trash" />
+        <SvgIcon className={s.icon_svg} svgId="ui-trash" />
       </Button>
 
       <span>{user_id}</span>

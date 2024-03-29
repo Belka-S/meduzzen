@@ -26,7 +26,7 @@
   padding-block: 4px;
 
   display: grid;
-  grid-template-columns: 2fr 30fr 15fr 15fr 1.5fr 1.5fr 1.5fr;
+  grid-template-columns: 2fr 25fr 33fr 1.5fr 1.5fr 2fr 1.5fr;
   align-items: center;
 
   line-height: 1.5;
@@ -49,7 +49,7 @@
     justify-self: center;
   }
 
-  &:hover .trash {
+  &:hover .icon_svg {
     opacity: 1;
   }
 }
@@ -61,6 +61,11 @@
       0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
     background-color: var(--white-color);
     border-radius: var(--indent-xs);
+
+    & .vision_svg {
+      opacity: 0.8;
+      fill: var(--white-color);
+    }
   }
 }
 
@@ -70,15 +75,22 @@
 }
 
 .button {
-  &:hover .trash {
+  &:hover .icon_svg {
     fill: var(--placeholder-color);
   }
 }
 
-.trash {
+.icon_svg {
   background-color: transparent;
   border-color: transparent;
   fill: var(--border-color);
   opacity: 0;
   transition: opacity 250ms fill 250ms;
+}
+
+.vision_svg {
+  justify-self: center;
+  opacity: 0.2;
+  transition: opacity 250ms fill 250ms;
+  fill: var(--primary-bg-color);
 }

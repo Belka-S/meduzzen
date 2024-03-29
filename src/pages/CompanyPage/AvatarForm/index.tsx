@@ -2,7 +2,7 @@ import { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import Button from 'components/ui/Button';
 import SvgIcon from 'components/ui/SvgIcon';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppExtraDispatch } from 'store';
 import { editCompany } from 'store/company';
@@ -27,6 +27,7 @@ const AvatarForm = () => {
 
   const {
     register,
+    control,
     handleSubmit,
     formState: { touchedFields },
   } = useForm<TInput>({ mode: 'onChange' });
@@ -72,8 +73,8 @@ const AvatarForm = () => {
   const onSubmit: SubmitHandler<TInput> = async data => {
     console.log('data: ', data);
     const formData = new FormData();
-    const files = data.file as FileList;
-    formData.append('file', files[0]);
+    const file = (data.file as FileList)[0];
+    formData.append('file', file);
 
     for (const [key, value] of formData) {
       console.log(`${key}: ${value}`);
@@ -81,6 +82,7 @@ const AvatarForm = () => {
 
     dispatchExtra(updateAvatarThunk(formData))
       .unwrap()
+      .then(() => document.location.reload())
       .finally(() => dispatch(editCompany(false)));
   };
 
@@ -98,19 +100,31 @@ const AvatarForm = () => {
     <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
       <label>
         <span className={s.error}>{errorMessage}</span>
-        <input
-          id={`${btnId}`}
-          className={classNames(
-            s.avatar,
-            avatarError && s.border__error,
-            avatarError === 'noError' && s.border__success,
+
+        <Controller
+          control={control}
+          name="file"
+          render={({ field: { onChange } }) => (
+            <input
+              id={`${btnId}`}
+              className={classNames(
+                s.avatar,
+                avatarError && s.border__error,
+                avatarError === 'noError' && s.border__success,
+              )}
+              type="file"
+              accept="image/*"
+              {...register('file', { required: true })}
+              onChange={e => {
+                setAvatar(e);
+                if (e.target.files) {
+                  return onChange(e.target.files[0]);
+                }
+              }}
+              onMouseOut={onMouseOut}
+              onMouseOver={onMouseOver}
+            />
           )}
-          type="file"
-          accept="image/*"
-          {...register('file', { required: true })}
-          onChange={e => setAvatar(e)}
-          onMouseOut={onMouseOut}
-          onMouseOver={onMouseOver}
         />
 
         {avatarError && avatarError !== 'noError' && (

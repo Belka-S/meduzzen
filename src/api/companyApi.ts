@@ -11,6 +11,8 @@ export type TPaginationParams = { page: number; page_size: number };
 
 export const createCompany = async (credentials: ICreateCompanyCredentials) => {
   const { data } = await apiClient.post('/company/', credentials);
+  const { company_name, is_visible } = credentials;
+  data.result = { ...data.result, company_name, is_visible };
   return data;
 };
 

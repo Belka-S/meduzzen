@@ -39,22 +39,21 @@ const handleGetAllSuccess = (
   action: PayloadAction<{ result: { companies: TCompany[] } }>,
 ) => state.concat(action.payload.result.companies);
 
+const handleCreateCompanySuccess = (
+  state: TCompany[],
+  action: PayloadAction<{ result: TCompany }>,
+) => {
+  state.push(action.payload.result);
+};
+
 const handleDeleteSuccess = (
   state: TCompany[],
   action: PayloadAction<{ result: Pick<TCompany, 'company_id'> }>,
 ) => {
   const { company_id } = action.payload.result;
-  console.log('company_id: ', company_id);
   const index = state.findIndex(el => el.company_id === company_id);
   console.log('index: ', index);
   state.splice(index, 1);
-};
-
-const handleAddToListSuccess = (
-  state: TCompany[],
-  action: PayloadAction<Pick<TCompany, 'company_name' | 'company_id'>>,
-) => {
-  state.push(action.payload);
 };
 
 const handlePaginationSuccess = (
@@ -78,7 +77,6 @@ const companySlice = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addCase(TNK.createCompanyThunk.fulfilled, handleGetSuccess)
       .addCase(TNK.getCompanyThunk.fulfilled, handleGetSuccess)
       .addCase(TNK.updateInfoThunk.fulfilled, handleUpdateSuccess)
       .addCase(TNK.updateVisibleThunk.fulfilled, handleSuccess)
@@ -97,10 +95,11 @@ const editSlice = createSlice({
 const companyListSlice = createSlice({
   name: 'companyList',
   initialState: initialState.companyList,
-  reducers: { addCompanyToList: handleAddToListSuccess },
+  reducers: {},
   extraReducers: builder => {
     builder
       .addCase(TNK.getAllCompaniesThunk.fulfilled, handleGetAllSuccess)
+      .addCase(TNK.createCompanyThunk.fulfilled, handleCreateCompanySuccess)
       .addCase(TNK.deleteCompanyThunk.fulfilled, handleDeleteSuccess);
   },
 });
@@ -155,4 +154,3 @@ export const companyReducer = combineReducers({
 
 export const { editCompany } = editSlice.actions;
 export const { updateAvatarPreview } = companySlice.actions;
-export const { addCompanyToList } = companyListSlice.actions;

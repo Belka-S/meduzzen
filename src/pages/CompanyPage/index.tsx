@@ -4,7 +4,7 @@ import ProfileBtn from 'components/ProfileBtn';
 import ProfileCard from 'components/ProfileCard';
 import OvalLoader from 'components/ui/Loader';
 import Section from 'components/ui/Section';
-import H1 from 'components/ui/Typography/H1';
+import H3 from 'components/ui/Typography/H3';
 import AvatarForm from 'pages/CompanyPage/AvatarForm';
 import ProfileForm from 'pages/CompanyPage/ProfileForm';
 import { useParams } from 'react-router-dom';
@@ -31,7 +31,7 @@ const CompanyPage = () => {
 
   const isMyCompany = company?.company_owner?.user_id === owner?.user_id;
   const isRedyToRender = !isLoading && id === company?.company_id?.toString();
-  const isAvatarForm = edit === 'avatar' && isMyCompany;
+  const isAvatarForm = edit === 'avatar' || isMyCompany;
   const isProfileForm = edit === 'data' && isMyCompany;
 
   const ava = {
@@ -70,7 +70,7 @@ const CompanyPage = () => {
             />
           )}
 
-          <H1 className={s.name}>{`${company?.company_name}`}</H1>
+          <H3 className={s.name}>{`${company?.company_name}`}</H3>
         </div>
 
         {isProfileForm && <ProfileForm />}
