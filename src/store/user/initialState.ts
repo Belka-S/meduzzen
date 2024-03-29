@@ -22,9 +22,9 @@ export type TEdit = false | 'avatar' | 'data';
 export type TInitialState = {
   owner: TUser | null;
   user: TUser | null;
-  edit: TEdit;
   userList: TUser[];
   pagination: TPagination;
+  edit: TEdit;
 };
 
 export const initialState: TInitialState = {

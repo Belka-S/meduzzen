@@ -48,7 +48,7 @@ const ClusterListPage = () => {
     <Section className={classNames('container', s.screen)}>
       <TableHead />
       {userList.map(el => (
-        <UserItem key={el.user_id} user={el} />
+        <UserItem key={el.user_id} props={el} />
       ))}
 
       {isLoadMore && (

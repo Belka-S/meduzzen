@@ -1,0 +1,116 @@
+.form {
+  display: flex;
+}
+
+.avatar {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin-inline: 20px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-weight: 600;
+  font-size: 70px;
+
+  border-radius: 50%;
+  // background-color: var(--hover-color);
+  background-size: cover;
+  background-position: center;
+  color: transparent;
+  cursor: pointer;
+  outline: 3px solid transparent;
+  transition: outline-color 250ms;
+
+  &:hover,
+  &:focus {
+    outline-color: var(--secondary-bg-color);
+
+    & ~ .validation {
+      border-color: var(--accent-color);
+      fill: var(--hover-color);
+    }
+  }
+
+  &::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 150px;
+    height: 150px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 50%;
+    font-family: var(--fontMontserrat);
+    text-transform: uppercase;
+  }
+
+  // &::-webkit-file-upload-button
+  &::file-selector-button {
+    display: none;
+  }
+
+  &.border__error {
+    outline-color: var(--alert-color);
+  }
+}
+
+.border__success {
+  outline-color: var(--success-color) !important;
+}
+
+.error {
+  position: absolute;
+  top: 50%;
+  left: 190px;
+
+  transform: translateY(-50%);
+  color: var(--alert-color);
+}
+
+.button {
+  position: absolute;
+  top: 0;
+  left: 188px;
+}
+
+// validation icons
+.validation {
+  position: absolute;
+  bottom: 15px;
+  left: 140px;
+  width: 28px;
+  height: 28px;
+  padding: 3px;
+
+  border: 1px solid;
+  border-radius: 50%;
+  background-color: var(--white-color);
+  cursor: pointer;
+  // pointer-events: all;
+  transition: border-color 250ms;
+
+  &:hover,
+  &:focus {
+    border-color: var(--accent-color);
+    fill: var(--hover-color);
+  }
+
+  &.exclamation {
+    border-color: var(--alert-color);
+    fill: var(--alert-color);
+  }
+  &.check {
+    border-color: var(--success-color);
+    fill: var(--success-color);
+  }
+  &.plus {
+    border-color: var(--icon-color);
+    fill: var(--placeholder-color);
+  }
+}

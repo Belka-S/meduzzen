@@ -40,6 +40,7 @@ const handlePingSuccess = (
   }>,
 ) => ({ ...state, ping: action.payload.result });
 
+// server
 const commonSlice = createSlice({
   name: 'common',
   initialState: commonInitialState,

@@ -1,4 +1,4 @@
-import InputRhf from 'components/InputRHF';
+import InputRhf from 'components/InputRhf';
 import Button from 'components/ui/Button';
 import SvgIcon from 'components/ui/SvgIcon';
 import H3 from 'components/ui/Typography/H3';

@@ -1,22 +1,24 @@
 import { useEffect } from 'react';
-import InputRhf from 'components/InputRHF';
+import InputRhf from 'components/InputRhf';
 import Button from 'components/ui/Button';
 import { Resolver, SubmitHandler, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppExtraDispatch } from 'store';
-import { editUser, getUserThunk, updateUserInfoThunk } from 'store/user';
+import { editUser, getUserThunk, updateInfoThunk } from 'store/user';
 import { useUser } from 'utils/hooks';
-import { profileSchema } from 'utils/validation';
+import { userProfileSchema } from 'utils/validation';
 import { InferType } from 'yup';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import s from './index.module.scss';
 
-type TInput = InferType<typeof profileSchema>;
+type TInput = InferType<typeof userProfileSchema>;
 
-const inputFields = Object.keys(profileSchema.fields) as Array<keyof TInput>;
+const inputFields = Object.keys(userProfileSchema.fields) as Array<
+  keyof TInput
+>;
 
 const ProfileForm = () => {
   const dispatch = useAppDispatch();
@@ -47,7 +49,7 @@ const ProfileForm = () => {
     } else return acc;
   }, {});
 
-  const resolver: Resolver<TInput> = yupResolver(profileSchema);
+  const resolver: Resolver<TInput> = yupResolver(userProfileSchema);
   const {
     register,
     handleSubmit,
@@ -88,18 +90,9 @@ const ProfileForm = () => {
 
   const onSubmit: SubmitHandler<TInput> = data => {
     const user_id = Number(id);
-    const getUsetLinks = () => {
-      const user_links = allLinks.map(el => data[el]).filter(el => el && el);
-      return user_links ? { ...user_links } : {};
-    };
-    dispatchExtra(
-      updateUserInfoThunk({
-        user_id,
-        ...data,
-        user_status: undefined,
-        ...getUsetLinks(),
-      }),
-    )
+    const user_links = allLinks.map(el => data[el]).filter(el => el && el);
+
+    dispatchExtra(updateInfoThunk({ user_id, ...data, user_links }))
       .then(() => dispatchExtra(getUserThunk(user_id)))
       .then(res => toast.success(res.payload.detail))
       .finally(() => dispatch(editUser(false)));

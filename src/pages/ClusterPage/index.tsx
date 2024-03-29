@@ -1,9 +1,12 @@
-import { useEffect } from 'react';
+import { MouseEvent, useEffect } from 'react';
 import classNames from 'classnames';
 import ProfileBtn from 'components/ProfileBtn';
+import ProfileCard from 'components/ProfileCard';
 import OvalLoader from 'components/ui/Loader';
 import Section from 'components/ui/Section';
 import H1 from 'components/ui/Typography/H1';
+import AvatarForm from 'pages/ClusterPage/AvatarForm';
+import ProfileForm from 'pages/ClusterPage/ProfileForm';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppExtraDispatch } from 'store';
@@ -12,17 +15,26 @@ import { editUser } from 'store/user';
 import { trimName } from 'utils/helpers';
 import { useUser } from 'utils/hooks';
 
-import AvatarForm from './AvatarForm';
-import ProfileCard from './ProfileCard';
-import ProfileForm from './ProfileForm';
-
 import s from './index.module.scss';
 
 const ClusterPage = () => {
   const dispatch = useAppDispatch();
   const dispatchExtra = useAppExtraDispatch();
   const { id } = useParams();
-  const { user, edit, owner, isLoading } = useUser();
+  const { user, profileInfo, edit, owner, isLoading } = useUser();
+
+  const isMyAccount = owner?.user_id === id;
+  const isRedyToRender = !isLoading && id === user?.user_id?.toString();
+  const isAvatarForm = edit === 'avatar' || id === owner?.user_id?.toString();
+  const isProfileForm = edit === 'data';
+
+  const ava = {
+    id: user?.user_id,
+    url: user?.user_avatar,
+    name: `${user?.user_firstname} ${user?.user_lastname}`,
+  };
+  const info = profileInfo.filter(el => el[1] && el);
+  const links = user?.user_links;
 
   useEffect(() => {
     dispatchExtra(getUserThunk(Number(id)));
@@ -36,36 +48,39 @@ const ClusterPage = () => {
     return isLastName ? `${firstname} ${lastname}` : firstname;
   };
 
-  const handleUpdateUserAvatar = () => {
-    if (owner?.is_superuser || owner?.user_id === user?.user_id) {
-      dispatch(editUser('avatar'));
-    } else {
-      toast.error("It's not your account");
+  const handleUpdateAvatar = (e: MouseEvent<HTMLDivElement>) => {
+    if (!owner?.is_superuser) {
+      if (!isMyAccount) {
+        e.preventDefault();
+        e.currentTarget.blur();
+        toast.error("It's not your account");
+        return;
+      }
     }
+    return dispatch(editUser('avatar'));
   };
-
-  const isRedyToRender = !isLoading && id === user?.user_id?.toString();
-  const isAvatarForm = edit === 'avatar' || id === owner?.user_id?.toString();
 
   if (!isRedyToRender) return <OvalLoader />;
   return (
     <Section className={classNames('container', s.screen)}>
       <div>
         <div className={s.main}>
-          {isAvatarForm ? (
-            <AvatarForm />
-          ) : (
+          {isAvatarForm && <AvatarForm />}
+
+          {!isAvatarForm && (
             <ProfileBtn
               className={s.avatar}
-              user={user}
+              ava={ava}
               size="xl"
-              onClick={handleUpdateUserAvatar}
+              onClick={handleUpdateAvatar}
             />
           )}
+
           <H1 className={s.name}>{getUserName()}</H1>
         </div>
 
-        {edit === 'data' ? <ProfileForm /> : <ProfileCard />}
+        {isProfileForm && <ProfileForm />}
+        {!isProfileForm && <ProfileCard info={info} links={links} />}
       </div>
 
       <div className={s.additional}></div>

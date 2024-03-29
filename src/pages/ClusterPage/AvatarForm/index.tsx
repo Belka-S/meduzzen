@@ -8,6 +8,7 @@ import { useAppDispatch, useAppExtraDispatch } from 'store';
 import { getMeThunk, updateAvatarPreview, updateAvatarThunk } from 'store/user';
 import { editUser } from 'store/user';
 import { getAbbreviation, getRandomColor } from 'utils/helpers';
+import { getRandomNumber } from 'utils/helpers/getRandomNumber';
 import { useUser } from 'utils/hooks';
 import { avatarSchema } from 'utils/validation';
 import { InferType, ValidationError } from 'yup';
@@ -30,7 +31,7 @@ const AvatarForm = () => {
     formState: { touchedFields },
   } = useForm<TInput>({ mode: 'onChange' });
 
-  // avatar preview
+  // avatar file, preview image
   const setAvatar = async (e: Event | ChangeEvent) => {
     const target = e.target as HTMLInputElement;
     const avatar = (target.files as FileList)[0];
@@ -51,8 +52,7 @@ const AvatarForm = () => {
   };
 
   // profile button styles
-  const random = (Math.random() * 10000).toFixed();
-  const btnId = `profile-${user?.user_id}${random}`;
+  const btnId = `profile-${getRandomNumber(12)}`;
   const color = getRandomColor(60);
 
   useEffect(() => {
@@ -73,7 +73,7 @@ const AvatarForm = () => {
   }, [btnId, color, user]);
 
   const onSubmit: SubmitHandler<TInput> = async data => {
-    const formData = new FormData(); // for (const [key, value] of formData) { console.log(`${key}: ${value}`); }
+    const formData = new FormData();
     const file = (data.file as FileList)[0];
     formData.append('file', file);
 

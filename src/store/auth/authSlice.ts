@@ -34,6 +34,7 @@ const handleLoginSuccess = (
   return { ...state, ...action.payload.result };
 };
 
+// auth
 const authSlice = createSlice({
   name: 'user',
   initialState,

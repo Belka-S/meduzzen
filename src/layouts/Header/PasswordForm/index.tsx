@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import InputRhf from 'components/InputRHF';
+import InputRhf from 'components/InputRhf';
 import Button from 'components/ui/Button';
 import H3 from 'components/ui/Typography/H3';
 import { Resolver, SubmitHandler, useForm } from 'react-hook-form';

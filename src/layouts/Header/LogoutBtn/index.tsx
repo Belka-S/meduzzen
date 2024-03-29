@@ -15,10 +15,16 @@ import s from './index.module.scss';
 
 const LogoutBtn = () => {
   const dispatch = useAppDispatch();
-  const { owner } = useUser();
   const { logout: logoutAuth0 } = useAuth0();
   const [isModal, setIsModal] = useState(false);
   const [isForm, setIsForm] = useState(false);
+  const { owner } = useUser();
+
+  const ava = {
+    id: owner?.user_id,
+    url: owner?.user_avatar,
+    name: `${owner?.user_firstname} ${owner?.user_lastname}`,
+  };
 
   const switchIsModal = () => {
     setIsModal(!isModal);
@@ -37,7 +43,7 @@ const LogoutBtn = () => {
 
   return (
     <>
-      <ProfileBtn user={owner} onClick={switchIsModal} />
+      <ProfileBtn ava={ava} onClick={switchIsModal} />
 
       {isModal && (
         <Modal className={s.modal} setIsModal={switchIsModal}>

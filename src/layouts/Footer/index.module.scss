@@ -1,6 +1,7 @@
 .footer {
-  padding-block: 10px;
   width: 100%;
+  height: 50px;
+  padding-block: 5px;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -10,15 +11,19 @@
 }
 
 .footer__wrap {
-  text-align: right;
+  display: flex;
+  height: 100%;
+  justify-content: space-between;
+  align-items: center;
   font-size: 16px;
+}
 
-  & a {
-    transition: color 250ms;
+.bs {
+  margin-right: auto;
+  transition: color 250ms;
 
-    &:hover {
-      color: var(--placeholder-color);
-    }
+  &:hover {
+    color: var(--placeholder-color);
   }
 
   & span {

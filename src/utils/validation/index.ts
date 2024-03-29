@@ -1,2 +1,2 @@
-export * from './elementSchema';
+export * from './clusterSchema';
 export * from './userSchema';
