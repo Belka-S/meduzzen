@@ -64,6 +64,7 @@ export const updateAvatar = async (
   const { data } = await apiClient.put(
     `/company/${company_id}/update_avatar/`,
     formData,
+    { headers: { 'Content-Type': 'multipart/form-data' } },
   );
   return data;
 };

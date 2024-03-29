@@ -91,7 +91,6 @@ const ProfileForm = () => {
   const onSubmit: SubmitHandler<TInput> = data => {
     const user_id = Number(id);
     const user_links = allLinks.map(el => data[el]).filter(el => el && el);
-
     dispatchExtra(updateInfoThunk({ user_id, ...data, user_links }))
       .then(() => dispatchExtra(getUserThunk(user_id)))
       .then(res => toast.success(res.payload.detail))

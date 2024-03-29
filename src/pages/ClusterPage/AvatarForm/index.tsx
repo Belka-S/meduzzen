@@ -72,14 +72,13 @@ const AvatarForm = () => {
     }
   }, [btnId, color, user]);
 
-  const onSubmit: SubmitHandler<TInput> = async data => {
+  const onSubmit: SubmitHandler<TInput> = data => {
     const formData = new FormData();
-    const file = (data.file as FileList)[0];
+    let file = (data.avatar as FileList)[0];
+    if (!file?.type) {
+      file = data.avatar as File;
+    } // for (const [key, value] of formData) { console.log(`${key}: ${value}`); }
     formData.append('file', file);
-
-    for (const [key, value] of formData) {
-      console.log(`${key}: ${value}`);
-    }
 
     dispatchExtra(updateAvatarThunk(formData))
       .unwrap()
@@ -104,7 +103,7 @@ const AvatarForm = () => {
 
         <Controller
           control={control}
-          name="file"
+          name="avatar"
           render={({ field: { onChange } }) => (
             <input
               id={`${btnId}`}
@@ -115,7 +114,7 @@ const AvatarForm = () => {
               )}
               type="file"
               accept="image/*"
-              {...register('file', { required: true })}
+              {...register('avatar', { required: true })}
               onChange={e => {
                 setAvatar(e);
                 if (e.target.files) {

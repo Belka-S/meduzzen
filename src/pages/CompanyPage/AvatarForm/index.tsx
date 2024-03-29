@@ -3,9 +3,10 @@ import classNames from 'classnames';
 import Button from 'components/ui/Button';
 import SvgIcon from 'components/ui/SvgIcon';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppExtraDispatch } from 'store';
-import { editCompany } from 'store/company';
+import { editCompany, getCompanyThunk } from 'store/company';
 import { updateAvatarPreview, updateAvatarThunk } from 'store/company';
 import { getAbbreviation, getRandomColor } from 'utils/helpers';
 import { getRandomNumber } from 'utils/helpers/getRandomNumber';
@@ -18,6 +19,7 @@ import s from './index.module.scss';
 type TInput = InferType<typeof avatarSchema>;
 
 const AvatarForm = () => {
+  const { id } = useParams();
   const dispatch = useAppDispatch();
   const dispatchExtra = useAppExtraDispatch();
   const { company } = useCompany();
@@ -70,19 +72,17 @@ const AvatarForm = () => {
     }
   }, [btnId, color, company]);
 
-  const onSubmit: SubmitHandler<TInput> = async data => {
-    console.log('data: ', data);
+  const onSubmit: SubmitHandler<TInput> = data => {
     const formData = new FormData();
-    const file = (data.file as FileList)[0];
+    let file = (data.avatar as FileList)[0];
+    if (!file?.type) {
+      file = data.avatar as File;
+    } // for (const [key, value] of formData) { console.log(`${key}: ${value}`); }
     formData.append('file', file);
-
-    for (const [key, value] of formData) {
-      console.log(`${key}: ${value}`);
-    }
 
     dispatchExtra(updateAvatarThunk(formData))
       .unwrap()
-      .then(() => document.location.reload())
+      .then(() => dispatchExtra(getCompanyThunk(Number(id))))
       .finally(() => dispatch(editCompany(false)));
   };
 
@@ -103,7 +103,7 @@ const AvatarForm = () => {
 
         <Controller
           control={control}
-          name="file"
+          name="avatar"
           render={({ field: { onChange } }) => (
             <input
               id={`${btnId}`}
@@ -114,7 +114,7 @@ const AvatarForm = () => {
               )}
               type="file"
               accept="image/*"
-              {...register('file', { required: true })}
+              {...register('avatar', { required: true })}
               onChange={e => {
                 setAvatar(e);
                 if (e.target.files) {

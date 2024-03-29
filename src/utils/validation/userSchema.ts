@@ -40,4 +40,4 @@ export const userProfileSchema = Yup.object().shape({
   d_link: link,
 });
 
-export const avatarSchema = Yup.object().shape({ file });
+export const avatarSchema = Yup.object().shape({ avatar: file });

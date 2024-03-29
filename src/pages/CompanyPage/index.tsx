@@ -22,7 +22,6 @@ const CompanyPage = () => {
   const { id } = useParams();
   const { owner } = useUser();
   const { company, profileInfo, edit, isLoading } = useCompany();
-  console.log('profileInfo: ', profileInfo);
 
   useEffect(() => {
     dispatchExtra(getCompanyThunk(Number(id)));

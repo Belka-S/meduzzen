@@ -40,6 +40,7 @@ const SiteNav = () => {
       {isUserPage && (
         <span className={s.active}>{`Profile of ${user?.user_firstname}`}</span>
       )}
+
       {isCompanyPage && (
         <span
           className={s.active}
