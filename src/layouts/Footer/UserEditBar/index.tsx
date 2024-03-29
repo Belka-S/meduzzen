@@ -47,12 +47,12 @@ const UserEditBar = () => {
       e.preventDefault();
       e.currentTarget.blur();
       if (confirm(`Are you sure you want to delete user: ${user_email}`)) {
+        dispatch(cleanOwner());
+        dispatch(logout());
         user_id &&
           dispatchExtra(deleteUserThunk(user_id))
             .unwrap()
             .then(res => toast.success(res?.detail));
-        dispatch(cleanOwner());
-        dispatch(logout());
         navigate('/cluster', { replace: true });
       }
     }
