@@ -3,7 +3,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { store } from 'store';
 import { createAppAsyncThunk } from 'store';
-import { TUser } from 'store/user';
+import { TPassword, TUser } from 'store/user';
 
 export const registerThunk = createAppAsyncThunk(
   'users/register',
@@ -83,7 +83,7 @@ export const updateInfoThunk = createAppAsyncThunk(
 
 export const updatePasswordThunk = createAppAsyncThunk(
   'users/updatePassword',
-  async (user: TUser, thunkAPI) => {
+  async (user: TPassword, thunkAPI) => {
     const { access_token } = store.getState().auth.token;
     try {
       if (access_token) {

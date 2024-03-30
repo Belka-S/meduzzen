@@ -16,26 +16,24 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import s from './index.module.scss';
 
 type TInput = InferType<typeof signupSchema>;
-
 const inputFields = Object.keys(signupSchema.fields) as Array<keyof TInput>;
 
 const SignupForm = () => {
   const dispatch = useAppExtraDispatch();
   const navigate = useNavigate();
   const { loginWithRedirect } = useAuth0();
+
+  // RHF
   const resolver: Resolver<TInput> = yupResolver(signupSchema);
+  const { register, handleSubmit, formState } = useForm<TInput>({
+    resolver,
+    mode: 'onChange',
+  });
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<TInput>({ mode: 'onChange', resolver });
-
-  const onSubmit: SubmitHandler<TInput> = data => {
-    dispatch(registerThunk(data))
-      .unwrap()
-      .then(res => toast.success(res?.detail))
-      .then(() => navigate('/signin', { replace: true }));
+  const onSubmit: SubmitHandler<TInput> = async data => {
+    const { payload } = await dispatch(registerThunk(data));
+    toast.success(payload.detail);
+    navigate('/signin', { replace: true });
   };
 
   return (
@@ -48,7 +46,12 @@ const SignupForm = () => {
       </div>
 
       {inputFields.map(el => (
-        <InputRhf key={el} inputName={el} errors={errors} register={register} />
+        <InputRhf
+          key={el}
+          inputField={el}
+          errors={formState.errors}
+          register={register}
+        />
       ))}
 
       <Button

@@ -1,4 +1,4 @@
-import { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import Button from 'components/ui/Button';
 import SvgIcon from 'components/ui/SvgIcon';
@@ -23,16 +23,26 @@ const AvatarForm = () => {
   const dispatch = useAppDispatch();
   const dispatchExtra = useAppExtraDispatch();
   const { company } = useCompany();
-
   const [avatarError, setAvatarError] = useState('');
   const [activeIcon, setActiveIcon] = useState(false);
 
-  const {
-    register,
-    control,
-    handleSubmit,
-    formState: { touchedFields },
-  } = useForm<TInput>({ mode: 'onChange' });
+  // RHF
+  const { register, control, handleSubmit, formState } = useForm<TInput>({
+    mode: 'onChange',
+  });
+
+  const onSubmit: SubmitHandler<TInput> = async data => {
+    const formData = new FormData();
+    let file = (data.avatar as unknown as FileList)[0];
+    if (!file?.type) {
+      file = data.avatar as File;
+    } // for (const [key, value] of formData) { console.log(`${key}: ${value}`); }
+    formData.append('file', file);
+
+    await dispatchExtra(updateAvatarThunk(formData));
+    await dispatchExtra(getCompanyThunk(Number(id)));
+    dispatch(editCompany(false));
+  };
 
   // avatar file, preview image
   const setAvatar = async (e: Event | ChangeEvent) => {
@@ -72,29 +82,10 @@ const AvatarForm = () => {
     }
   }, [btnId, color, company]);
 
-  const onSubmit: SubmitHandler<TInput> = data => {
-    const formData = new FormData();
-    let file = (data.avatar as unknown as FileList)[0];
-    if (!file?.type) {
-      file = data.avatar as File;
-    } // for (const [key, value] of formData) { console.log(`${key}: ${value}`); }
-    formData.append('file', file);
-
-    dispatchExtra(updateAvatarThunk(formData))
-      .unwrap()
-      .then(() => dispatchExtra(getCompanyThunk(Number(id))))
-      .finally(() => dispatch(editCompany(false)));
-  };
-
   // input validation
   const errorMessage = avatarError === 'noError' ? '' : avatarError;
-  const isDisabled = errorMessage || Object.keys(touchedFields).length === 0;
-
-  const onMouseOver = () => setActiveIcon(true);
-  const onMouseOut = (e: MouseEvent<HTMLInputElement>) => {
-    setActiveIcon(false);
-    e.currentTarget.blur();
-  };
+  const isModified = Object.keys(formState.touchedFields).length > 0;
+  const isDisabled = !isModified || errorMessage;
 
   return (
     <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
@@ -121,8 +112,11 @@ const AvatarForm = () => {
                   return onChange(e.target.files[0]);
                 }
               }}
-              onMouseOut={onMouseOut}
-              onMouseOver={onMouseOver}
+              onMouseOut={e => {
+                setActiveIcon(false);
+                e.currentTarget.blur();
+              }}
+              onMouseOver={() => setActiveIcon(true)}
             />
           )}
         />
@@ -150,7 +144,7 @@ const AvatarForm = () => {
         )}
       </label>
 
-      {Object.keys(touchedFields).length > 0 && (
+      {Object.keys(formState.touchedFields).length > 0 && (
         <Button
           className={s.button}
           type="submit"

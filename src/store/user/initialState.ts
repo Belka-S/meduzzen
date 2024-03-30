@@ -11,6 +11,12 @@ export type TUser = {
   is_superuser: boolean;
 };
 
+export type TPassword = {
+  user_id: number;
+  user_password: string;
+  user_password_repeat: string;
+};
+
 export type TPagination = {
   current_page: number;
   total_page: number;

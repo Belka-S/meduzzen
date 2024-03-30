@@ -17,31 +17,25 @@ import s from './index.module.scss';
 
 type TInput = InferType<typeof companySchema>;
 type TCompanyForm = { setIsModal: () => void };
-
 const inputFields = Object.keys(companySchema.fields) as Array<keyof TInput>;
 
 const CompanyForm: FC<TCompanyForm> = ({ setIsModal }) => {
   const navigate = useNavigate();
   const dispatchExtra = useAppExtraDispatch();
   const [company_name, is_visible] = inputFields;
-
+  // RHF
   const resolver: Resolver<TInput> = yupResolver(companySchema);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<TInput>({
-    mode: 'onChange',
+  const { register, handleSubmit, formState } = useForm<TInput>({
     resolver,
+    mode: 'onChange',
     defaultValues: { is_visible: true },
   });
 
-  const onSubmit: SubmitHandler<TInput> = data => {
-    dispatchExtra(createCompanyThunk(data))
-      .unwrap()
-      .then(res => toast.success(res?.detail))
-      .then(() => setIsModal())
-      .finally(() => navigate('/company', { replace: true }));
+  const onSubmit: SubmitHandler<TInput> = async data => {
+    const { payload } = await dispatchExtra(createCompanyThunk(data));
+    toast.success(payload.detail);
+    navigate('/company', { replace: true });
+    setIsModal();
   };
 
   return (
@@ -50,9 +44,13 @@ const CompanyForm: FC<TCompanyForm> = ({ setIsModal }) => {
         <H3 className={s.title}>Create company</H3>
       </div>
 
-      <InputRhf inputName={company_name} errors={errors} register={register} />
+      <InputRhf
+        inputField={company_name}
+        errors={formState.errors}
+        register={register}
+      />
       <InputCheck
-        inputName={is_visible}
+        inputField={is_visible}
         register={register}
         label="the company is visible to all users"
       />

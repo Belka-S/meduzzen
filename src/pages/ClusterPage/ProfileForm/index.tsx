@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import InputRhf from 'components/InputRhf';
 import Button from 'components/ui/Button';
 import { Resolver, SubmitHandler, useForm } from 'react-hook-form';
@@ -15,7 +15,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import s from './index.module.scss';
 
 type TInput = InferType<typeof userProfileSchema>;
-
 const inputFields = Object.keys(userProfileSchema.fields) as Array<
   keyof TInput
 >;
@@ -27,39 +26,61 @@ const ProfileForm = () => {
   const { user } = useUser();
 
   // all link inputs
-  const allLinks = inputFields.filter(el => el.includes('link'));
+  const allLinks = useMemo(
+    () => inputFields.filter(el => el.includes('link')),
+    [],
+  );
 
   // hidden link inputs
-  let hiddenLinks = allLinks
-    .map((el, i) => {
-      if (user?.user_links && !user.user_links[i]) return el;
-    })
-    .filter(el => el && el)
-    .slice(1);
-
-  hiddenLinks =
-    hiddenLinks.length > 0
-      ? hiddenLinks
-      : inputFields.filter(el => el.includes('_link'));
+  let hiddenLinks = useMemo(
+    () =>
+      allLinks
+        .map((el, i) => {
+          if (user?.user_links && !user.user_links[i]) return el;
+        })
+        .filter(el => el && el)
+        .slice(1),
+    [allLinks, user?.user_links],
+  );
+  hiddenLinks = useMemo(
+    () =>
+      !hiddenLinks.length
+        ? hiddenLinks
+        : inputFields.filter(el => el.includes('_link')),
+    [hiddenLinks],
+  );
 
   // initial link inputs
-  const initialLinks = allLinks.reduce((acc, el, i) => {
-    if (user?.user_links && user?.user_links[i]) {
-      return { ...acc, [el]: user?.user_links[i] };
-    } else return acc;
-  }, {});
+  const initialLinks = useMemo(
+    () =>
+      allLinks.reduce((acc, el, i) => {
+        if (user?.user_links && user?.user_links[i]) {
+          return { ...acc, [el]: user?.user_links[i] };
+        } else return acc;
+      }, {}),
+    [allLinks, user?.user_links],
+  );
 
+  // RHF
   const resolver: Resolver<TInput> = yupResolver(userProfileSchema);
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors, isValid, touchedFields },
-  } = useForm<TInput>({
+  const { register, handleSubmit, watch, formState } = useForm<TInput>({
     resolver,
     mode: 'onChange',
     defaultValues: { ...user, ...initialLinks },
   });
+  const { errors, isValid, touchedFields } = formState;
+
+  const onSubmit: SubmitHandler<TInput> = async data => {
+    const user_id = Number(id);
+    const user_links = allLinks
+      .map(el => data[el])
+      .filter(el => el && el) as string[];
+
+    await dispatchExtra(updateInfoThunk({ user_id, ...data, user_links }));
+    const { payload } = await dispatchExtra(getUserThunk(user_id));
+    toast.success(payload.detail);
+    dispatch(editUser(false));
+  };
 
   // automaticly open new link input
   inputFields.map(el => watch(el));
@@ -88,18 +109,6 @@ const ProfileForm = () => {
     }
   }, [initialLinks]);
 
-  const onSubmit: SubmitHandler<TInput> = data => {
-    const user_id = Number(id);
-    const user_links = allLinks
-      .map(el => data[el])
-      .filter(el => el && el) as string[];
-
-    dispatchExtra(updateInfoThunk({ user_id, ...data, user_links }))
-      .then(() => dispatchExtra(getUserThunk(user_id)))
-      .then(res => toast.success(res.payload.detail))
-      .finally(() => dispatch(editUser(false)));
-  };
-
   const isDisabled = !isValid || Object.keys(touchedFields).length === 0;
 
   return (
@@ -108,7 +117,7 @@ const ProfileForm = () => {
         <InputRhf
           key={el}
           style={{ display: hiddenLinks.includes(el) ? 'none' : 'block' }}
-          inputName={el}
+          inputField={el}
           errors={errors}
           watch={watch}
           register={register}

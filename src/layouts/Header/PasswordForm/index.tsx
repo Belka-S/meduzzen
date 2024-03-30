@@ -15,24 +15,23 @@ import s from './index.module.scss';
 
 type TInput = InferType<typeof passwordSchema>;
 type TPasswordForm = { setIsModal: () => void };
-
 const inputFields = Object.keys(passwordSchema.fields) as Array<keyof TInput>;
 
 const PasswordForm: FC<TPasswordForm> = ({ setIsModal }) => {
   const dispatch = useAppExtraDispatch();
   const { owner } = useUser();
-
+  // RHF
   const resolver: Resolver<TInput> = yupResolver(passwordSchema);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<TInput>({ mode: 'onChange', resolver });
+  const { register, handleSubmit, formState } = useForm<TInput>({
+    resolver,
+    mode: 'onChange',
+  });
 
-  const onSubmit: SubmitHandler<TInput> = data => {
-    dispatch(updatePasswordThunk({ ...data, user_id: owner?.user_id }))
-      .unwrap()
-      .then(() => setIsModal());
+  const onSubmit: SubmitHandler<TInput> = async data => {
+    const user_id = Number(owner?.user_id);
+    const user = { ...data, user_id };
+    await dispatch(updatePasswordThunk(user));
+    setIsModal();
   };
 
   return (
@@ -42,7 +41,12 @@ const PasswordForm: FC<TPasswordForm> = ({ setIsModal }) => {
       </div>
 
       {inputFields.map(el => (
-        <InputRhf key={el} inputName={el} errors={errors} register={register} />
+        <InputRhf
+          key={el}
+          inputField={el}
+          errors={formState.errors}
+          register={register}
+        />
       ))}
 
       <Button type="submit" variant="smooth" label="Submit" />

@@ -5,7 +5,7 @@ import SvgIcon from 'components/ui/SvgIcon';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppExtraDispatch } from 'store';
-import { getMeThunk, updateAvatarPreview, updateAvatarThunk } from 'store/user';
+import { editUser, updateAvatarPreview, updateAvatarThunk } from 'store/user';
 import { getAbbreviation, getRandomColor } from 'utils/helpers';
 import { getRandomNumber } from 'utils/helpers/getRandomNumber';
 import { useUser } from 'utils/hooks';
@@ -20,22 +20,30 @@ const AvatarForm = () => {
   const dispatch = useAppDispatch();
   const dispatchExtra = useAppExtraDispatch();
   const { user } = useUser();
-
   const [avatarError, setAvatarError] = useState('');
   const [activeIcon, setActiveIcon] = useState(false);
 
-  const {
-    register,
-    control,
-    handleSubmit,
-    formState: { touchedFields },
-  } = useForm<TInput>({ mode: 'onChange' });
+  // RHF
+  const { register, control, handleSubmit, formState } = useForm<TInput>({
+    mode: 'onChange',
+  });
+
+  const onSubmit: SubmitHandler<TInput> = async data => {
+    const formData = new FormData();
+    let file = (data.avatar as unknown as FileList)[0];
+    if (!file?.type) {
+      file = data.avatar as File;
+    } // for (const [key, value] of formData) { console.log(`${key}: ${value}`); }
+    formData.append('file', file);
+
+    await dispatchExtra(updateAvatarThunk(formData));
+    document.location.reload();
+  };
 
   // avatar file, preview image
   const setAvatar = async (e: Event | ChangeEvent) => {
     const target = e.target as HTMLInputElement;
     const avatar = (target.files as FileList)[0];
-
     const user_avatar = URL.createObjectURL(avatar);
     dispatch(updateAvatarPreview({ user_avatar }));
     try {
@@ -57,7 +65,6 @@ const AvatarForm = () => {
 
   useEffect(() => {
     if (user?.user_avatar) {
-      // document.styleSheets[0].deleteRule(0);
       document.styleSheets[0].insertRule(
         `#${btnId} {background-image: url(${user?.user_avatar})}`,
         0,
@@ -72,23 +79,10 @@ const AvatarForm = () => {
     }
   }, [btnId, color, user]);
 
-  const onSubmit: SubmitHandler<TInput> = data => {
-    const formData = new FormData();
-    let file = (data.avatar as unknown as FileList)[0];
-    if (!file?.type) {
-      file = data.avatar as File;
-    } // for (const [key, value] of formData) { console.log(`${key}: ${value}`); }
-    formData.append('file', file);
-
-    dispatchExtra(updateAvatarThunk(formData))
-      .unwrap()
-      .then(() => dispatchExtra(getMeThunk()))
-      .then(() => document.location.reload());
-  };
-
   // input validation
   const errorMessage = avatarError === 'noError' ? '' : avatarError;
-  const isDisabled = errorMessage || Object.keys(touchedFields).length === 0;
+  const isModified = Object.keys(formState.touchedFields).length > 0;
+  const isDisabled = !isModified || errorMessage;
 
   return (
     <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
@@ -147,7 +141,7 @@ const AvatarForm = () => {
         )}
       </label>
 
-      {Object.keys(touchedFields).length > 0 && (
+      {Object.keys(formState.touchedFields).length > 0 && (
         <Button
           className={s.button}
           type="submit"
