@@ -74,7 +74,7 @@ const AvatarForm = () => {
 
   const onSubmit: SubmitHandler<TInput> = data => {
     const formData = new FormData();
-    let file = (data.avatar as FileList)[0];
+    let file = (data.avatar as unknown as FileList)[0];
     if (!file?.type) {
       file = data.avatar as File;
     } // for (const [key, value] of formData) { console.log(`${key}: ${value}`); }

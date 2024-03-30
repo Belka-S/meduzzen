@@ -1,7 +1,8 @@
+import { TUser } from 'store/user';
+
 import { apiClient, token } from './apiHttp';
 
-export interface IAuthCredentials {
-  user_email: string;
+export interface IAuthCredentials extends Pick<TUser, 'user_email'> {
   user_password: string;
 }
 

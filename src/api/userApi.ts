@@ -1,11 +1,11 @@
 import { TUser } from 'store/user';
 
 import { apiClient, token } from './apiHttp';
-import { IAuthCredentials } from './authApi';
 
-export interface IRegisterCredentials extends IAuthCredentials {
+export interface IRegisterCredentials
+  extends Pick<TUser, 'user_email' | 'user_firstname' | 'user_lastname'> {
   user_firstname: string;
-  user_lastname: string;
+  user_password: string;
   user_password_repeat: string;
 }
 

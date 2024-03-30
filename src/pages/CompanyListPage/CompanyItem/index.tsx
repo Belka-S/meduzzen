@@ -6,7 +6,7 @@ import SvgIcon from 'components/ui/SvgIcon';
 import { NavLink } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppExtraDispatch } from 'store';
-import { TCompany } from 'store/company';
+import { TCompany, updateVisibleThunk } from 'store/company';
 import { deleteCompanyThunk, editCompany } from 'store/company';
 import { useCompany } from 'utils/hooks';
 
@@ -39,7 +39,11 @@ const CompanyItem: FC<TCompanyProps> = ({ props }) => {
     }
   };
 
-  const handleUpdateInfo = () => dispatch(editCompany('data'));
+  const switchVisible = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    const options = { company_id, is_visible: !company?.is_visible };
+    dispatchExtra(updateVisibleThunk(options));
+  };
 
   return (
     <NavLink
@@ -56,7 +60,7 @@ const CompanyItem: FC<TCompanyProps> = ({ props }) => {
         className={s.button}
         variant="round"
         color="transparent"
-        onClick={handleUpdateInfo}
+        onClick={() => dispatch(editCompany('data'))}
       >
         <SvgIcon className={s.icon_svg} svgId="ui-edit" />
       </Button>
@@ -75,7 +79,7 @@ const CompanyItem: FC<TCompanyProps> = ({ props }) => {
           className={s.button}
           variant="round"
           color="transparent"
-          onClick={handleDelete}
+          onClick={switchVisible}
         >
           <SvgIcon className={s.vision_svg} svgId="ui-visible" />
         </Button>
@@ -86,7 +90,7 @@ const CompanyItem: FC<TCompanyProps> = ({ props }) => {
           className={s.button}
           variant="round"
           color="transparent"
-          onClick={handleDelete}
+          onClick={switchVisible}
         >
           <SvgIcon className={s.vision_svg} svgId="ui-invisible" />
         </Button>

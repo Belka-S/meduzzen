@@ -1,5 +1,6 @@
 import * as API from 'api/authApi';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import { createAppAsyncThunk } from 'store';
 
 export const loginThunk = createAppAsyncThunk(

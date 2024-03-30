@@ -41,7 +41,7 @@ const handleUpdateSuccess = (
 const handleAvatarPreviewSuccess = (
   state: TUser | null,
   action: PayloadAction<Pick<TUser, 'user_avatar'>>,
-) => ({ ...state, ...action.payload });
+) => state && { ...state, ...action.payload };
 
 const handleGetAllSuccess = (
   state: TUser[],

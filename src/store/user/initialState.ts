@@ -1,14 +1,14 @@
 export type TUser = {
-  user_id?: number;
-  user_email?: string;
-  user_firstname?: string;
-  user_lastname?: string;
-  user_avatar?: string;
-  user_status?: string | null;
-  user_city?: string | null;
-  user_phone?: string | null;
-  user_links?: string[];
-  is_superuser?: boolean;
+  user_id: number;
+  user_email: string;
+  user_firstname: string;
+  user_lastname: string;
+  user_avatar: string;
+  user_status: string | null;
+  user_city: string | null;
+  user_phone: string | null;
+  user_links: string[];
+  is_superuser: boolean;
 };
 
 export type TPagination = {

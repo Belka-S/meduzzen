@@ -2,14 +2,11 @@ import { TCompany } from 'store/company';
 
 import { apiClient, token } from './apiHttp';
 
-export interface ICreateCompanyCredentials {
-  company_name: string;
-  is_visible: boolean;
-}
-
 export type TPaginationParams = { page: number; page_size: number };
 
-export const createCompany = async (credentials: ICreateCompanyCredentials) => {
+export const createCompany = async (
+  credentials: Pick<TCompany, 'is_visible' | 'company_name'>,
+) => {
   const { data } = await apiClient.post('/company/', credentials);
   const { company_name, is_visible } = credentials;
   data.result = { ...data.result, company_name, is_visible };
@@ -44,7 +41,7 @@ export const updateCompanyInfo = async (
 
 export const updateVisible = async (
   accessToken: string,
-  company: Partial<TCompany>,
+  company: Pick<TCompany, 'is_visible' | 'company_id'>,
 ) => {
   const { company_id, ...credentials } = company;
   token.set(accessToken);

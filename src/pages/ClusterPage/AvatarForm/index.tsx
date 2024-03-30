@@ -1,4 +1,4 @@
-import { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import Button from 'components/ui/Button';
 import SvgIcon from 'components/ui/SvgIcon';
@@ -74,7 +74,7 @@ const AvatarForm = () => {
 
   const onSubmit: SubmitHandler<TInput> = data => {
     const formData = new FormData();
-    let file = (data.avatar as FileList)[0];
+    let file = (data.avatar as unknown as FileList)[0];
     if (!file?.type) {
       file = data.avatar as File;
     } // for (const [key, value] of formData) { console.log(`${key}: ${value}`); }
@@ -89,12 +89,6 @@ const AvatarForm = () => {
   // input validation
   const errorMessage = avatarError === 'noError' ? '' : avatarError;
   const isDisabled = errorMessage || Object.keys(touchedFields).length === 0;
-
-  const onMouseOver = () => setActiveIcon(true);
-  const onMouseOut = (e: MouseEvent<HTMLInputElement>) => {
-    setActiveIcon(false);
-    e.currentTarget.blur();
-  };
 
   return (
     <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
@@ -121,8 +115,11 @@ const AvatarForm = () => {
                   return onChange(e.target.files[0]);
                 }
               }}
-              onMouseOut={onMouseOut}
-              onMouseOver={onMouseOver}
+              onMouseOver={() => setActiveIcon(true)}
+              onMouseOut={e => {
+                setActiveIcon(false);
+                e.currentTarget.blur();
+              }}
             />
           )}
         />

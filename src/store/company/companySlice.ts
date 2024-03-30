@@ -29,10 +29,7 @@ const handleUpdateSuccess = (
   action: PayloadAction<{ result: TCompany }>,
 ) => ({ ...state, ...action.payload.result });
 
-const handleAvatarPreviewSuccess = (
-  state: TCompany | null,
-  action: PayloadAction<Pick<TCompany, 'company_avatar'>>,
-) => ({ ...state, ...action.payload });
+//
 
 const handleGetAllSuccess = (
   state: TCompany[],
@@ -67,6 +64,11 @@ const handleEditSuccess = (_: TEdit, action: PayloadAction<TEdit>) =>
 const handleSuccess = () => {
   toast.success('Success');
 };
+
+const handleAvatarPreviewSuccess = (
+  state: TCompany | null,
+  action: PayloadAction<Pick<TCompany, 'company_avatar'>>,
+) => state && { ...state, ...action.payload };
 
 // company
 const companySlice = createSlice({

@@ -67,7 +67,7 @@ export const deleteUserThunk = createAppAsyncThunk(
 
 export const updateInfoThunk = createAppAsyncThunk(
   'users/updateInfo',
-  async (user: TUser, thunkAPI) => {
+  async (user: Partial<TUser>, thunkAPI) => {
     const { access_token } = store.getState().auth.token;
     try {
       if (access_token) {

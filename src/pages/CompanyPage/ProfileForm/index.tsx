@@ -90,7 +90,9 @@ const ProfileForm = () => {
 
   const onSubmit: SubmitHandler<TInput> = data => {
     const company_id = Number(id);
-    const company_links = allLinks.map(el => data[el]).filter(el => el && el);
+    const company_links = allLinks
+      .map(el => data[el])
+      .filter(el => el && el) as string[];
 
     dispatchExtra(updateInfoThunk({ company_id, ...data, company_links }))
       .then(res => toast.success(res.payload.detail))

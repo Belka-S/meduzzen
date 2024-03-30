@@ -7,7 +7,10 @@ import { TCompany } from 'store/company';
 
 export const createCompanyThunk = createAppAsyncThunk(
   'company/register',
-  async (credentials: API.ICreateCompanyCredentials, thunkAPI) => {
+  async (
+    credentials: Pick<TCompany, 'is_visible' | 'company_name'>,
+    thunkAPI,
+  ) => {
     try {
       return await API.createCompany(credentials);
     } catch (error) {
@@ -51,7 +54,7 @@ export const deleteCompanyThunk = createAppAsyncThunk(
 
 export const updateInfoThunk = createAppAsyncThunk(
   'company/updateInfo',
-  async (company: TCompany, thunkAPI) => {
+  async (company: Partial<TCompany>, thunkAPI) => {
     const { access_token } = store.getState().auth.token;
     try {
       if (access_token) {
@@ -67,7 +70,7 @@ export const updateInfoThunk = createAppAsyncThunk(
 
 export const updateVisibleThunk = createAppAsyncThunk(
   'company/updatePassword',
-  async (company: TCompany, thunkAPI) => {
+  async (company: Pick<TCompany, 'is_visible' | 'company_id'>, thunkAPI) => {
     const { access_token } = store.getState().auth.token;
     try {
       if (access_token) {

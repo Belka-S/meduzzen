@@ -1,20 +1,20 @@
 export type TCompany = {
-  company_id?: number;
-  company_name?: string;
-  company_title?: string | null;
-  company_description?: string | null;
-  company_city?: string | null;
-  company_phone?: string | null;
-  company_avatar?: string;
-  is_visible?: boolean;
+  company_id: number;
+  company_name: string;
+  company_title: string | null;
+  company_description: string | null;
+  company_city: string | null;
+  company_phone: string | null;
+  company_avatar: string;
+  is_visible: boolean;
 
-  company_links?: string[];
-  company_owner?: {
-    user_id?: number;
-    user_email?: string;
-    user_firstname?: string;
-    user_lastname?: string;
-    user_avatar?: string;
+  company_links: string[];
+  company_owner: {
+    user_id: number;
+    user_email: string;
+    user_firstname: string;
+    user_lastname: string;
+    user_avatar: string;
   };
 };
 
