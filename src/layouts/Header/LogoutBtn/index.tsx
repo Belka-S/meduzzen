@@ -36,8 +36,8 @@ const LogoutBtn = () => {
   };
 
   const handleLogout = () => {
-    dispatch(logout());
     dispatch(cleanOwner());
+    dispatch(logout());
     logoutAuth0();
   };
 

@@ -37,9 +37,7 @@ const SigninForm = () => {
   });
 
   const onSubmit: SubmitHandler<TInput> = data => {
-    dispatch(loginThunk(data))
-      .unwrap()
-      .then(() => dispatch(getMeThunk()));
+    dispatch(loginThunk(data)).then(() => dispatch(getMeThunk()));
   };
 
   return (

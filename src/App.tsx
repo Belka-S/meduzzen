@@ -9,7 +9,7 @@ import { useAppDispatch, useAppExtraDispatch } from 'store';
 import { login } from 'store/auth';
 import { getMeThunk } from 'store/user';
 import { loadWebFonts } from 'styles/loadWebFonts';
-import { useUser } from 'utils/hooks';
+import { useAuth, useUser } from 'utils/hooks';
 
 import { useAuth0 } from '@auth0/auth0-react';
 
@@ -25,6 +25,7 @@ const CompanyPage = lazy(() => import('pages/CompanyPage'));
 const App = () => {
   const dispatch = useAppDispatch();
   const dispatchExtra = useAppExtraDispatch();
+  const { isAuth } = useAuth();
   const { isLoading, owner } = useUser();
   const { getAccessTokenSilently, isAuthenticated } = useAuth0();
 
@@ -41,8 +42,8 @@ const App = () => {
   }, [dispatch, dispatchExtra, getAccessTokenSilently, isAuthenticated, owner]);
 
   useEffect(() => {
-    // add GetMe
-  }, []);
+    isAuth && dispatchExtra(getMeThunk());
+  }, [dispatchExtra, isAuth]);
 
   return (
     <>

@@ -25,16 +25,10 @@ const authPersistConfig = {
   whitelist: ['token'],
 };
 
-const usersPersistConfig = {
-  key: 'users',
-  storage,
-  whitelist: ['owner'],
-};
-
 export const rootReducer = combineReducers({
   common: commonReducer,
   auth: persistReducer(authPersistConfig, authReducer),
-  users: persistReducer(usersPersistConfig, usersReducer),
+  users: usersReducer,
   companies: companyReducer,
 });
 
