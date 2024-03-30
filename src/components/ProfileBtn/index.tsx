@@ -1,43 +1,39 @@
-import { FC, useEffect } from 'react';
+import { FC, MouseEvent, useEffect } from 'react';
 import classNames from 'classnames';
-import { TUser } from 'store/user';
 import { getAbbreviation, getRandomColor } from 'utils/helpers';
 
 import s from './index.module.scss';
 
-type TUserProps = {
-  user: TUser;
+type TAvatar = { id?: number | string; name?: string; url?: string };
+
+type TProfileBtnProps = {
+  ava: TAvatar;
   size?: 's' | 'm' | 'l' | 'xl';
-  onClick?: () => void;
+  onClick?: (e: MouseEvent<HTMLDivElement>) => void;
   className?: string;
 };
 
-const ProfileBtn: FC<TUserProps> = ({
-  user,
-  size = 'm',
-  onClick,
-  className,
-}) => {
-  const { user_id, user_firstname, user_lastname, user_avatar } = user;
+const ProfileBtn: FC<TProfileBtnProps> = props => {
+  const { ava, size = 'm', onClick, className } = props;
 
   // profile button styles
-  const btnId = `profile-${user_id}`;
+  const btnId = `profile-${ava.id}`;
   const color = getRandomColor(60);
 
   useEffect(() => {
-    if (user_avatar) {
+    if (ava.url) {
       document.styleSheets[0].insertRule(
-        `#${btnId} {background-image: url(${user_avatar})}`,
+        `#${btnId} {background-image: url(${ava.url})}`,
         0,
       );
-    } else if (user_firstname || user_lastname) {
-      const abbr = getAbbreviation(`${user_firstname} ${user_lastname}`);
+    } else if (ava.name) {
+      const abbr = getAbbreviation(ava.name);
       // document.styleSheets[0].deleteRule(0);
       document.styleSheets[0].insertRule(
         `#${btnId}::after { background-color: ${color}; color: #ffffff; content: '${abbr}'}`,
       );
     }
-  }, [btnId, color, user_avatar, user_firstname, user_lastname]);
+  }, [btnId, color, ava]);
 
   return (
     <>

@@ -8,9 +8,9 @@ export const checkStatusThunk = createAppAsyncThunk(
     try {
       return await API.checkStatus();
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        return thunkAPI.rejectWithValue(error.response?.data);
-      }
+      if (!axios.isAxiosError(error)) throw error;
+      toast.error(error.message);
+      return thunkAPI.rejectWithValue(error.response?.data);
     }
   },
 );
@@ -21,9 +21,9 @@ export const getLogsThunk = createAppAsyncThunk(
     try {
       return await API.getLogs();
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        return thunkAPI.rejectWithValue(error.response?.data);
-      }
+      if (!axios.isAxiosError(error)) throw error;
+      toast.error(error.message);
+      return thunkAPI.rejectWithValue(error.response?.data);
     }
   },
 );
@@ -34,9 +34,9 @@ export const pingThunk = createAppAsyncThunk(
     try {
       return await API.ping(val);
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        return thunkAPI.rejectWithValue(error.response?.data);
-      }
+      if (!axios.isAxiosError(error)) throw error;
+      toast.error(error.message);
+      return thunkAPI.rejectWithValue(error.response?.data);
     }
   },
 );

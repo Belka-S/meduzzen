@@ -29,12 +29,12 @@
   }
 
   &.s {
-    width: var(--btn-height-s);
-    height: var(--btn-height-s);
+    min-width: var(--btn-height-s);
+    min-height: var(--btn-height-s);
 
     &::after {
-      width: var(--btn-height-s);
-      height: var(--btn-height-s);
+      min-width: var(--btn-height-s);
+      min-height: var(--btn-height-s);
       padding-top: 1px;
       font-weight: 600;
       font-size: 12px;
@@ -42,12 +42,12 @@
   }
 
   &.m {
-    width: var(--btn-height-m);
-    height: var(--btn-height-m);
+    min-width: var(--btn-height-m);
+    min-height: var(--btn-height-m);
 
     &::after {
-      width: var(--btn-height-m);
-      height: var(--btn-height-m);
+      min-width: var(--btn-height-m);
+      min-height: var(--btn-height-m);
       padding-top: 1px;
       font-weight: 600;
       font-size: 16px;
@@ -55,26 +55,26 @@
   }
 
   &.l {
-    width: var(--btn-height-l);
-    height: var(--btn-height-l);
+    min-width: var(--btn-height-l);
+    min-height: var(--btn-height-l);
 
     &::after {
-      width: var(--btn-height-l);
-      height: var(--btn-height-l);
+      min-width: var(--btn-height-l);
+      min-height: var(--btn-height-l);
       font-weight: 600;
       font-size: 20px;
     }
   }
 
   &.xl {
-    width: 150px;
-    height: 150px;
+    min-width: 150px;
+    min-height: 150px;
 
     &::after {
-      width: 150px;
-      height: 150px;
+      min-width: 150px;
+      min-height: 150px;
       font-weight: 600;
-      font-size: 70px;
+      font-size: 60px;
     }
   }
 }

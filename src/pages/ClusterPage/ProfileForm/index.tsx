@@ -1,22 +1,24 @@
 import { useEffect } from 'react';
-import InputRhf from 'components/InputRHF';
+import InputRhf from 'components/InputRhf';
 import Button from 'components/ui/Button';
 import { Resolver, SubmitHandler, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppExtraDispatch } from 'store';
-import { editUser, getUserThunk, updateUserInfoThunk } from 'store/user';
+import { editUser, getUserThunk, updateInfoThunk } from 'store/user';
 import { useUser } from 'utils/hooks';
-import { profileSchema } from 'utils/validation';
+import { userProfileSchema } from 'utils/validation';
 import { InferType } from 'yup';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import s from './index.module.scss';
 
-type TInput = InferType<typeof profileSchema>;
+type TInput = InferType<typeof userProfileSchema>;
 
-const inputFields = Object.keys(profileSchema.fields) as Array<keyof TInput>;
+const inputFields = Object.keys(userProfileSchema.fields) as Array<
+  keyof TInput
+>;
 
 const ProfileForm = () => {
   const dispatch = useAppDispatch();
@@ -30,7 +32,7 @@ const ProfileForm = () => {
   // hidden link inputs
   let hiddenLinks = allLinks
     .map((el, i) => {
-      if (user.user_links && !user.user_links[i]) return el;
+      if (user?.user_links && !user.user_links[i]) return el;
     })
     .filter(el => el && el)
     .slice(1);
@@ -42,27 +44,25 @@ const ProfileForm = () => {
 
   // initial link inputs
   const initialLinks = allLinks.reduce((acc, el, i) => {
-    if (user.user_links && user.user_links[i]) {
-      return { ...acc, [el]: user.user_links[i] };
+    if (user?.user_links && user?.user_links[i]) {
+      return { ...acc, [el]: user?.user_links[i] };
     } else return acc;
   }, {});
 
-  const resolver: Resolver<TInput> = yupResolver(profileSchema);
+  const resolver: Resolver<TInput> = yupResolver(userProfileSchema);
   const {
     register,
     handleSubmit,
     watch,
-
     formState: { errors, isValid, touchedFields },
   } = useForm<TInput>({
     resolver,
-
     mode: 'onChange',
     defaultValues: { ...user, ...initialLinks },
   });
 
   // automaticly open new link input
-  allLinks.map(el => watch(el));
+  inputFields.map(el => watch(el));
 
   // show / hide inputs
   useEffect(() => {
@@ -88,13 +88,10 @@ const ProfileForm = () => {
     }
   }, [initialLinks]);
 
-  console.log(touchedFields);
-
   const onSubmit: SubmitHandler<TInput> = data => {
     const user_id = Number(id);
     const user_links = allLinks.map(el => data[el]).filter(el => el && el);
-
-    dispatchExtra(updateUserInfoThunk({ ...data, user_id, user_links }))
+    dispatchExtra(updateInfoThunk({ user_id, ...data, user_links }))
       .then(() => dispatchExtra(getUserThunk(user_id)))
       .then(res => toast.success(res.payload.detail))
       .finally(() => dispatch(editUser(false)));
@@ -121,6 +118,7 @@ const ProfileForm = () => {
         variant="smooth"
         label="Submit"
         onClick={e => e.currentTarget.blur()}
+        onMouseOver={e => e.currentTarget.focus()}
       />
     </form>
   );

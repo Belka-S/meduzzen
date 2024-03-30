@@ -27,22 +27,23 @@ const fn = (type: 'pending' | 'fulfilled' | 'rejected') =>
   });
 
 // fulfilled slice
-const handleLoginSucsess = (
+const handleLoginSuccess = (
   state: TAuth,
   action: PayloadAction<{ result: TAuth }>,
 ) => {
   return { ...state, ...action.payload.result };
 };
 
+// auth
 const authSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    login: handleLoginSucsess,
+    login: handleLoginSuccess,
     logout: () => initialState,
   },
   extraReducers: builder => {
-    builder.addCase(TNK.loginThunk.fulfilled, handleLoginSucsess);
+    builder.addCase(TNK.loginThunk.fulfilled, handleLoginSuccess);
   },
 });
 

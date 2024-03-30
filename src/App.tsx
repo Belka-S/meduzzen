@@ -40,6 +40,10 @@ const App = () => {
     }
   }, [dispatch, dispatchExtra, getAccessTokenSilently, isAuthenticated, owner]);
 
+  useEffect(() => {
+    // add GetMe
+  }, []);
+
   return (
     <>
       {(!isLoading || owner) && (

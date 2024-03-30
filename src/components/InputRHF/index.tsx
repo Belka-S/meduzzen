@@ -14,7 +14,9 @@ import s from './index.module.scss';
 type TInputProps<T extends FieldValues> = {
   className?: string;
   style?: CSSProperties;
+
   inputName: Path<T>;
+  label?: string;
   watch?: UseFormWatch<T>;
   errors: Record<string, GlobalError>;
   register: UseFormRegister<T>;
@@ -23,13 +25,13 @@ type TInputProps<T extends FieldValues> = {
 };
 
 const InputRhf = <T extends FieldValues>(props: TInputProps<T>) => {
-  const { errors, register, style, className } = props;
-  const { inputName, placeholder = '', size = 'm' } = props;
+  const { inputName, label, errors, register, style } = props;
+  const { placeholder = '', size = 'm', className } = props;
 
   return (
     <label className={className} style={style}>
       <span className={classNames(s.label, s[size])}>
-        {normalizeText(inputName)}
+        {label ? label : normalizeText(inputName)}
       </span>
       &nbsp;
       <span className={classNames(s.error, s[size])}>

@@ -22,11 +22,10 @@
   }
   &.smooth {
     border-radius: calc(var(--btn-height-s) / 2);
-    padding: var(--btn-gap-s);
   }
   &.round {
     width: var(--btn-height-s);
-    padding-inline: var(--btn-gap-s);
+    padding: 0;
     border-radius: 50%;
   }
 }
@@ -46,7 +45,7 @@
   }
   &.round {
     width: var(--btn-height-m);
-    padding-inline: var(--btn-gap-m);
+    padding: 0;
     border-radius: 50%;
   }
 }
@@ -66,7 +65,7 @@
   }
   &.round {
     width: var(--btn-height-l);
-    padding-inline: var(--btn-gap-l);
+    padding: 0;
     border-radius: 50%;
   }
 }

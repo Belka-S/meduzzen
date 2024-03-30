@@ -21,7 +21,6 @@ export const register = async (credentials: IRegisterCredentials) => {
 export const getMe = async (accessToken: string) => {
   token.set(accessToken);
   const { data } = await apiClient.get('/auth/me/');
-
   return data;
 };
 
@@ -56,7 +55,6 @@ export const updatePassword = async (
 ) => {
   const { user_id, ...credentials } = user;
   token.set(accessToken);
-
   const { data } = await apiClient.put(
     `/user/${user_id}/update_password/`,
     credentials,
@@ -70,10 +68,10 @@ export const updateAvatar = async (
   formData: FormData,
 ) => {
   token.set(accessToken);
-
   const { data } = await apiClient.put(
     `/user/${user_id}/update_avatar/`,
     formData,
+    { headers: { 'Content-Type': 'multipart/form-data' } },
   );
   return data;
 };
@@ -83,6 +81,6 @@ export const getAllUsers = async (
   params: TPaginationParams,
 ) => {
   token.set(accessToken);
-  const { data } = await apiClient.get('/users', { params });
+  const { data } = await apiClient.get('/users/', { params });
   return data;
 };

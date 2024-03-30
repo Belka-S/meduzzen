@@ -8,9 +8,9 @@ export const loginThunk = createAppAsyncThunk(
     try {
       return await API.login(credentials);
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        return thunkAPI.rejectWithValue(error.response?.data);
-      }
+      if (!axios.isAxiosError(error)) throw error;
+      toast.error(error.message);
+      return thunkAPI.rejectWithValue(error.response?.data);
     }
   },
 );

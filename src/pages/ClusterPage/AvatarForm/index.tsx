@@ -1,17 +1,16 @@
-import { FormEvent, useEffect, useState } from 'react';
+import { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import Button from 'components/ui/Button';
-import { Resolver, SubmitHandler, useForm } from 'react-hook-form';
+import SvgIcon from 'components/ui/SvgIcon';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppExtraDispatch } from 'store';
 import { getMeThunk, updateAvatarPreview, updateAvatarThunk } from 'store/user';
-import { editUser } from 'store/user';
 import { getAbbreviation, getRandomColor } from 'utils/helpers';
+import { getRandomNumber } from 'utils/helpers/getRandomNumber';
 import { useUser } from 'utils/hooks';
 import { avatarSchema } from 'utils/validation';
-import { InferType } from 'yup';
-
-import { yupResolver } from '@hookform/resolvers/yup';
+import { InferType, ValidationError } from 'yup';
 
 import s from './index.module.scss';
 
@@ -21,100 +20,146 @@ const AvatarForm = () => {
   const dispatch = useAppDispatch();
   const dispatchExtra = useAppExtraDispatch();
   const { user } = useUser();
-  const { user_id, user_firstname, user_lastname, user_avatar } = user;
 
   const [avatarError, setAvatarError] = useState('');
+  const [activeIcon, setActiveIcon] = useState(false);
 
-  const resolver: Resolver<TInput> = yupResolver(avatarSchema);
   const {
     register,
+    control,
     handleSubmit,
     formState: { touchedFields },
-  } = useForm<TInput>({
-    resolver,
-    mode: 'onChange',
-  });
+  } = useForm<TInput>({ mode: 'onChange' });
 
-  // avatar preview
-  const setAvatar = async (e: FormEvent<HTMLInputElement>) => {
-    setAvatarError('');
-    const avatar = e.target.files[0];
+  // avatar file, preview image
+  const setAvatar = async (e: Event | ChangeEvent) => {
+    const target = e.target as HTMLInputElement;
+    const avatar = (target.files as FileList)[0];
+
     const user_avatar = URL.createObjectURL(avatar);
     dispatch(updateAvatarPreview({ user_avatar }));
-
     try {
-      await avatarSchema.validate({ avatar }, { abortEarly: false });
+      await avatarSchema.validate({ file: avatar }, { abortEarly: false });
       setAvatarError('noError');
     } catch (err) {
-      const msg = err.inner[0].message;
-      toast.error(msg);
-      setAvatarError(msg);
+      if (err instanceof ValidationError) {
+        const msg = err.inner[0].message;
+        toast.error(msg);
+        setAvatarError(msg);
+      }
       return err;
     }
   };
 
   // profile button styles
-  const random = (Math.random() * 1000).toFixed();
-  const btnId = `profile-${user_id}${random}`;
+  const btnId = `profile-${getRandomNumber(12)}`;
   const color = getRandomColor(60);
 
   useEffect(() => {
-    if (user_avatar) {
+    if (user?.user_avatar) {
+      // document.styleSheets[0].deleteRule(0);
       document.styleSheets[0].insertRule(
-        `#${btnId} {background-image: url(${user_avatar})}`,
+        `#${btnId} {background-image: url(${user?.user_avatar})}`,
         0,
       );
-    } else if (user_firstname || user_lastname) {
-      const abbr = getAbbreviation(`${user_firstname} ${user_lastname}`);
-      // document.styleSheets[0].deleteRule(0);
+    } else if (user?.user_firstname || user?.user_lastname) {
+      const abbr = getAbbreviation(
+        `${user?.user_firstname} ${user?.user_lastname}`,
+      );
       document.styleSheets[0].insertRule(
         `#${btnId}::after { background-color: ${color}; color: #ffffff; content: '${abbr}'}`,
       );
     }
-  }, [btnId, color, user_avatar, user_firstname, user_lastname]);
+  }, [btnId, color, user]);
 
   const onSubmit: SubmitHandler<TInput> = data => {
     const formData = new FormData();
-    if (data.file && data.file[0]) {
-      formData.append('file', data.file[0]);
+    let file = (data.avatar as FileList)[0];
+    if (!file?.type) {
+      file = data.avatar as File;
     } // for (const [key, value] of formData) { console.log(`${key}: ${value}`); }
+    formData.append('file', file);
 
     dispatchExtra(updateAvatarThunk(formData))
       .unwrap()
       .then(() => dispatchExtra(getMeThunk()))
-      .finally(() => dispatch(editUser(false)));
+      .then(() => document.location.reload());
   };
 
+  // input validation
   const errorMessage = avatarError === 'noError' ? '' : avatarError;
-
   const isDisabled = errorMessage || Object.keys(touchedFields).length === 0;
+
+  const onMouseOver = () => setActiveIcon(true);
+  const onMouseOut = (e: MouseEvent<HTMLInputElement>) => {
+    setActiveIcon(false);
+    e.currentTarget.blur();
+  };
 
   return (
     <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
       <label>
         <span className={s.error}>{errorMessage}</span>
-        <input
-          id={`${btnId}`}
-          className={classNames(
-            s.avatar,
-            avatarError && s.border__error,
-            avatarError === 'noError' && s.border__success,
+
+        <Controller
+          control={control}
+          name="avatar"
+          render={({ field: { onChange } }) => (
+            <input
+              id={`${btnId}`}
+              className={classNames(
+                s.avatar,
+                avatarError && s.border__error,
+                avatarError === 'noError' && s.border__success,
+              )}
+              type="file"
+              accept="image/*"
+              {...register('avatar', { required: true })}
+              onChange={e => {
+                setAvatar(e);
+                if (e.target.files) {
+                  return onChange(e.target.files[0]);
+                }
+              }}
+              onMouseOut={onMouseOut}
+              onMouseOver={onMouseOver}
+            />
           )}
-          type="file"
-          accept="image/*"
-          {...register('avatar', { required: true })}
-          onChange={e => setAvatar(e)}
         />
+
+        {avatarError && avatarError !== 'noError' && (
+          <SvgIcon
+            className={classNames(s.validation, s.exclamation)}
+            svgId="ui-exclamation"
+            size={24}
+          />
+        )}
+        {avatarError === 'noError' && (
+          <SvgIcon
+            className={classNames(s.validation, s.check)}
+            svgId="ui-check"
+            size={24}
+          />
+        )}
+        {activeIcon && (
+          <SvgIcon
+            className={classNames(s.validation, s.plus)}
+            svgId="ui-plus"
+            size={24}
+          />
+        )}
       </label>
 
-      <Button
-        className={s.button}
-        type="submit"
-        color={isDisabled ? 'disabled' : 'outlined'}
-        variant="smooth"
-        label="Submit"
-        onClick={e => e.currentTarget.blur()}
-      />
+      {Object.keys(touchedFields).length > 0 && (
+        <Button
+          className={s.button}
+          type="submit"
+          color={isDisabled ? 'disabled' : 'outlined'}
+          variant="smooth"
+          label="Submit"
+          onClick={e => e.currentTarget.blur()}
+        />
+      )}
     </form>
   );
 };

@@ -19,17 +19,17 @@ const fn = (type: 'pending' | 'fulfilled' | 'rejected') =>
   });
 
 // fulfilled slice
-const handleCheckStatusSucsess = (
+const handleCheckStatusSuccess = (
   state: TCommonInitialState,
   action: PayloadAction<{ result: string }>,
 ) => ({ ...state, status: action.payload.result });
 
-const handleGetLogsSucsess = (
+const handleGetLogsSuccess = (
   state: TCommonInitialState,
   action: PayloadAction<{ result: string }>,
 ) => ({ ...state, logs: action.payload.result });
 
-const handlePingSucsess = (
+const handlePingSuccess = (
   state: TCommonInitialState,
   action: PayloadAction<{
     result: {
@@ -40,15 +40,16 @@ const handlePingSucsess = (
   }>,
 ) => ({ ...state, ping: action.payload.result });
 
+// server
 const commonSlice = createSlice({
   name: 'common',
   initialState: commonInitialState,
   reducers: {},
   extraReducers: builder => {
     builder
-      .addCase(TNK.checkStatusThunk.fulfilled, handleCheckStatusSucsess)
-      .addCase(TNK.getLogsThunk.fulfilled, handleGetLogsSucsess)
-      .addCase(TNK.pingThunk.fulfilled, handlePingSucsess);
+      .addCase(TNK.checkStatusThunk.fulfilled, handleCheckStatusSuccess)
+      .addCase(TNK.getLogsThunk.fulfilled, handleGetLogsSuccess)
+      .addCase(TNK.pingThunk.fulfilled, handlePingSuccess);
   },
 });
 

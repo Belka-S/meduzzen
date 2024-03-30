@@ -11,5 +11,6 @@ export type TButtonProps = {
 
   href?: string;
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
+  onMouseOver?: (e: MouseEvent<HTMLButtonElement>) => void;
   children?: ReactElement;
 };

@@ -15,6 +15,7 @@ const Button: FC<TButtonProps> = props => {
     label,
 
     onClick,
+    onMouseOver,
     children,
   } = props;
 
@@ -23,6 +24,7 @@ const Button: FC<TButtonProps> = props => {
       className={classNames(className, s.button, s[size], s[color], s[variant])}
       type={type}
       onClick={onClick}
+      onMouseOver={onMouseOver}
     >
       {label && label}
       {children}

@@ -1,9 +1,10 @@
-import InputRhf from 'components/InputRHF';
+import InputRhf from 'components/InputRhf';
 import Button from 'components/ui/Button';
 import SvgIcon from 'components/ui/SvgIcon';
 import H3 from 'components/ui/Typography/H3';
 import { Resolver, SubmitHandler, useForm } from 'react-hook-form';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { useAppExtraDispatch } from 'store';
 import { registerThunk } from 'store/user';
 import { signupSchema } from 'utils/validation';
@@ -33,6 +34,7 @@ const SignupForm = () => {
   const onSubmit: SubmitHandler<TInput> = data => {
     dispatch(registerThunk(data))
       .unwrap()
+      .then(res => toast.success(res?.detail))
       .then(() => navigate('/signin', { replace: true }));
   };
 

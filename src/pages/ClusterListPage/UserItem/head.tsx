@@ -11,10 +11,9 @@ const TableHead = () => {
         <H5>Email</H5>
         <H5>First Name</H5>
         <H5>Last Name</H5>
-
         <span />
         <span />
-        <span />
+        <H5>ID</H5>
       </div>
     </div>
   );
