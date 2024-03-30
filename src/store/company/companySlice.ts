@@ -1,5 +1,6 @@
 import { toast } from 'react-toastify';
-import { initialState, TCompany, TEdit, TPagination } from 'store/company';
+import { TCompany, TEdit, TPagination } from 'store';
+import { initialState } from 'store/company';
 import * as TNK from 'store/company/companyThunks';
 
 import {

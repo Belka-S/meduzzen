@@ -6,9 +6,10 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import PrivateRoutes from 'routes/PrivateRoutes';
 import PublicRoutes from 'routes/PublicRoutes';
 import { useAppDispatch, useAppExtraDispatch } from 'store';
-import { login } from 'store/auth';
+import { login, logout } from 'store/auth';
 import { getMeThunk } from 'store/user';
 import { loadWebFonts } from 'styles/loadWebFonts';
+import { isTokenExpired } from 'utils/helpers';
 import { useAuth, useUser } from 'utils/hooks';
 
 import { useAuth0 } from '@auth0/auth0-react';
@@ -25,7 +26,7 @@ const CompanyPage = lazy(() => import('pages/CompanyPage'));
 const App = () => {
   const dispatch = useAppDispatch();
   const dispatchExtra = useAppExtraDispatch();
-  const { isAuth } = useAuth();
+  const { accessToken, isAuth } = useAuth();
   const { isLoading, owner } = useUser();
   const { getAccessTokenSilently, isAuthenticated } = useAuth0();
 
@@ -42,8 +43,9 @@ const App = () => {
   }, [dispatch, dispatchExtra, getAccessTokenSilently, isAuthenticated, owner]);
 
   useEffect(() => {
+    accessToken && isTokenExpired(accessToken) && dispatch(logout());
     isAuth && dispatchExtra(getMeThunk());
-  }, [dispatchExtra, isAuth]);
+  }, [accessToken, dispatch, dispatchExtra, isAuth]);
 
   return (
     <>

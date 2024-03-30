@@ -1,13 +1,13 @@
 import * as API from 'api/userApi';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { store } from 'store';
+import { IRegister, store, TPaginationParams } from 'store';
 import { createAppAsyncThunk } from 'store';
-import { TPassword, TUser } from 'store/user';
+import { TPassword, TUser } from 'store';
 
 export const registerThunk = createAppAsyncThunk(
   'users/register',
-  async (credentials: API.IRegisterCredentials, thunkAPI) => {
+  async (credentials: IRegister, thunkAPI) => {
     try {
       return await API.register(credentials);
     } catch (error) {
@@ -116,7 +116,7 @@ export const updateAvatarThunk = createAppAsyncThunk(
 
 export const getAllUsersThunk = createAppAsyncThunk(
   'users/getAll',
-  async (params: API.TPaginationParams, thunkAPI) => {
+  async (params: TPaginationParams, thunkAPI) => {
     const { access_token } = store.getState().auth.token;
     try {
       if (access_token) {

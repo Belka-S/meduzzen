@@ -5,9 +5,9 @@ import Button from 'components/ui/Button';
 import SvgIcon from 'components/ui/SvgIcon';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useAppDispatch, useAppExtraDispatch } from 'store';
+import { TUser, useAppDispatch, useAppExtraDispatch } from 'store';
 import { logout } from 'store/auth';
-import { cleanOwner, deleteUserThunk, editUser, TUser } from 'store/user';
+import { cleanOwner, deleteUserThunk, editUser } from 'store/user';
 import { trimName } from 'utils/helpers';
 import { useUser } from 'utils/hooks';
 

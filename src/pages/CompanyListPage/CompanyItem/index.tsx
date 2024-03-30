@@ -5,8 +5,8 @@ import Button from 'components/ui/Button';
 import SvgIcon from 'components/ui/SvgIcon';
 import { NavLink } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useAppDispatch, useAppExtraDispatch } from 'store';
-import { TCompany, updateVisibleThunk } from 'store/company';
+import { TCompany, useAppDispatch, useAppExtraDispatch } from 'store';
+import { updateVisibleThunk } from 'store/company';
 import { deleteCompanyThunk, editCompany } from 'store/company';
 import { useCompany } from 'utils/hooks';
 

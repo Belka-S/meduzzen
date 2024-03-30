@@ -1,4 +1,4 @@
-import { TUser } from 'store/user';
+import { TUser } from 'store';
 
 import { apiClient, token } from './apiHttp';
 

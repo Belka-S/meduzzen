@@ -1,17 +1,8 @@
-import { TUser } from 'store/user';
+import { IRegister, TPaginationParams, TUser } from 'store';
 
 import { apiClient, token } from './apiHttp';
 
-export interface IRegisterCredentials
-  extends Pick<TUser, 'user_email' | 'user_firstname' | 'user_lastname'> {
-  user_firstname: string;
-  user_password: string;
-  user_password_repeat: string;
-}
-
-export type TPaginationParams = { page: number; page_size: number };
-
-export const register = async (credentials: IRegisterCredentials) => {
+export const register = async (credentials: IRegister) => {
   const { data } = await apiClient.post('/user/', credentials);
   const user_email = credentials.user_email;
   data.result = { ...data.result, user_email };

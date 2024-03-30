@@ -1,8 +1,6 @@
-import { TCompany } from 'store/company';
+import { TCompany, TPaginationParams } from 'store';
 
 import { apiClient, token } from './apiHttp';
-
-export type TPaginationParams = { page: number; page_size: number };
 
 export const createCompany = async (
   credentials: Pick<TCompany, 'is_visible' | 'company_name'>,

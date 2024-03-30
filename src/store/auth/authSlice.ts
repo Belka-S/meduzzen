@@ -1,4 +1,6 @@
+import { TAuth } from 'store';
 import * as TNK from 'store/auth/authThunks';
+import { initialState } from 'store/auth/inititalState';
 
 import {
   combineReducers,
@@ -6,16 +8,6 @@ import {
   isAnyOf,
   PayloadAction,
 } from '@reduxjs/toolkit';
-
-export type TAuth = {
-  access_token: string;
-  token_type?: string;
-};
-
-export const initialState: TAuth = {
-  access_token: '',
-  token_type: '',
-};
 
 const thunkArr = [TNK.loginThunk];
 

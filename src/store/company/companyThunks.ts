@@ -1,9 +1,9 @@
 import * as API from 'api/companyApi';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { store } from 'store';
+import { store, TPaginationParams } from 'store';
 import { createAppAsyncThunk } from 'store';
-import { TCompany } from 'store/company';
+import { TCompany } from 'store';
 
 export const createCompanyThunk = createAppAsyncThunk(
   'company/register',
@@ -103,7 +103,7 @@ export const updateAvatarThunk = createAppAsyncThunk(
 
 export const getAllCompaniesThunk = createAppAsyncThunk(
   'company/getAll',
-  async (params: API.TPaginationParams, thunkAPI) => {
+  async (params: TPaginationParams, thunkAPI) => {
     const { access_token } = store.getState().auth.token;
     try {
       if (access_token) {
