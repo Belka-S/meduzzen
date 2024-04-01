@@ -28,7 +28,7 @@ export type TInitialState = {
   analyticQuiz: TRatingAnalytic[];
 
   loading: boolean;
-  error: boolean;
+  error: boolean | string;
 };
 
 export const initialState: TInitialState = {

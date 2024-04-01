@@ -13,7 +13,8 @@ import {
 export const getCompaniesListThunk = createAppAsyncThunk(
   'userData/CompaniesList',
   async (params: Pick<TUser, 'user_id'>, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+    const access_token = store.getState().auth.token?.access_token;
+    if (!access_token) return;
     try {
       return await API.getCompaniesList(access_token, params);
     } catch (error) {
@@ -27,7 +28,8 @@ export const getCompaniesListThunk = createAppAsyncThunk(
 export const getIvitesListThunk = createAppAsyncThunk(
   'userData/IvitesList',
   async (params: Pick<TUser, 'user_id'>, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+    const access_token = store.getState().auth.token?.access_token;
+    if (!access_token) return;
     try {
       return await API.getIvitesList(access_token, params);
     } catch (error) {
@@ -41,7 +43,8 @@ export const getIvitesListThunk = createAppAsyncThunk(
 export const getRequestsListThunk = createAppAsyncThunk(
   'userData/RequestsList',
   async (params: Pick<TUser, 'user_id'>, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+    const access_token = store.getState().auth.token?.access_token;
+    if (!access_token) return;
     try {
       return await API.getRequestsList(access_token, params);
     } catch (error) {
@@ -55,7 +58,8 @@ export const getRequestsListThunk = createAppAsyncThunk(
 export const getRatingThunk = createAppAsyncThunk(
   'userData/GlobalRating',
   async (params: Pick<TUser, 'user_id'>, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+    const access_token = store.getState().auth.token?.access_token;
+    if (!access_token) return;
     try {
       return await API.getGlobalRating(access_token, params);
     } catch (error) {
@@ -69,7 +73,8 @@ export const getRatingThunk = createAppAsyncThunk(
 export const getAnalyticThunk = createAppAsyncThunk(
   'userData/GlobalRatingAnalytic',
   async (params: Pick<TUser, 'user_id'>, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+    const access_token = store.getState().auth.token?.access_token;
+    if (!access_token) return;
     try {
       return await API.getGlobalRatingAnalytic(access_token, params);
     } catch (error) {
@@ -83,7 +88,8 @@ export const getAnalyticThunk = createAppAsyncThunk(
 export const getRatingInCompanyThunk = createAppAsyncThunk(
   'userData/RatingInCompany',
   async (params: TActionParams, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+    const access_token = store.getState().auth.token?.access_token;
+    if (!access_token) return;
     try {
       return await API.getRatingInCompany(access_token, params);
     } catch (error) {
@@ -97,7 +103,8 @@ export const getRatingInCompanyThunk = createAppAsyncThunk(
 export const getAnalyticInCompanyThunk = createAppAsyncThunk(
   'userData/RatingAnalyticInCompany',
   async (params: TActionParams, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+    const access_token = store.getState().auth.token?.access_token;
+    if (!access_token) return;
     try {
       return await API.getRatingAnalyticInCompany(access_token, params);
     } catch (error) {
@@ -111,7 +118,8 @@ export const getAnalyticInCompanyThunk = createAppAsyncThunk(
 export const getRatingForQuizThunk = createAppAsyncThunk(
   'userData/RatingForQuiz',
   async (params: TQuizUserParams, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+    const access_token = store.getState().auth.token?.access_token;
+    if (!access_token) return;
     try {
       return await API.getRatingForQuiz(access_token, params);
     } catch (error) {
@@ -125,7 +133,8 @@ export const getRatingForQuizThunk = createAppAsyncThunk(
 export const getAnalyticForQuizThunk = createAppAsyncThunk(
   'userData/RatingAnalyticForQuiz ',
   async (params: TQuizUserParams, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+    const access_token = store.getState().auth.token?.access_token;
+    if (!access_token) return;
     try {
       return await API.getRatingAnalyticForQuiz(access_token, params);
     } catch (error) {
@@ -139,7 +148,8 @@ export const getAnalyticForQuizThunk = createAppAsyncThunk(
 export const getLastAnswersListThunk = createAppAsyncThunk(
   'userData/LastAnswersList',
   async (params: Pick<TUser, 'user_id'>, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+    const access_token = store.getState().auth.token?.access_token;
+    if (!access_token) return;
     try {
       return await API.getLastAnswersList(access_token, params);
     } catch (error) {
@@ -153,7 +163,8 @@ export const getLastAnswersListThunk = createAppAsyncThunk(
 export const getLastAnswersCsvThunk = createAppAsyncThunk(
   'userData/LastAnswersCsv',
   async (params: Pick<TUser, 'user_id'>, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+    const access_token = store.getState().auth.token?.access_token;
+    if (!access_token) return;
     try {
       return await API.getLastAnswersCsv(access_token, params);
     } catch (error) {
@@ -167,7 +178,8 @@ export const getLastAnswersCsvThunk = createAppAsyncThunk(
 export const getQuizzesPassThunk = createAppAsyncThunk(
   'userData/QuizzesLastPass',
   async (params: Pick<TUser, 'user_id'>, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+    const access_token = store.getState().auth.token?.access_token;
+    if (!access_token) return;
     try {
       return await API.getQuizzesLastPass(access_token, params);
     } catch (error) {
@@ -181,7 +193,8 @@ export const getQuizzesPassThunk = createAppAsyncThunk(
 export const getNotificationsThunk = createAppAsyncThunk(
   'userData/NotificationsList',
   async (params: Pick<TUser, 'user_id'>, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+    const access_token = store.getState().auth.token?.access_token;
+    if (!access_token) return;
     try {
       return await API.getNotificationsList(access_token, params);
     } catch (error) {
@@ -195,7 +208,8 @@ export const getNotificationsThunk = createAppAsyncThunk(
 export const markNotificationAsReadThunk = createAppAsyncThunk(
   'userData/NotificationAsRead',
   async (params: TNotificationParams, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+    const access_token = store.getState().auth.token?.access_token;
+    if (!access_token) return;
     try {
       return await API.markNotificationAsRead(access_token, params);
     } catch (error) {

@@ -1,20 +1,9 @@
 import { toast } from 'react-toastify';
-import {
-  TCompaniesList,
-  TCompany,
-  TCompanyFromList,
-  TEdit,
-  TPagination,
-} from 'store';
-import { initialState } from 'store/company';
+import { TCompany, TCompanyFromList, TEdit, TPagination } from 'store';
+import { initialState, TInitialState } from 'store/company';
 import * as TNK from 'store/company/companyThunks';
 
-import {
-  combineReducers,
-  createSlice,
-  isAnyOf,
-  PayloadAction,
-} from '@reduxjs/toolkit';
+import { createSlice, isAnyOf, PayloadAction } from '@reduxjs/toolkit';
 
 const thunkArr = [TNK.createCompanyThunk, TNK.getCompanyThunk];
 
@@ -25,141 +14,82 @@ const fn = (type: 'pending' | 'fulfilled' | 'rejected') =>
     else return el.rejected;
   });
 
-// fulfilled slice
-const handleGetSuccess = (
-  state: TCompany | null,
-  action: PayloadAction<{ result: TCompany }>,
-) => ({ ...state, ...action.payload?.result });
-
-const handleUpdateSuccess = (
-  state: TCompany | null,
-  action: PayloadAction<{ result: TCompany }>,
-) => ({ ...state, ...action.payload.result });
-
-//
-
-const handleGetAllSuccess = (
-  state: TCompaniesList,
-  action: PayloadAction<{ result: { companies: TCompaniesList } }>,
-) => state.concat(action.payload.result.companies);
-
-const handleCreateCompanySuccess = (
-  state: TCompaniesList,
-  action: PayloadAction<{ result: TCompanyFromList }>,
-) => {
-  state.push(action.payload.result);
-};
-
-const handleDeleteSuccess = (
-  state: TCompaniesList,
-  action: PayloadAction<{ result: Pick<TCompany, 'company_id'> }>,
-) => {
-  const { company_id } = action.payload.result;
-  const index = state.findIndex(el => el.company_id === company_id);
-  console.log('index: ', index);
-  state.splice(index, 1);
-};
-
-const handlePaginationSuccess = (
-  _: TPagination,
-  action: PayloadAction<{ result: { pagination: TPagination } }>,
-) => action.payload.result.pagination;
-
-const handleEditSuccess = (_: TEdit, action: PayloadAction<TEdit>) =>
-  action.payload;
-
+// handlers
 const handleSuccess = () => {
   toast.success('Success');
 };
 
 const handleAvatarPreviewSuccess = (
-  state: TCompany | null,
+  state: TInitialState,
   action: PayloadAction<Pick<TCompany, 'company_avatar'>>,
-) => state && { ...state, ...action.payload };
+) => {
+  if (!state || !state.company) return;
+  return { ...state, company: { ...state.company, ...action.payload } };
+};
 
-// company
+const handleEditSuccess = (
+  state: TInitialState,
+  action: PayloadAction<TEdit>,
+) => ({ ...state, edit: action.payload });
+
+const handleGetCompanySuccess = (
+  state: TInitialState,
+  action: PayloadAction<{ result: TCompany }>,
+) => ({ ...state, company: action.payload.result });
+
+const handleDeleteSuccess = (
+  state: TInitialState,
+  action: PayloadAction<{ result: Pick<TCompany, 'company_id'> }>,
+) => {
+  const { company_id } = action.payload.result;
+  const index = state.companyList.findIndex(el => el.company_id === company_id);
+  state.companyList.splice(index, 1);
+};
+
+const handleGetAllSuccess = (
+  state: TInitialState,
+  action: PayloadAction<{
+    result: { companies: TCompanyFromList[]; pagination: TPagination };
+  }>,
+) => ({
+  ...state,
+  companyList: state.companyList.concat(action.payload.result.companies),
+  pagination: action.payload.result.pagination,
+});
+
+// slice
 const companySlice = createSlice({
-  name: 'company',
-  initialState: initialState.company,
+  name: 'companies',
+  initialState,
   reducers: {
     updateAvatarPreview: handleAvatarPreviewSuccess,
+    editCompany: handleEditSuccess,
   },
   extraReducers: builder => {
     builder
-      .addCase(TNK.getCompanyThunk.fulfilled, handleGetSuccess)
-      .addCase(TNK.updateInfoThunk.fulfilled, handleUpdateSuccess)
+      // company
+      .addCase(TNK.createCompanyThunk.fulfilled, handleSuccess)
+      .addCase(TNK.getCompanyThunk.fulfilled, handleGetCompanySuccess)
+      .addCase(TNK.updateInfoThunk.fulfilled, handleSuccess)
       .addCase(TNK.updateVisibleThunk.fulfilled, handleSuccess)
-      .addCase(TNK.updateAvatarThunk.fulfilled, handleSuccess);
-  },
-});
-
-// edit
-const editSlice = createSlice({
-  name: 'edit',
-  initialState: initialState.edit,
-  reducers: { editCompany: handleEditSuccess },
-});
-
-// companyList
-const companiesListSlice = createSlice({
-  name: 'companyList',
-  initialState: initialState.companiesList,
-  reducers: {},
-  extraReducers: builder => {
-    builder
+      .addCase(TNK.updateAvatarThunk.fulfilled, handleSuccess)
+      .addCase(TNK.deleteCompanyThunk.fulfilled, handleDeleteSuccess)
+      // companyList
       .addCase(TNK.getAllCompaniesThunk.fulfilled, handleGetAllSuccess)
-      .addCase(TNK.createCompanyThunk.fulfilled, handleCreateCompanySuccess)
-      .addCase(TNK.deleteCompanyThunk.fulfilled, handleDeleteSuccess);
+
+      // loading, error
+      .addMatcher(isAnyOf(...fn('pending')), state => {
+        return { ...state, loading: true, error: false };
+      })
+      .addMatcher(isAnyOf(...fn('fulfilled')), state => {
+        return { ...state, loading: false, error: false };
+      })
+      .addMatcher(isAnyOf(...fn('rejected')), (state, action) => {
+        return { ...state, loading: false, error: action.payload };
+      });
   },
 });
 
-// pagination
-const paginationSlice = createSlice({
-  name: 'pagination',
-  initialState: initialState.pagination,
-  reducers: {},
-  extraReducers: builder => {
-    builder.addCase(
-      TNK.getAllCompaniesThunk.fulfilled,
-      handlePaginationSuccess,
-    );
-  },
-});
+export const companyReducer = companySlice.reducer;
 
-// loading slice
-const loadingSlice = createSlice({
-  name: 'loading',
-  initialState: false,
-  reducers: {},
-  extraReducers: builder => {
-    builder
-      .addMatcher(isAnyOf(...fn('pending')), () => true)
-      .addMatcher(isAnyOf(...fn('fulfilled')), () => false)
-      .addMatcher(isAnyOf(...fn('rejected')), () => false);
-  },
-});
-
-// error slice
-const errorSlice = createSlice({
-  name: 'error',
-  initialState: false,
-  reducers: {},
-  extraReducers: builder => {
-    builder
-      .addMatcher(isAnyOf(...fn('pending')), () => false)
-      .addMatcher(isAnyOf(...fn('fulfilled')), () => false)
-      .addMatcher(isAnyOf(...fn('rejected')), (_, action) => action.payload);
-  },
-});
-
-export const companyReducer = combineReducers({
-  company: companySlice.reducer,
-  companiesList: companiesListSlice.reducer,
-  pagination: paginationSlice.reducer,
-  edit: editSlice.reducer,
-  loading: loadingSlice.reducer,
-  error: errorSlice.reducer,
-});
-
-export const { editCompany } = editSlice.actions;
-export const { updateAvatarPreview } = companySlice.actions;
+export const { updateAvatarPreview, editCompany } = companySlice.actions;

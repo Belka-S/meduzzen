@@ -21,11 +21,10 @@ export const registerThunk = createAppAsyncThunk(
 export const getMeThunk = createAppAsyncThunk(
   'auth/login',
   async (_, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+    const access_token = store.getState().auth.token?.access_token;
+    if (!access_token) return;
     try {
-      if (access_token) {
-        return await API.getMe(access_token);
-      }
+      return await API.getMe(access_token);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -37,11 +36,10 @@ export const getMeThunk = createAppAsyncThunk(
 export const getUserThunk = createAppAsyncThunk(
   'users/get',
   async (id: number, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+    const access_token = store.getState().auth.token?.access_token;
+    if (!access_token) return;
     try {
-      if (access_token) {
-        return await API.getUser(access_token, id);
-      }
+      return await API.getUser(access_token, id);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -53,11 +51,10 @@ export const getUserThunk = createAppAsyncThunk(
 export const deleteUserThunk = createAppAsyncThunk(
   'users/delete',
   async (id: number, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+    const access_token = store.getState().auth.token?.access_token;
+    if (!access_token) return;
     try {
-      if (access_token) {
-        return await API.deleteUser(access_token, id);
-      }
+      return await API.deleteUser(access_token, id);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -69,11 +66,10 @@ export const deleteUserThunk = createAppAsyncThunk(
 export const updateInfoThunk = createAppAsyncThunk(
   'users/updateInfo',
   async (user: Partial<TUser>, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+    const access_token = store.getState().auth.token?.access_token;
+    if (!access_token) return;
     try {
-      if (access_token) {
-        return await API.updateUserInfo(access_token, user);
-      }
+      return await API.updateUserInfo(access_token, user);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -85,11 +81,10 @@ export const updateInfoThunk = createAppAsyncThunk(
 export const updatePasswordThunk = createAppAsyncThunk(
   'users/updatePassword',
   async (user: TPassword, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+    const access_token = store.getState().auth.token?.access_token;
+    if (!access_token) return;
     try {
-      if (access_token) {
-        return await API.updatePassword(access_token, user);
-      }
+      return await API.updatePassword(access_token, user);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -101,7 +96,8 @@ export const updatePasswordThunk = createAppAsyncThunk(
 export const updateAvatarThunk = createAppAsyncThunk(
   'users/updateAvatar',
   async (formData: FormData, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+    const access_token = store.getState().auth.token?.access_token;
+    if (!access_token) return;
     const user_id = store.getState().users.user?.user_id;
     try {
       if (access_token && user_id) {
@@ -118,11 +114,10 @@ export const updateAvatarThunk = createAppAsyncThunk(
 export const getAllUsersThunk = createAppAsyncThunk(
   'users/getAll',
   async (params: TPaginationParams, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+    const access_token = store.getState().auth.token?.access_token;
+    if (!access_token) return;
     try {
-      if (access_token) {
-        return await API.getAllUsers(access_token, params);
-      }
+      return await API.getAllUsers(access_token, params);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);

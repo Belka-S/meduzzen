@@ -24,7 +24,7 @@ export type TInitialState = {
   readNoteId: number;
 
   loading: boolean;
-  error: boolean;
+  error: boolean | string;
 };
 
 export const initialState: TInitialState = {

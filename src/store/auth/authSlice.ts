@@ -1,13 +1,8 @@
 import { TAuth } from 'store';
 import * as TNK from 'store/auth/authThunks';
-import { initialState } from 'store/auth/inititalState';
+import { initialState, TInitialStae } from 'store/auth/inititalState';
 
-import {
-  combineReducers,
-  createSlice,
-  isAnyOf,
-  PayloadAction,
-} from '@reduxjs/toolkit';
+import { createSlice, isAnyOf, PayloadAction } from '@reduxjs/toolkit';
 
 const thunkArr = [TNK.loginThunk];
 
@@ -18,57 +13,39 @@ const fn = (type: 'pending' | 'fulfilled' | 'rejected') =>
     else return el.rejected;
   });
 
-// fulfilled slice
+// handlers
 const handleLoginSuccess = (
-  state: TAuth,
+  state: TInitialStae,
   action: PayloadAction<{ result: TAuth }>,
 ) => {
-  return { ...state, ...action.payload.result };
+  return { ...state, token: action.payload.result };
 };
 
-// auth
+// slice
 const authSlice = createSlice({
-  name: 'user',
+  name: 'token',
   initialState,
   reducers: {
     login: handleLoginSuccess,
     logout: () => initialState,
   },
   extraReducers: builder => {
-    builder.addCase(TNK.loginThunk.fulfilled, handleLoginSuccess);
-  },
-});
-
-// loading slice
-const loadingSlice = createSlice({
-  name: 'loading',
-  initialState: false,
-  reducers: {},
-  extraReducers: builder => {
+    // success
     builder
-      .addMatcher(isAnyOf(...fn('pending')), () => true)
-      .addMatcher(isAnyOf(...fn('fulfilled')), () => false)
-      .addMatcher(isAnyOf(...fn('rejected')), () => false);
+      .addCase(TNK.loginThunk.fulfilled, handleLoginSuccess)
+      // loading, error
+      .addMatcher(isAnyOf(...fn('pending')), state => {
+        return { ...state, loading: true, error: false };
+      })
+      .addMatcher(isAnyOf(...fn('fulfilled')), state => {
+        return { ...state, loading: false, error: false };
+      })
+      .addMatcher(isAnyOf(...fn('rejected')), (state, action) => {
+        return { ...state, loading: false, error: action.payload };
+      });
   },
 });
 
-// error slice
-const errorSlice = createSlice({
-  name: 'error',
-  initialState: false,
-  reducers: {},
-  extraReducers: builder => {
-    builder
-      .addMatcher(isAnyOf(...fn('pending')), () => false)
-      .addMatcher(isAnyOf(...fn('fulfilled')), () => false)
-      .addMatcher(isAnyOf(...fn('rejected')), (_, action) => action.payload);
-  },
-});
-
-export const authReducer = combineReducers({
-  token: authSlice.reducer,
-  loading: loadingSlice.reducer,
-  error: errorSlice.reducer,
-});
+export const authReducer = authSlice.reducer;
 
 export const { login, logout } = authSlice.actions;

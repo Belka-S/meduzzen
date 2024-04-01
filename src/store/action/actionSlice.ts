@@ -98,7 +98,7 @@ const actionSlice = createSlice({
         return { ...state, loading: true, error: false };
       })
       .addMatcher(isAnyOf(...fn('fulfilled')), state => {
-        return { ...state, loading: true, error: true };
+        return { ...state, loading: false, error: false };
       })
       .addMatcher(isAnyOf(...fn('rejected')), (state, action) => {
         return { ...state, loading: false, error: action.payload };

@@ -17,7 +17,7 @@ export type TPassword = {
 };
 
 export interface IRegister
-  extends Pick<TUser, 'user_email' & 'user_firstname' & 'user_lastname'> {
+  extends Pick<TUser, 'user_email' | 'user_firstname' | 'user_lastname'> {
   user_firstname: string;
   user_password: string;
   user_password_repeat: string;
@@ -51,21 +51,21 @@ export type TCompany = {
   company_links: string[];
   company_owner: Pick<
     TUser,
-    'user_id' &
-      'user_email' &
-      'user_firstname' &
-      'user_lastname' &
-      'user_avatar'
+    | 'user_id'
+    | 'user_email'
+    | 'user_firstname'
+    | 'user_lastname'
+    | 'user_avatar'
   >;
 };
 
 export type TCompanyFromList = Pick<
   TCompany,
-  'company_id' &
-    'company_name' &
-    'company_title' &
-    'company_avatar' &
-    'is_visible'
+  | 'company_id'
+  | 'company_name'
+  | 'company_title'
+  | 'company_avatar'
+  | 'is_visible'
 >;
 
 export type TCompaniesList = Array<TCompanyFromList>;
@@ -148,9 +148,9 @@ export type TQuizCompanyParams = Pick<TCompany, 'company_id'> &
 export type TUserFromList = TAction &
   Pick<
     TUser,
-    'user_id' &
-      'user_email' &
-      'user_firstname' &
-      'user_lastname' &
-      'user_avatar'
+    | 'user_id'
+    | 'user_email'
+    | 'user_firstname'
+    | 'user_lastname'
+    | 'user_avatar'
   >;

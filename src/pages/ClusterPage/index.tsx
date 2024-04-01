@@ -13,10 +13,10 @@ import { useAppDispatch, useAppExtraDispatch } from 'store';
 import { getUserThunk } from 'store/user';
 import { editUser } from 'store/user';
 import { trimName } from 'utils/helpers';
+import { getArrFromObj } from 'utils/helpers/getArrFromObj';
 import { useUser } from 'utils/hooks';
 
 import s from './index.module.scss';
-import { getArrFromObj } from 'utils/helpers/getArrFromObj';
 
 const ClusterPage = () => {
   const dispatch = useAppDispatch();

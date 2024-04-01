@@ -1,11 +1,11 @@
 import { TRootState } from 'store';
 
 export const selectCompany = (state: TRootState) => state.companies.company;
-export const selectEdit = (state: TRootState) => state.companies.edit;
 export const selectCompanyList = (state: TRootState) =>
-  state.companies.companiesList;
+  state.companies.companyList;
 export const selectPagination = (state: TRootState) =>
   state.companies.pagination;
+export const selectEdit = (state: TRootState) => state.companies.edit;
 
 export const selectCompanyOwner = (state: TRootState) =>
   state.companies.company?.company_owner?.user_email;

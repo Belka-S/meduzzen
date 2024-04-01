@@ -6,8 +6,8 @@ export const createCompany = async (
   credentials: Pick<TCompany, 'is_visible' | 'company_name'>,
 ) => {
   const { data } = await apiClient.post('/company/', credentials);
-  const { company_name, is_visible } = credentials;
-  data.result = { ...data.result, company_name, is_visible };
+  const { company_name } = credentials;
+  data.result = { ...data.result, company_name };
   return data;
 };
 

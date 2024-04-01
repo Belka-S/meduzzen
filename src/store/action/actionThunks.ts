@@ -7,7 +7,8 @@ import { createAppAsyncThunk } from 'store';
 export const createActionFromUserThunk = createAppAsyncThunk(
   'action/createFromUser',
   async (params: Pick<TCompany, 'company_id'>, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+    const access_token = store.getState().auth.token?.access_token;
+    if (!access_token) return;
     try {
       return await API.createActionFromUser(access_token, params);
     } catch (error) {
@@ -21,7 +22,8 @@ export const createActionFromUserThunk = createAppAsyncThunk(
 export const createActionFromCompanyThunk = createAppAsyncThunk(
   'action/createFromCompany',
   async (params: TActionParams, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+    const access_token = store.getState().auth.token?.access_token;
+    if (!access_token) return;
     try {
       return await API.createActionFromCompany(access_token, params);
     } catch (error) {
@@ -35,7 +37,8 @@ export const createActionFromCompanyThunk = createAppAsyncThunk(
 export const acceptActionInviteThunk = createAppAsyncThunk(
   'action/acceptInvite',
   async (action_id: number, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+    const access_token = store.getState().auth.token?.access_token;
+    if (!access_token) return;
     try {
       return await API.acceptActionInvite(access_token, action_id);
     } catch (error) {
@@ -49,7 +52,8 @@ export const acceptActionInviteThunk = createAppAsyncThunk(
 export const acceptActionRequestThunk = createAppAsyncThunk(
   'action/acceptRequest',
   async (action_id: number, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+    const access_token = store.getState().auth.token?.access_token;
+    if (!access_token) return;
     try {
       return await API.acceptActionRequest(access_token, action_id);
     } catch (error) {
@@ -63,7 +67,8 @@ export const acceptActionRequestThunk = createAppAsyncThunk(
 export const declineActionThunk = createAppAsyncThunk(
   'action/decline',
   async (action_id: number, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+    const access_token = store.getState().auth.token?.access_token;
+    if (!access_token) return;
     try {
       return await API.declineAction(access_token, action_id);
     } catch (error) {
@@ -77,7 +82,8 @@ export const declineActionThunk = createAppAsyncThunk(
 export const addToAdminThunk = createAppAsyncThunk(
   'action/addMemberToAdmin',
   async (action_id: number, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+    const access_token = store.getState().auth.token?.access_token;
+    if (!access_token) return;
     try {
       return await API.addMemberToAdmin(access_token, action_id);
     } catch (error) {
@@ -91,7 +97,8 @@ export const addToAdminThunk = createAppAsyncThunk(
 export const removeFromAdminThunk = createAppAsyncThunk(
   'action/removeMemberFromAdmin',
   async (action_id: number, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+    const access_token = store.getState().auth.token?.access_token;
+    if (!access_token) return;
     try {
       return await API.removeMemberFromAdmin(access_token, action_id);
     } catch (error) {
@@ -105,7 +112,8 @@ export const removeFromAdminThunk = createAppAsyncThunk(
 export const addToBlockThunk = createAppAsyncThunk(
   'action/addMemberToBlock',
   async (action_id: number, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+    const access_token = store.getState().auth.token?.access_token;
+    if (!access_token) return;
     try {
       return await API.addMemberToBlock(access_token, action_id);
     } catch (error) {
@@ -119,7 +127,8 @@ export const addToBlockThunk = createAppAsyncThunk(
 export const removeFromBlockThunk = createAppAsyncThunk(
   'action/removeMemberFromBlock',
   async (action_id: number, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+    const access_token = store.getState().auth.token?.access_token;
+    if (!access_token) return;
     try {
       return await API.removeMemberFromBlock(access_token, action_id);
     } catch (error) {
@@ -133,7 +142,8 @@ export const removeFromBlockThunk = createAppAsyncThunk(
 export const leaveFromCompanyThunk = createAppAsyncThunk(
   'action/leaveMemberFromCompany',
   async (action_id: number, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+    const access_token = store.getState().auth.token?.access_token;
+    if (!access_token) return;
     try {
       return await API.leaveMemberFromCompany(access_token, action_id);
     } catch (error) {

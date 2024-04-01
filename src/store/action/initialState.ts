@@ -13,7 +13,7 @@ export type TInitialState = {
   leaveFromCompany: string;
 
   loading: boolean;
-  error: boolean;
+  error: boolean | string;
 };
 
 export const initialState: TInitialState = {

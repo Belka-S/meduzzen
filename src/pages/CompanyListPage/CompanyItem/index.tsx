@@ -5,7 +5,7 @@ import Button from 'components/ui/Button';
 import SvgIcon from 'components/ui/SvgIcon';
 import { NavLink } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { TCompany, useAppDispatch, useAppExtraDispatch } from 'store';
+import { TCompanyFromList, useAppDispatch, useAppExtraDispatch } from 'store';
 import { updateVisibleThunk } from 'store/company';
 import { deleteCompanyThunk, editCompany } from 'store/company';
 import { useCompany } from 'utils/hooks';
@@ -13,7 +13,7 @@ import { useCompany } from 'utils/hooks';
 import s from './index.module.scss';
 
 type TCompanyProps = {
-  props: TCompany;
+  props: TCompanyFromList;
 };
 
 const CompanyItem: FC<TCompanyProps> = ({ props }) => {

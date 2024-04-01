@@ -1,6 +1,15 @@
 import { TAuth } from 'store';
 
-export const initialState: TAuth = {
-  access_token: '',
-  token_type: '',
+export type TInitialStae = {
+  token: TAuth | null;
+
+  loading: boolean;
+  error: boolean | string;
+};
+
+export const initialState: TInitialStae = {
+  token: null,
+
+  loading: false,
+  error: false,
 };
