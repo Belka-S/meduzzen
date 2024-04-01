@@ -118,7 +118,7 @@ const paginationSlice = createSlice({
 });
 
 // loading slice
-const usersLoadingSlice = createSlice({
+const loadingSlice = createSlice({
   name: 'loading',
   initialState: false,
   reducers: {},
@@ -131,7 +131,7 @@ const usersLoadingSlice = createSlice({
 });
 
 // error slice
-const usersErrorSlice = createSlice({
+const errorSlice = createSlice({
   name: 'error',
   initialState: false,
   reducers: {},
@@ -149,8 +149,8 @@ export const usersReducer = combineReducers({
   userList: userListSlice.reducer,
   pagination: paginationSlice.reducer,
   edit: editSlice.reducer,
-  loading: usersLoadingSlice.reducer,
-  error: usersErrorSlice.reducer,
+  loading: loadingSlice.reducer,
+  error: errorSlice.reducer,
 });
 
 export const { editUser } = editSlice.actions;

@@ -33,10 +33,12 @@ const AvatarForm = () => {
     let file = (data.avatar as unknown as FileList)[0];
     if (!file?.type) {
       file = data.avatar as File;
-    } // for (const [key, value] of formData) { console.log(`${key}: ${value}`); }
+    }
     formData.append('file', file);
+    // for (const [key, value] of formData) { console.log(`${key}: ${value}`); }
 
     await dispatchExtra(updateAvatarThunk(formData));
+    dispatch(editUser(false));
     document.location.reload();
   };
 

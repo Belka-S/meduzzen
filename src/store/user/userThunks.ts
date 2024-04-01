@@ -60,6 +60,7 @@ export const deleteUserThunk = createAppAsyncThunk(
       }
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
+      toast.error(error.message);
       return thunkAPI.rejectWithValue(error.response?.data);
     }
   },

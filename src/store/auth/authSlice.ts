@@ -40,7 +40,7 @@ const authSlice = createSlice({
 });
 
 // loading slice
-const authLoadingSlice = createSlice({
+const loadingSlice = createSlice({
   name: 'loading',
   initialState: false,
   reducers: {},
@@ -53,7 +53,7 @@ const authLoadingSlice = createSlice({
 });
 
 // error slice
-const authErrorSlice = createSlice({
+const errorSlice = createSlice({
   name: 'error',
   initialState: false,
   reducers: {},
@@ -67,8 +67,8 @@ const authErrorSlice = createSlice({
 
 export const authReducer = combineReducers({
   token: authSlice.reducer,
-  loading: authLoadingSlice.reducer,
-  error: authErrorSlice.reducer,
+  loading: loadingSlice.reducer,
+  error: errorSlice.reducer,
 });
 
 export const { login, logout } = authSlice.actions;

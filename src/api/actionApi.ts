@@ -1,10 +1,13 @@
+import { TActionParams, TCompany } from 'store';
+
 import { apiClient, token } from './apiHttp';
 
 export const createActionFromUser = async (
   accessToken: string,
-  company_id: number,
+  params: Pick<TCompany, 'company_id'>,
 ) => {
   token.set(accessToken);
+  const { company_id } = params;
   const { data } = await apiClient.get(
     `/action/create_from_user/company/${company_id}/`,
   );
@@ -13,10 +16,10 @@ export const createActionFromUser = async (
 
 export const createActionFromCompany = async (
   accessToken: string,
-  user_id: number,
-  company_id: number,
+  params: TActionParams,
 ) => {
   token.set(accessToken);
+  const { company_id, user_id } = params;
   const { data } = await apiClient.get(
     `/action/create_from_company/${company_id}/user/${user_id}/`,
   );

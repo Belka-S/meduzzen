@@ -1,5 +1,11 @@
 import { toast } from 'react-toastify';
-import { TCompany, TEdit, TPagination } from 'store';
+import {
+  TCompaniesList,
+  TCompany,
+  TCompanyFromList,
+  TEdit,
+  TPagination,
+} from 'store';
 import { initialState } from 'store/company';
 import * as TNK from 'store/company/companyThunks';
 
@@ -33,19 +39,19 @@ const handleUpdateSuccess = (
 //
 
 const handleGetAllSuccess = (
-  state: TCompany[],
-  action: PayloadAction<{ result: { companies: TCompany[] } }>,
+  state: TCompaniesList,
+  action: PayloadAction<{ result: { companies: TCompaniesList } }>,
 ) => state.concat(action.payload.result.companies);
 
 const handleCreateCompanySuccess = (
-  state: TCompany[],
-  action: PayloadAction<{ result: TCompany }>,
+  state: TCompaniesList,
+  action: PayloadAction<{ result: TCompanyFromList }>,
 ) => {
   state.push(action.payload.result);
 };
 
 const handleDeleteSuccess = (
-  state: TCompany[],
+  state: TCompaniesList,
   action: PayloadAction<{ result: Pick<TCompany, 'company_id'> }>,
 ) => {
   const { company_id } = action.payload.result;
@@ -95,9 +101,9 @@ const editSlice = createSlice({
 });
 
 // companyList
-const companyListSlice = createSlice({
+const companiesListSlice = createSlice({
   name: 'companyList',
-  initialState: initialState.companyList,
+  initialState: initialState.companiesList,
   reducers: {},
   extraReducers: builder => {
     builder
@@ -121,7 +127,7 @@ const paginationSlice = createSlice({
 });
 
 // loading slice
-const companyLoadingSlice = createSlice({
+const loadingSlice = createSlice({
   name: 'loading',
   initialState: false,
   reducers: {},
@@ -134,7 +140,7 @@ const companyLoadingSlice = createSlice({
 });
 
 // error slice
-const companyErrorSlice = createSlice({
+const errorSlice = createSlice({
   name: 'error',
   initialState: false,
   reducers: {},
@@ -148,11 +154,11 @@ const companyErrorSlice = createSlice({
 
 export const companyReducer = combineReducers({
   company: companySlice.reducer,
-  companyList: companyListSlice.reducer,
+  companiesList: companiesListSlice.reducer,
   pagination: paginationSlice.reducer,
   edit: editSlice.reducer,
-  loading: companyLoadingSlice.reducer,
-  error: companyErrorSlice.reducer,
+  loading: loadingSlice.reducer,
+  error: errorSlice.reducer,
 });
 
 export const { editCompany } = editSlice.actions;

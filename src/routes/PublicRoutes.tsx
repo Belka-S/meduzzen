@@ -6,8 +6,8 @@ import { useAuth, useUser } from 'utils/hooks';
 const PublicRoutes = () => {
   const { state } = useLocation();
   const { isAuth } = useAuth();
-  const { isLoading } = useUser();
-  const isPublic = !isAuth && !isLoading;
+  const { loading } = useUser();
+  const isPublic = !isAuth && !loading;
 
   return isPublic ? (
     <Suspense fallback={<OvalLoader />}>

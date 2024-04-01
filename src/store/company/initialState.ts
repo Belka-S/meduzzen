@@ -1,15 +1,15 @@
-import { TCompany, TEdit, TPagination } from 'store';
+import { TCompaniesList, TCompany, TEdit, TPagination } from 'store';
 
 export type TInitialState = {
   company: TCompany | null;
-  companyList: TCompany[];
+  companiesList: TCompaniesList;
   pagination: TPagination;
   edit: TEdit;
 };
 
 export const initialState: TInitialState = {
   company: null,
-  companyList: [],
+  companiesList: [],
   pagination: { current_page: 0, total_page: 0 },
   edit: false,
 };

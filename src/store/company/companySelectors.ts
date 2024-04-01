@@ -3,7 +3,7 @@ import { TRootState } from 'store';
 export const selectCompany = (state: TRootState) => state.companies.company;
 export const selectEdit = (state: TRootState) => state.companies.edit;
 export const selectCompanyList = (state: TRootState) =>
-  state.companies.companyList;
+  state.companies.companiesList;
 export const selectPagination = (state: TRootState) =>
   state.companies.pagination;
 

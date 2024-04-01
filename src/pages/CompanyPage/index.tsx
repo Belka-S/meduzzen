@@ -15,13 +15,14 @@ import { editCompany } from 'store/company';
 import { useCompany, useUser } from 'utils/hooks';
 
 import s from './index.module.scss';
+import { getArrFromObj } from 'utils/helpers/getArrFromObj';
 
 const CompanyPage = () => {
   const dispatch = useAppDispatch();
   const dispatchExtra = useAppExtraDispatch();
   const { id } = useParams();
   const { owner } = useUser();
-  const { company, profileInfo, edit, isLoading } = useCompany();
+  const { company, profileInfo, edit, loading } = useCompany();
 
   useEffect(() => {
     dispatchExtra(getCompanyThunk(Number(id)));
@@ -30,7 +31,7 @@ const CompanyPage = () => {
   if (!company) return;
 
   const isMyCompany = company?.company_owner?.user_id === owner?.user_id;
-  const isRedyToRender = !isLoading && id === company?.company_id?.toString();
+  const isRedyToRender = !loading && id === company?.company_id?.toString();
   const isAvatarForm = edit === 'avatar' || isMyCompany;
   const isProfileForm = edit === 'data' && isMyCompany;
 
@@ -40,7 +41,7 @@ const CompanyPage = () => {
     name: company?.company_name,
   };
 
-  const info = profileInfo.filter(el => Object.values(el)[0] && el);
+  const info = getArrFromObj(profileInfo) as Array<{ [key: string]: string }>;
   const links = company.company_links ? company.company_links : [];
 
   const handleUpdateAvatar = (e: MouseEvent<HTMLDivElement>) => {

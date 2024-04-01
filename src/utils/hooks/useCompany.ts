@@ -12,15 +12,8 @@ export const useCompany = () => {
   const city = useAppSelector(selectors.selectCompanyCity);
   const phone = useAppSelector(selectors.selectCompanyPhone);
   const description = useAppSelector(selectors.selectCompanyDescription);
-  const profileInfo = [
-    { owner },
-    { title },
-    { city },
-    { phone },
-    { description },
-  ];
-
-  const isLoading = useAppSelector(selectors.selectLoading);
+  const profileInfo = { owner, title, city, phone, description };
+  const loading = useAppSelector(selectors.selectLoading);
   const error = useAppSelector(selectors.selectError);
 
   return {
@@ -29,7 +22,7 @@ export const useCompany = () => {
     edit,
     companyList,
     pagination,
-    isLoading,
+    loading,
     error,
   };
 };

@@ -12,9 +12,9 @@ export const useUser = () => {
   const city = useAppSelector(selectors.selectUserCity);
   const phone = useAppSelector(selectors.selectUserPhone);
   const status = useAppSelector(selectors.selectUserStatus);
-  const profileInfo = [{ email }, { city }, { phone }, { status }];
+  const profileInfo = { email, city, phone, status };
 
-  const isLoading = useAppSelector(selectors.selectLoading);
+  const loading = useAppSelector(selectors.selectLoading);
   const error = useAppSelector(selectors.selectError);
 
   return {
@@ -24,7 +24,7 @@ export const useUser = () => {
     edit,
     userList,
     pagination,
-    isLoading,
+    loading,
     error,
   };
 };

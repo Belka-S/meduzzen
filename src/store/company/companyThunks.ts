@@ -7,12 +7,9 @@ import { TCompany } from 'store';
 
 export const createCompanyThunk = createAppAsyncThunk(
   'company/register',
-  async (
-    credentials: Pick<TCompany, 'is_visible' | 'company_name'>,
-    thunkAPI,
-  ) => {
+  async (company: Pick<TCompany, 'is_visible' | 'company_name'>, thunkAPI) => {
     try {
-      return await API.createCompany(credentials);
+      return await API.createCompany(company);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -47,6 +44,7 @@ export const deleteCompanyThunk = createAppAsyncThunk(
       }
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
+      toast.error(error.message);
       return thunkAPI.rejectWithValue(error.response?.data);
     }
   },

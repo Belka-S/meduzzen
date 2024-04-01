@@ -7,8 +7,8 @@ import s from './index.module.scss';
 const SiteNav = () => {
   const { pathname } = useLocation();
   const { isAuth } = useAuth();
-  const { owner, user, isLoading: userLoading } = useUser();
-  const { company, isLoading: companyLoading } = useCompany();
+  const { owner, user, loading: userLoading } = useUser();
+  const { company, loading: companyLoading } = useCompany();
 
   const isHome = pathname === '/';
   const isAbout = pathname === '/about';

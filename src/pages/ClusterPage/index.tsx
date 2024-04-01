@@ -16,12 +16,13 @@ import { trimName } from 'utils/helpers';
 import { useUser } from 'utils/hooks';
 
 import s from './index.module.scss';
+import { getArrFromObj } from 'utils/helpers/getArrFromObj';
 
 const ClusterPage = () => {
   const dispatch = useAppDispatch();
   const dispatchExtra = useAppExtraDispatch();
   const { id } = useParams();
-  const { user, profileInfo, edit, owner, isLoading } = useUser();
+  const { user, profileInfo, edit, owner, loading } = useUser();
 
   useEffect(() => {
     dispatchExtra(getUserThunk(Number(id)));
@@ -30,7 +31,7 @@ const ClusterPage = () => {
   if (!user) return;
 
   const isMyAccount = owner?.user_id === id;
-  const isRedyToRender = !isLoading && id === user?.user_id?.toString();
+  const isRedyToRender = !loading && id === user?.user_id?.toString();
   const isAvatarForm = edit === 'avatar' || id === owner?.user_id?.toString();
   const isProfileForm = edit === 'data';
 
@@ -40,7 +41,7 @@ const ClusterPage = () => {
     name: `${user?.user_firstname} ${user?.user_lastname}`,
   };
 
-  const info = profileInfo.filter(el => Object.values(el)[0] && el);
+  const info = getArrFromObj(profileInfo) as Array<{ [key: string]: string }>;
   const links = user.user_links ? user.user_links : [];
 
   const getUserName = () => {

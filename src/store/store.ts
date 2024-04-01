@@ -13,9 +13,12 @@ import storage from 'redux-persist/lib/storage';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
 import { companyReducer } from './company/companySlice';
+import { actionReducer } from './action';
 import { authReducer } from './auth';
+import { companyDataReducer } from './companyData';
 import { commonReducer } from './server';
 import { usersReducer } from './user';
+import { userDataReducer } from './userData';
 
 // ----------------persistReducer---------------- //
 
@@ -30,6 +33,9 @@ export const rootReducer = combineReducers({
   auth: persistReducer(authPersistConfig, authReducer),
   users: usersReducer,
   companies: companyReducer,
+  actions: actionReducer,
+  userData: userDataReducer,
+  companyData: companyDataReducer,
 });
 
 // ----------------configureStore---------------- //

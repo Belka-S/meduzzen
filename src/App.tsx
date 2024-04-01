@@ -27,7 +27,7 @@ const App = () => {
   const dispatch = useAppDispatch();
   const dispatchExtra = useAppExtraDispatch();
   const { accessToken, isAuth } = useAuth();
-  const { isLoading, owner } = useUser();
+  const { loading, owner } = useUser();
   const { getAccessTokenSilently, isAuthenticated } = useAuth0();
 
   useEffect(() => {
@@ -49,7 +49,7 @@ const App = () => {
 
   return (
     <>
-      {(!isLoading || owner) && (
+      {(!loading || owner) && (
         <Routes>
           <Route path="/" element={<SharedLayout />}>
             <Route index element={<HomePage />} />
@@ -69,7 +69,7 @@ const App = () => {
         </Routes>
       )}
 
-      {isLoading && <OvalLoader />}
+      {loading && <OvalLoader />}
 
       <Toast />
     </>

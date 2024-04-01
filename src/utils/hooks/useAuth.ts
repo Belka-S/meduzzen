@@ -5,8 +5,8 @@ export const useAuth = () => {
   const isAuth = Boolean(useAppSelector(selectors.selectToken));
   const accessToken = useAppSelector(selectors.selectToken);
 
-  const isLoading = useAppSelector(selectors.selectLoading);
+  const loading = useAppSelector(selectors.selectLoading);
   const error = useAppSelector(selectors.selectError);
 
-  return { isAuth, accessToken, isLoading, error };
+  return { isAuth, accessToken, loading, error };
 };
