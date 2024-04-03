@@ -1,5 +1,12 @@
 import { toast } from 'react-toastify';
-import { TCompany, TCompanyFromList, TEdit, TPagination } from 'store';
+import {
+  TCompany,
+  TCompanyFromList,
+  TCompanySelect,
+  TEdit,
+  TPagination,
+  TProfileAppendix,
+} from 'store';
 import { initialState, TInitialState } from 'store/company';
 import * as TNK from 'store/company/companyThunks';
 
@@ -27,15 +34,63 @@ const handleAvatarPreviewSuccess = (
   return { ...state, company: { ...state.company, ...action.payload } };
 };
 
+const handleSelectCompanies = (
+  state: TInitialState,
+  action: PayloadAction<TCompanySelect>,
+) => ({ ...state, select: action.payload });
+
+const handleCheckCompany = (
+  state: TInitialState,
+  action: PayloadAction<Pick<TCompany, 'company_id'>>,
+) => {
+  state.checked.push(action.payload);
+};
+
+const handleUncheckCompany = (
+  state: TInitialState,
+  action: PayloadAction<Pick<TCompany, 'company_id'>>,
+) => {
+  const { company_id } = action.payload;
+  const index = state.checked.findIndex(el => el.company_id === company_id);
+  state.checked.splice(index, 1);
+};
+
+const handleProfileAppendix = (
+  state: TInitialState,
+  action: PayloadAction<TProfileAppendix>,
+) => ({ ...state, profileAppendix: action.payload });
+
 const handleEditSuccess = (
   state: TInitialState,
   action: PayloadAction<TEdit>,
 ) => ({ ...state, edit: action.payload });
 
-const handleGetCompanySuccess = (
+const handleCreateSuccess = (
+  state: TInitialState,
+  action: PayloadAction<{
+    result: Pick<TCompany, 'company_id' | 'company_name' | 'is_visible'>;
+  }>,
+) => {
+  state.companyList.push({ ...action.payload.result });
+};
+
+const handleGetSuccess = (
   state: TInitialState,
   action: PayloadAction<{ result: TCompany }>,
 ) => ({ ...state, company: action.payload.result });
+
+const handleUpdateVisibleSuccess = (
+  state: TInitialState,
+  action: PayloadAction<{ result: Pick<TCompany, 'company_id'> }>,
+) => {
+  const { company_id } = action.payload.result;
+  const index = state.companyList.findIndex(el => el.company_id === company_id);
+  const company = state.companyList.at(index);
+  if (company) {
+    const is_visible = !company.is_visible;
+    state.companyList.splice(index, 1, { ...company, is_visible });
+  }
+};
 
 const handleDeleteSuccess = (
   state: TInitialState,
@@ -63,15 +118,20 @@ const companySlice = createSlice({
   initialState,
   reducers: {
     updateAvatarPreview: handleAvatarPreviewSuccess,
+    selectCompanies: handleSelectCompanies,
+    checkCompany: handleCheckCompany,
+    uncheckCompany: handleUncheckCompany,
+    uncheckAllCompanies: state => ({ ...state, checked: [] }),
+    setProfileAppendix: handleProfileAppendix,
     editCompany: handleEditSuccess,
   },
   extraReducers: builder => {
     builder
       // company
-      .addCase(TNK.createCompanyThunk.fulfilled, handleSuccess)
-      .addCase(TNK.getCompanyThunk.fulfilled, handleGetCompanySuccess)
-      .addCase(TNK.updateInfoThunk.fulfilled, handleSuccess)
-      .addCase(TNK.updateVisibleThunk.fulfilled, handleSuccess)
+      .addCase(TNK.createCompanyThunk.fulfilled, handleCreateSuccess)
+      .addCase(TNK.getCompanyThunk.fulfilled, handleGetSuccess)
+      .addCase(TNK.updateInfoThunk.fulfilled, () => {})
+      .addCase(TNK.updateVisibleThunk.fulfilled, handleUpdateVisibleSuccess)
       .addCase(TNK.updateAvatarThunk.fulfilled, handleSuccess)
       .addCase(TNK.deleteCompanyThunk.fulfilled, handleDeleteSuccess)
       // companyList
@@ -92,4 +152,12 @@ const companySlice = createSlice({
 
 export const companyReducer = companySlice.reducer;
 
-export const { updateAvatarPreview, editCompany } = companySlice.actions;
+export const {
+  updateAvatarPreview,
+  selectCompanies,
+  checkCompany,
+  uncheckAllCompanies,
+  uncheckCompany,
+  setProfileAppendix,
+  editCompany,
+} = companySlice.actions;

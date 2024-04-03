@@ -1,0 +1,24 @@
+.label {
+  font-size: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 250ms;
+
+  &:hover {
+    color: var(--placeholder-color);
+  }
+}
+
+.input {
+  margin-left: 4px;
+
+  cursor: pointer;
+}
+
+.active {
+  color: var(--hover-color);
+
+  &:hover {
+    color: var(--hover-color) !important;
+  }
+}

@@ -1,4 +1,5 @@
 import SvgIcon from 'components/ui/SvgIcon';
+import CompanySelector from 'layouts/Header/CompanySelector';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useAuth, useCompany, useUser } from 'utils/hooks';
 
@@ -41,6 +42,7 @@ const SiteNav = () => {
         <span className={s.active}>{`Profile of ${user?.user_firstname}`}</span>
       )}
 
+      {isCompany && <CompanySelector />}
       {isCompanyPage && (
         <span
           className={s.active}

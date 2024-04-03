@@ -28,7 +28,7 @@ export const getRequestsList = async (
 ) => {
   token.set(accessToken);
   const { company_id } = params;
-  const { data } = await apiClient.get(`/company/${company_id}/invites_list/`);
+  const { data } = await apiClient.get(`/company/${company_id}/requests_list/`);
   return data;
 };
 

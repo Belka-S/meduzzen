@@ -5,6 +5,7 @@ import ProfileCard from 'components/ProfileCard';
 import OvalLoader from 'components/ui/Loader';
 import Section from 'components/ui/Section';
 import H3 from 'components/ui/Typography/H3';
+import UserItem from 'pages/ClusterListPage/UserItem';
 import AvatarForm from 'pages/CompanyPage/AvatarForm';
 import ProfileForm from 'pages/CompanyPage/ProfileForm';
 import { useParams } from 'react-router-dom';
@@ -12,17 +13,19 @@ import { toast } from 'react-toastify';
 import { useAppDispatch, useAppExtraDispatch } from 'store';
 import { getCompanyThunk } from 'store/company';
 import { editCompany } from 'store/company';
+import { getArrFromObj } from 'utils/helpers/getArrFromObj';
 import { useCompany, useUser } from 'utils/hooks';
+import { useAction } from 'utils/hooks/useAction';
 
 import s from './index.module.scss';
-import { getArrFromObj } from 'utils/helpers/getArrFromObj';
 
 const CompanyPage = () => {
   const dispatch = useAppDispatch();
   const dispatchExtra = useAppExtraDispatch();
   const { id } = useParams();
-  const { owner } = useUser();
-  const { company, profileInfo, edit, loading } = useCompany();
+  const { owner, userList, checkedUsers } = useUser();
+  const { company, profileInfo, profileAppendix, edit, loading } = useCompany();
+  const { companyData } = useAction();
 
   useEffect(() => {
     dispatchExtra(getCompanyThunk(Number(id)));
@@ -56,6 +59,19 @@ const CompanyPage = () => {
     return dispatch(editCompany('avatar'));
   };
 
+  const getListToRender = () => {
+    if (profileAppendix === 'checked') {
+      return [...checkedUsers]
+        .sort((a, b) => a.user_id - b.user_id)
+        .map(el => userList.find(item => item.user_id === el.user_id));
+    } else if (profileAppendix === 'invites') {
+      return [...companyData.invites].sort((a, b) => a.user_id - b.user_id);
+    } else if (profileAppendix === 'requests') {
+      return [...companyData.requests].sort((a, b) => a.user_id - b.user_id);
+    }
+  };
+  const companies = getListToRender();
+
   if (!isRedyToRender) return <OvalLoader />;
   return (
     <Section className={classNames('container', s.screen)}>
@@ -79,7 +95,10 @@ const CompanyPage = () => {
         {!isProfileForm && <ProfileCard info={info} links={links} />}
       </div>
 
-      <div className={s.additional}></div>
+      <div className={s.additional}>
+        <H3 className={s.appendix_title}>{`My ${profileAppendix}:`}</H3>
+        {companies?.map(el => el && <UserItem key={el?.user_id} props={el} />)}
+      </div>
     </Section>
   );
 };

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import ProfileBtn from 'components/ProfileBtn';
 import Button from 'components/ui/Button';
 import Modal from 'components/ui/Modal';
+import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from 'store';
 import { logout } from 'store/auth';
 import { cleanOwner } from 'store/user';
@@ -15,24 +16,28 @@ import s from './index.module.scss';
 
 const LogoutBtn = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { logout: logoutAuth0 } = useAuth0();
   const [isModal, setIsModal] = useState(false);
   const [isForm, setIsForm] = useState(false);
   const { owner } = useUser();
 
+  if (!owner) return;
+  const { user_id, user_avatar, user_firstname, user_lastname } = owner;
   const ava = {
-    id: owner?.user_id,
-    url: owner?.user_avatar,
-    name: `${owner?.user_firstname} ${owner?.user_lastname}`,
+    id: user_id,
+    url: user_avatar,
+    name: `${user_firstname} ${user_lastname}`,
+  };
+
+  const handleProfile = () => {
+    navigate(`/cluster/${user_id}`, { replace: true });
+    setIsModal(!isModal);
   };
 
   const switchIsModal = () => {
     setIsModal(!isModal);
     setIsForm(false);
-  };
-
-  const handleUpdatePassword = () => {
-    setIsForm(true);
   };
 
   const handleLogout = () => {
@@ -50,21 +55,26 @@ const LogoutBtn = () => {
           {isForm && <PasswordForm setIsModal={switchIsModal} />}
 
           {!isForm && (
-            <Button
-              onClick={handleUpdatePassword}
-              variant="smooth"
-              size="l"
-              label="Change Password"
-            />
-          )}
-
-          {!isForm && (
-            <Button
-              onClick={handleLogout}
-              variant="smooth"
-              size="l"
-              label="Log Out"
-            />
+            <>
+              <Button
+                variant="smooth"
+                size="l"
+                label="Profile"
+                onClick={handleProfile}
+              />
+              <Button
+                variant="smooth"
+                size="l"
+                label="Change Password"
+                onClick={() => setIsForm(true)}
+              />
+              <Button
+                variant="smooth"
+                size="l"
+                label="Log Out"
+                onClick={handleLogout}
+              />
+            </>
           )}
         </Modal>
       )}

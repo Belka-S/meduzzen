@@ -13,6 +13,7 @@ const TableHead = () => {
         <H5>Last Name</H5>
         <span />
         <span />
+        <span />
         <H5>ID</H5>
       </div>
     </div>

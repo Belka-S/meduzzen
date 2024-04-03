@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import { TEdit, TPagination, TUser } from 'store';
+import { TEdit, TPagination, TProfileAppendix, TUser } from 'store';
 import { initialState, TInitialState } from 'store/user';
 import * as TNK from 'store/user/userThunks';
 
@@ -39,6 +39,27 @@ const handleGetAllSuccess = (
   pagination: action.payload.result.pagination,
 });
 
+const handleCheckUser = (
+  state: TInitialState,
+  action: PayloadAction<Pick<TUser, 'user_id'>>,
+) => {
+  state.checked.push(action.payload);
+};
+
+const handleUncheckUser = (
+  state: TInitialState,
+  action: PayloadAction<Pick<TUser, 'user_id'>>,
+) => {
+  const { user_id } = action.payload;
+  const index = state.checked.findIndex(el => el.user_id === user_id);
+  state.checked.splice(index, 1);
+};
+
+const handleProfileAppendix = (
+  state: TInitialState,
+  action: PayloadAction<TProfileAppendix>,
+) => ({ ...state, profileAppendix: action.payload });
+
 const handleEditSuccess = (
   state: TInitialState,
   action: PayloadAction<TEdit>,
@@ -52,7 +73,7 @@ const handleRegisterSuccess = (
 const handleGetMeSuccess = (
   state: TInitialState,
   action: PayloadAction<{ result: TUser }>,
-) => ({ ...state, owner: action.payload.result });
+) => ({ ...state, owner: action.payload?.result });
 
 const handleGetUserSuccess = (
   state: TInitialState,
@@ -73,6 +94,10 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     updateAvatarPreview: handleAvatarPreviewSuccess,
+    checkUser: handleCheckUser,
+    uncheckUser: handleUncheckUser,
+    uncheckAllUsers: state => ({ ...state, checked: [] }),
+    setProfileAppendix: handleProfileAppendix,
     editUser: handleEditSuccess,
     cleanOwner: state => ({ ...state, owner: null }),
   },
@@ -104,4 +129,12 @@ const userSlice = createSlice({
 
 export const usersReducer = userSlice.reducer;
 
-export const { updateAvatarPreview, editUser, cleanOwner } = userSlice.actions;
+export const {
+  updateAvatarPreview,
+  cleanOwner,
+  checkUser,
+  uncheckAllUsers,
+  uncheckUser,
+  setProfileAppendix,
+  editUser,
+} = userSlice.actions;

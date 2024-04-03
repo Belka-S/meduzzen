@@ -1,8 +1,8 @@
 .screen {
   height: 100%;
   display: grid;
-  grid-template-columns: 2fr 3fr;
-  gap: 10px;
+  grid-template-columns: 3fr 4fr;
+  gap: 20px;
   justify-content: flex-start;
 }
 
@@ -25,7 +25,11 @@
   text-transform: capitalize;
 }
 
-// additional info
-.additional {
+// appendix info
+.appendix {
   // outline: 1px solid wheat;
+}
+
+.appendix_title {
+  text-align: center;
 }

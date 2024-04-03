@@ -6,6 +6,8 @@ export const useUser = () => {
   const user = useAppSelector(selectors.selectUser);
   const userList = useAppSelector(selectors.selectUserList);
   const pagination = useAppSelector(selectors.selectPagination);
+  const checkedUsers = useAppSelector(selectors.selectChecked);
+  const profileAppendix = useAppSelector(selectors.selectProfileAppendix);
   const edit = useAppSelector(selectors.selectEdit);
 
   const email = useAppSelector(selectors.selectUserEmail);
@@ -21,9 +23,12 @@ export const useUser = () => {
     owner,
     user,
     profileInfo,
-    edit,
     userList,
     pagination,
+    checkedUsers,
+    profileAppendix,
+    edit,
+
     loading,
     error,
   };

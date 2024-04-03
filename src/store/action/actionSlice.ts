@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify';
 import { TAction } from 'store';
 import * as TNK from 'store/action/actionThunks';
 import { initialState, TInitialState } from 'store/action/initialState';
@@ -25,15 +26,22 @@ const fn = (type: 'pending' | 'fulfilled' | 'rejected') =>
   });
 
 // handlers
-const handleActionUserSs = (
-  state: TInitialState,
+const handleSuccess = (
+  _: TInitialState,
   action: PayloadAction<{ result: Pick<TAction, 'action_id'> }>,
-) => ({ ...state, createActionFromUser: action.payload.result });
+) => {
+  toast.success(`Succeed with ${action.payload.result.action_id}`);
+};
 
-const handleActionCompSs = (
-  state: TInitialState,
-  action: PayloadAction<{ result: Pick<TAction, 'action_id'> }>,
-) => ({ ...state, createActionFromCompany: action.payload.result });
+// const handleActionUserSs = (
+//   state: TInitialState,
+//   action: PayloadAction<{ result: Pick<TAction, 'action_id'> }>,
+// ) => ({ ...state, createActionFromUser: action.payload.result });
+
+// const handleActionCompSs = (
+//   state: TInitialState,
+//   action: PayloadAction<{ result: Pick<TAction, 'action_id'> }>,
+// ) => ({ ...state, createActionFromCompany: action.payload.result });
 
 const handleActionInviteSuccess = (
   state: TInitialState,
@@ -83,8 +91,8 @@ const actionSlice = createSlice({
   extraReducers: builder => {
     builder
       // success
-      .addCase(TNK.createActionFromUserThunk.fulfilled, handleActionUserSs)
-      .addCase(TNK.createActionFromCompanyThunk.fulfilled, handleActionCompSs)
+      .addCase(TNK.createActionFromUserThunk.fulfilled, handleSuccess)
+      .addCase(TNK.createActionFromCompanyThunk.fulfilled, handleSuccess)
       .addCase(TNK.acceptActionInviteThunk.fulfilled, handleActionInviteSuccess)
       .addCase(TNK.acceptActionRequestThunk.fulfilled, handleActionReqSuccess)
       .addCase(TNK.declineActionThunk.fulfilled, handleDeclineActionSuccess)

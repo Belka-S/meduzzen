@@ -8,9 +8,11 @@ export const createActionFromUser = async (
 ) => {
   token.set(accessToken);
   const { company_id } = params;
+  console.log('params: ', params);
   const { data } = await apiClient.get(
     `/action/create_from_user/company/${company_id}/`,
   );
+  console.log('data: ', data);
   return data;
 };
 

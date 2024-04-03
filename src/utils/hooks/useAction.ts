@@ -8,23 +8,28 @@ export const useAction = () => {
   const loading = useAppSelector(selectors.selectLoading);
   const error = useAppSelector(selectors.selectError);
 
-  const companyData = useAppSelector(companyDataSelectots.selectData);
+  const companyData = useAppSelector(companyDataSelectots.selectCompanyData);
+  const myCompanies = useAppSelector(companyDataSelectots.selectMyCompanies);
   const loadingCD = useAppSelector(companyDataSelectots.selectLoading);
   const errorCD = useAppSelector(companyDataSelectots.selectError);
 
-  const userData = useAppSelector(userDataSelectots.selectData);
+  const userData = useAppSelector(userDataSelectots.selectUserData);
   const loadingUD = useAppSelector(userDataSelectots.selectLoading);
   const errorUD = useAppSelector(userDataSelectots.selectError);
 
   return {
     action,
-    loading,
-    error,
     companyData,
-    loadingCD,
-    errorCD,
+    myCompanies,
     userData,
+
     loadingUD,
     errorUD,
+
+    loadingCD,
+    errorCD,
+
+    loading,
+    error,
   };
 };

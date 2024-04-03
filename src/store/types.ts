@@ -61,14 +61,10 @@ export type TCompany = {
 
 export type TCompanyFromList = Pick<
   TCompany,
-  | 'company_id'
-  | 'company_name'
-  | 'company_title'
-  | 'company_avatar'
-  | 'is_visible'
->;
+  'company_id' | 'company_name' | 'is_visible'
+> & { company_title?: string; company_avatar?: string };
 
-export type TCompaniesList = Array<TCompanyFromList>;
+export type TCompanySelect = 'all' | 'own';
 
 // pagination
 export type TPagination = {
@@ -81,6 +77,10 @@ export type TPaginationParams = { page: number; page_size: number };
 
 // edit avatar
 export type TEdit = false | 'avatar' | 'data';
+
+// profile appendix
+
+export type TProfileAppendix = false | 'checked' | 'invites' | 'requests';
 
 // actions
 export type TQuiz = {

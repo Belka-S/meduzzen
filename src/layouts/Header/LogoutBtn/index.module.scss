@@ -1,7 +1,7 @@
 .modal {
-  width: 550px;
-  display: grid;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
 
-  grid-template-columns: repeat(2, 1fr);
   gap: 50px;
 }
