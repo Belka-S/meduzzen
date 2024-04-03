@@ -1,11 +1,6 @@
 import { toast } from 'react-toastify';
-import {
-  TAnswers,
-  TMyCompanyFromList,
-  TNotification,
-  TQuizPass,
-  TRatingAnalytic,
-} from 'store';
+import { TAnswers, TMyCompanyFromList, TNotification } from 'store';
+import { TQuizPass, TRatingAnalytic } from 'store';
 import { initialState, TInitialState } from 'store/userData/initialState';
 import * as TNK from 'store/userData/userDataThunks';
 

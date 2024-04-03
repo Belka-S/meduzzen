@@ -16,7 +16,7 @@ import { editUser } from 'store/user';
 import { trimName } from 'utils/helpers';
 import { getArrFromObj } from 'utils/helpers/getArrFromObj';
 import { useCompany, useUser } from 'utils/hooks';
-import { useAction } from 'utils/hooks/useAction';
+import { useAction } from 'utils/hooks';
 
 import s from './index.module.scss';
 
@@ -25,12 +25,12 @@ const ClusterPage = () => {
   const dispatchExtra = useAppExtraDispatch();
   const { id } = useParams();
   const { companyList, checkedCompanies } = useCompany();
-  const { owner, user, profileInfo, profileAppendix } = useUser();
+  const { owner, user, profileInfo, appendix } = useUser();
   const { edit, loading } = useUser();
   const { userData } = useAction();
 
   useEffect(() => {
-    dispatchExtra(getUserThunk(Number(id)));
+    dispatchExtra(getUserThunk({ user_id: Number(id) }));
   }, [dispatchExtra, id]);
 
   if (!user) return;
@@ -69,15 +69,16 @@ const ClusterPage = () => {
   };
 
   const getListToRender = () => {
-    if (profileAppendix === 'checked') {
+    console.log(appendix);
+    if (appendix === 'checked') {
       return [...checkedCompanies]
         .sort((a, b) => a.company_id - b.company_id)
         .map(el => companyList.find(item => item.company_id === el.company_id));
     }
-    if (profileAppendix === 'invites') {
+    if (appendix === 'invites') {
       return [...userData.invites].sort((a, b) => a.company_id - b.company_id);
     }
-    if (profileAppendix === 'requests') {
+    if (appendix === 'requests') {
       return [...userData.requests].sort((a, b) => a.company_id - b.company_id);
     }
   };
@@ -107,7 +108,7 @@ const ClusterPage = () => {
       </div>
 
       <div className={s.appendix}>
-        <H3 className={s.appendix_title}>{`My ${profileAppendix}:`}</H3>
+        {appendix ? <H3 className={s.title}>{`My ${appendix}:`}</H3> : <span />}
         {users?.map(
           el => el && <CompanyItem key={el?.company_id} props={el} />,
         )}

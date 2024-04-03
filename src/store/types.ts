@@ -16,20 +16,24 @@ export type TPassword = {
   user_password_repeat: string;
 };
 
-export interface IRegister
-  extends Pick<TUser, 'user_email' | 'user_firstname' | 'user_lastname'> {
+export type TRegister = {
+  user_email: string;
   user_firstname: string;
+  user_lastname: string;
   user_password: string;
   user_password_repeat: string;
-}
+};
 
 // user
-export type TUser = {
+export type TUserOfList = {
   user_id: number;
   user_email: string;
   user_firstname: string;
   user_lastname: string;
   user_avatar: string;
+};
+
+export type TUser = TUserOfList & {
   user_status: string | null;
   user_city: string | null;
   user_phone: string | null;
@@ -38,6 +42,14 @@ export type TUser = {
 };
 
 // companies
+export type TCompanyOfList = {
+  company_id: number;
+  company_name: string;
+  company_title: string;
+  company_avatar: string;
+  is_visible: boolean;
+};
+
 export type TCompany = {
   company_id: number;
   company_name: string;
@@ -49,20 +61,8 @@ export type TCompany = {
   is_visible: boolean;
 
   company_links: string[];
-  company_owner: Pick<
-    TUser,
-    | 'user_id'
-    | 'user_email'
-    | 'user_firstname'
-    | 'user_lastname'
-    | 'user_avatar'
-  >;
+  company_owner: TUserOfList;
 };
-
-export type TCompanyFromList = Pick<
-  TCompany,
-  'company_id' | 'company_name' | 'is_visible'
-> & { company_title?: string; company_avatar?: string };
 
 export type TCompanySelect = 'all' | 'own';
 
@@ -79,32 +79,21 @@ export type TPaginationParams = { page: number; page_size: number };
 export type TEdit = false | 'avatar' | 'data';
 
 // profile appendix
-
-export type TProfileAppendix = false | 'checked' | 'invites' | 'requests';
+export type TAppendix = false | 'checked' | 'invites' | 'requests';
 
 // actions
-export type TQuiz = {
-  quiz_id: number;
-  quiz_name: string;
-  quiz_title: string;
-  quiz_description: string;
-};
-
 export type TAction = { action_id: number; action: string };
 
-export type TActionParams = Pick<TUser, 'user_id'> &
-  Pick<TCompany, 'company_id'>;
+export type TActionParams = { user_id: number; company_id: number };
 
 // user data
-export type TMyCompanyFromList = TCompanyFromList & TAction;
+export type TMyCompanyFromList = TCompanyOfList & TAction;
 
-export type TQuizUserParams = Pick<TUser, 'user_id'> & Pick<TQuiz, 'quiz_id'>;
+export type TQuizUserParams = { user_id: number; quiz_id: number };
 
-export type TNotificationParams = Pick<TUser, 'user_id'> & {
-  notification_id: number;
-};
+export type TNotificationParams = { user_id: number; notification_id: number };
 
-export type TRating = { rating: number; user_id: number };
+export type TRating = { user_id: number; rating: number };
 
 export type TRatingAnalytic = {
   current_rating: number;
@@ -123,13 +112,20 @@ export type TAnswers = {
   created_at: Date;
 };
 
+export type TQuiz = {
+  quiz_id: number;
+  quiz_name: string;
+  quiz_title: string;
+  quiz_description: string;
+};
+
 export type TQuizPass = TQuiz & { last_quiz_pass_at: Date };
-export type TQuizPassList = Pick<TQuiz, 'quiz_id'> & {
+
+export type TUsersWithQuizzesPassed = {
+  user_id: number;
+  quiz_id: number;
   last_quiz_pass_at: Date;
 };
-export type TUsersWithQuizzesPassed = Array<
-  Pick<TUser, 'user_id'> & TQuizPassList
->;
 
 export type TNotification = {
   notification_id: number;
@@ -142,15 +138,6 @@ export type TNotification = {
 };
 
 // company data
-export type TQuizCompanyParams = Pick<TCompany, 'company_id'> &
-  Pick<TQuiz, 'quiz_id'>;
+export type TQuizCompanyParams = { company_id: number; quiz_id: number };
 
-export type TUserFromList = TAction &
-  Pick<
-    TUser,
-    | 'user_id'
-    | 'user_email'
-    | 'user_firstname'
-    | 'user_lastname'
-    | 'user_avatar'
-  >;
+export type TUserOfAction = TAction & TUserOfList;

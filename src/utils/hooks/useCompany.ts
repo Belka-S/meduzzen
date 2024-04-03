@@ -7,7 +7,7 @@ export const useCompany = () => {
   const pagination = useAppSelector(selectors.selectPagination);
   const select = useAppSelector(selectors.selectSelect);
   const checkedCompanies = useAppSelector(selectors.selectChecked);
-  const profileAppendix = useAppSelector(selectors.selectProfileAppendix);
+  const appendix = useAppSelector(selectors.selectAppendix);
   const edit = useAppSelector(selectors.selectEdit);
 
   const owner = useAppSelector(selectors.selectCompanyOwner);
@@ -26,7 +26,7 @@ export const useCompany = () => {
     pagination,
     select,
     checkedCompanies,
-    profileAppendix,
+    appendix,
     edit,
 
     loading,

@@ -5,7 +5,8 @@ import Button from 'components/ui/Button';
 import SvgIcon from 'components/ui/SvgIcon';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { TUserFromList, useAppDispatch, useAppExtraDispatch } from 'store';
+import { TUser, TUserOfAction, useAppDispatch } from 'store';
+import { useAppExtraDispatch } from 'store';
 import { logout } from 'store/auth';
 import { checkUser, cleanOwner, deleteUserThunk } from 'store/user';
 import { editUser, uncheckUser } from 'store/user';
@@ -15,7 +16,7 @@ import { useUser } from 'utils/hooks';
 import s from './index.module.scss';
 
 type TUserProps = {
-  props: TUserFromList;
+  props: TUser | TUserOfAction;
 };
 
 const UserItem: FC<TUserProps> = ({ props }) => {
@@ -48,7 +49,7 @@ const UserItem: FC<TUserProps> = ({ props }) => {
       dispatch(cleanOwner());
       dispatch(logout());
       if (user_id) {
-        const { payload } = await dispatchExtra(deleteUserThunk(user_id));
+        const { payload } = await dispatchExtra(deleteUserThunk({ user_id }));
         toast.success(payload.detail);
         navigate('/cluster', { replace: true });
       }

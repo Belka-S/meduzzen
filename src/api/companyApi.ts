@@ -3,7 +3,7 @@ import { TCompany, TPaginationParams } from 'store';
 import { apiClient, token } from './apiHttp';
 
 export const createCompany = async (
-  credentials: Pick<TCompany, 'is_visible' | 'company_name'>,
+  credentials: Pick<TCompany, 'company_name' | 'is_visible'>,
 ) => {
   const { data } = await apiClient.post('/company/', credentials);
   const { company_name, is_visible } = credentials;
@@ -11,16 +11,24 @@ export const createCompany = async (
   return data;
 };
 
-export const getCompany = async (accessToken: string, id: number) => {
+export const getCompany = async (
+  accessToken: string,
+  params: { company_id: number },
+) => {
   token.set(accessToken);
-  const { data } = await apiClient.get(`/company/${id}`);
+  const { company_id } = params;
+  const { data } = await apiClient.get(`/company/${company_id}`);
   return data;
 };
 
-export const deleteCompany = async (accessToken: string, id: number) => {
+export const deleteCompany = async (
+  accessToken: string,
+  params: { company_id: number },
+) => {
   token.set(accessToken);
-  const { data } = await apiClient.delete(`/company/${id}`);
-  data.result = { ...data.result, company_id: id };
+  const { company_id } = params;
+  const { data } = await apiClient.delete(`/company/${company_id}`);
+  data.result = { ...data.result, company_id };
   return data;
 };
 

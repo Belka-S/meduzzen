@@ -1,12 +1,6 @@
 import { toast } from 'react-toastify';
-import {
-  TCompany,
-  TCompanyFromList,
-  TCompanySelect,
-  TEdit,
-  TPagination,
-  TProfileAppendix,
-} from 'store';
+import { TAppendix, TCompany, TCompanyOfList } from 'store';
+import { TCompanySelect, TEdit, TPagination } from 'store';
 import { initialState, TInitialState } from 'store/company';
 import * as TNK from 'store/company/companyThunks';
 
@@ -55,10 +49,10 @@ const handleUncheckCompany = (
   state.checked.splice(index, 1);
 };
 
-const handleProfileAppendix = (
+const handleAppendix = (
   state: TInitialState,
-  action: PayloadAction<TProfileAppendix>,
-) => ({ ...state, profileAppendix: action.payload });
+  action: PayloadAction<TAppendix>,
+) => ({ ...state, appendix: action.payload });
 
 const handleEditSuccess = (
   state: TInitialState,
@@ -67,9 +61,7 @@ const handleEditSuccess = (
 
 const handleCreateSuccess = (
   state: TInitialState,
-  action: PayloadAction<{
-    result: Pick<TCompany, 'company_id' | 'company_name' | 'is_visible'>;
-  }>,
+  action: PayloadAction<{ result: TCompanyOfList }>,
 ) => {
   state.companyList.push({ ...action.payload.result });
 };
@@ -104,7 +96,7 @@ const handleDeleteSuccess = (
 const handleGetAllSuccess = (
   state: TInitialState,
   action: PayloadAction<{
-    result: { companies: TCompanyFromList[]; pagination: TPagination };
+    result: { companies: TCompanyOfList[]; pagination: TPagination };
   }>,
 ) => ({
   ...state,
@@ -122,21 +114,20 @@ const companySlice = createSlice({
     checkCompany: handleCheckCompany,
     uncheckCompany: handleUncheckCompany,
     uncheckAllCompanies: state => ({ ...state, checked: [] }),
-    setProfileAppendix: handleProfileAppendix,
+    setCompanyAppendix: handleAppendix,
     editCompany: handleEditSuccess,
   },
   extraReducers: builder => {
     builder
-      // company
+      // company success
       .addCase(TNK.createCompanyThunk.fulfilled, handleCreateSuccess)
       .addCase(TNK.getCompanyThunk.fulfilled, handleGetSuccess)
       .addCase(TNK.updateInfoThunk.fulfilled, () => {})
       .addCase(TNK.updateVisibleThunk.fulfilled, handleUpdateVisibleSuccess)
       .addCase(TNK.updateAvatarThunk.fulfilled, handleSuccess)
       .addCase(TNK.deleteCompanyThunk.fulfilled, handleDeleteSuccess)
-      // companyList
+      // companyList success
       .addCase(TNK.getAllCompaniesThunk.fulfilled, handleGetAllSuccess)
-
       // loading, error
       .addMatcher(isAnyOf(...fn('pending')), state => {
         return { ...state, loading: true, error: false };
@@ -158,6 +149,6 @@ export const {
   checkCompany,
   uncheckAllCompanies,
   uncheckCompany,
-  setProfileAppendix,
+  setCompanyAppendix,
   editCompany,
 } = companySlice.actions;

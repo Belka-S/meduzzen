@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import { TEdit, TPagination, TProfileAppendix, TUser } from 'store';
+import { TAppendix, TEdit, TPagination, TUser } from 'store';
 import { initialState, TInitialState } from 'store/user';
 import * as TNK from 'store/user/userThunks';
 
@@ -55,10 +55,10 @@ const handleUncheckUser = (
   state.checked.splice(index, 1);
 };
 
-const handleProfileAppendix = (
+const handleAppendix = (
   state: TInitialState,
-  action: PayloadAction<TProfileAppendix>,
-) => ({ ...state, profileAppendix: action.payload });
+  action: PayloadAction<TAppendix>,
+) => ({ ...state, appendix: action.payload });
 
 const handleEditSuccess = (
   state: TInitialState,
@@ -97,22 +97,22 @@ const userSlice = createSlice({
     checkUser: handleCheckUser,
     uncheckUser: handleUncheckUser,
     uncheckAllUsers: state => ({ ...state, checked: [] }),
-    setProfileAppendix: handleProfileAppendix,
+    setUserAppendix: handleAppendix,
     editUser: handleEditSuccess,
     cleanOwner: state => ({ ...state, owner: null }),
   },
   extraReducers: builder => {
     builder
-      // owner
+      // owner success
       .addCase(TNK.registerThunk.fulfilled, handleRegisterSuccess)
       .addCase(TNK.getMeThunk.fulfilled, handleGetMeSuccess)
-      // user
+      // user success
       .addCase(TNK.getUserThunk.fulfilled, handleGetUserSuccess)
       .addCase(TNK.updateInfoThunk.fulfilled, handleSuccess)
       .addCase(TNK.updatePasswordThunk.fulfilled, handleSuccess)
       .addCase(TNK.updateAvatarThunk.fulfilled, handleSuccess)
       .addCase(TNK.deleteUserThunk.fulfilled, handleSuccess)
-      // userList
+      // userList success
       .addCase(TNK.getAllUsersThunk.fulfilled, handleGetAllSuccess)
       // loading, error
       .addMatcher(isAnyOf(...fn('pending')), state => {
@@ -135,6 +135,6 @@ export const {
   checkUser,
   uncheckAllUsers,
   uncheckUser,
-  setProfileAppendix,
+  setUserAppendix,
   editUser,
 } = userSlice.actions;

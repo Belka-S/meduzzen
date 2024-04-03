@@ -1,19 +1,19 @@
 import {
+  TAppendix,
   TCompany,
-  TCompanyFromList,
+  TCompanyOfList,
   TCompanySelect,
   TEdit,
   TPagination,
-  TProfileAppendix,
 } from 'store';
 
 export type TInitialState = {
   company: TCompany | null;
-  companyList: TCompanyFromList[];
+  companyList: TCompanyOfList[];
   pagination: TPagination;
   select: TCompanySelect;
   checked: Pick<TCompany, 'company_id'>[];
-  profileAppendix: TProfileAppendix;
+  appendix: TAppendix;
   edit: TEdit;
 
   loading: boolean;
@@ -26,7 +26,7 @@ export const initialState: TInitialState = {
   pagination: { current_page: 0, total_page: 0 },
   select: 'own',
   checked: [],
-  profileAppendix: false,
+  appendix: false,
   edit: false,
 
   loading: false,

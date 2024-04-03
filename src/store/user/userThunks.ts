@@ -1,13 +1,13 @@
 import * as API from 'api/userApi';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { IRegister, store, TPaginationParams } from 'store';
+import { store, TPaginationParams, TRegister } from 'store';
 import { createAppAsyncThunk } from 'store';
 import { TPassword, TUser } from 'store';
 
 export const registerThunk = createAppAsyncThunk(
   'users/register',
-  async (credentials: IRegister, thunkAPI) => {
+  async (credentials: TRegister, thunkAPI) => {
     try {
       return await API.register(credentials);
     } catch (error) {
@@ -35,11 +35,11 @@ export const getMeThunk = createAppAsyncThunk(
 
 export const getUserThunk = createAppAsyncThunk(
   'users/get',
-  async (id: number, thunkAPI) => {
+  async (params: { user_id: number }, thunkAPI) => {
     const access_token = store.getState().auth.token?.access_token;
     if (!access_token) return;
     try {
-      return await API.getUser(access_token, id);
+      return await API.getUser(access_token, params);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -50,11 +50,11 @@ export const getUserThunk = createAppAsyncThunk(
 
 export const deleteUserThunk = createAppAsyncThunk(
   'users/delete',
-  async (id: number, thunkAPI) => {
+  async (params: { user_id: number }, thunkAPI) => {
     const access_token = store.getState().auth.token?.access_token;
     if (!access_token) return;
     try {
-      return await API.deleteUser(access_token, id);
+      return await API.deleteUser(access_token, params);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -99,10 +99,9 @@ export const updateAvatarThunk = createAppAsyncThunk(
     const access_token = store.getState().auth.token?.access_token;
     if (!access_token) return;
     const user_id = store.getState().users.user?.user_id;
+    if (!user_id) return;
     try {
-      if (access_token && user_id) {
-        return await API.updateAvatar(access_token, user_id, formData);
-      }
+      return await API.updateAvatar(access_token, user_id, formData);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);

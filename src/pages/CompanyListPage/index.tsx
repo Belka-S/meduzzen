@@ -6,7 +6,7 @@ import { useAppDispatch, useAppExtraDispatch } from 'store';
 import { editCompany, getAllCompaniesThunk } from 'store/company';
 import { getCompaniesListThunk } from 'store/userData';
 import { useCompany, useUser } from 'utils/hooks';
-import { useAction } from 'utils/hooks/useAction';
+import { useAction } from 'utils/hooks';
 
 import TableHead from './CompanyItem/head';
 import CompanyItem from './CompanyItem';

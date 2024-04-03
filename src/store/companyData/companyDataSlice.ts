@@ -1,12 +1,6 @@
 import { toast } from 'react-toastify';
-import {
-  TAnswers,
-  TQuiz,
-  TRating,
-  TRatingAnalytic,
-  TUserFromList,
-  TUsersWithQuizzesPassed,
-} from 'store';
+import { TAnswers, TQuiz, TRating, TRatingAnalytic } from 'store';
+import { TUserOfAction, TUsersWithQuizzesPassed } from 'store';
 import * as TNK from 'store/companyData/companyDataThunks';
 import { initialState, TInitialState } from 'store/companyData/initialState';
 
@@ -47,22 +41,22 @@ const handleSuccess = () => {
 
 const handleMembersListSuccess = (
   state: TInitialState,
-  action: PayloadAction<{ result: { users: TUserFromList[] } }>,
+  action: PayloadAction<{ result: { users: TUserOfAction[] } }>,
 ) => ({ ...state, members: action.payload.result.users });
 
 const handleInvitesListSuccess = (
   state: TInitialState,
-  action: PayloadAction<{ result: { users: TUserFromList[] } }>,
+  action: PayloadAction<{ result: { users: TUserOfAction[] } }>,
 ) => ({ ...state, invites: action.payload.result.users });
 
 const handleRequestsListSuccess = (
   state: TInitialState,
-  action: PayloadAction<{ result: { users: TUserFromList[] } }>,
+  action: PayloadAction<{ result: { users: TUserOfAction[] } }>,
 ) => ({ ...state, requests: action.payload.result.users });
 
 const handleBlockedListSuccess = (
   state: TInitialState,
-  action: PayloadAction<{ result: { users: TUserFromList[] } }>,
+  action: PayloadAction<{ result: { users: TUserOfAction[] } }>,
 ) => ({ ...state, blocked: action.payload.result.users });
 
 const handleQuizzesListSuccess = (
@@ -117,7 +111,7 @@ const handleAnalyticQuizSuccess = (
 
 const handleQuizzesPassSs = (
   state: TInitialState,
-  action: PayloadAction<{ result: { users: TUsersWithQuizzesPassed } }>,
+  action: PayloadAction<{ result: { users: TUsersWithQuizzesPassed[] } }>,
 ) => ({ ...state, quizzesPassed: action.payload.result.users });
 
 // slice

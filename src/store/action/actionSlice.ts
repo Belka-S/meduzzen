@@ -33,16 +33,6 @@ const handleSuccess = (
   toast.success(`Succeed with ${action.payload.result.action_id}`);
 };
 
-// const handleActionUserSs = (
-//   state: TInitialState,
-//   action: PayloadAction<{ result: Pick<TAction, 'action_id'> }>,
-// ) => ({ ...state, createActionFromUser: action.payload.result });
-
-// const handleActionCompSs = (
-//   state: TInitialState,
-//   action: PayloadAction<{ result: Pick<TAction, 'action_id'> }>,
-// ) => ({ ...state, createActionFromCompany: action.payload.result });
-
 const handleActionInviteSuccess = (
   state: TInitialState,
   action: PayloadAction<{ result: Pick<TAction, 'action_id'> }>,

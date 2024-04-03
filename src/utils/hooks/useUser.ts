@@ -7,7 +7,7 @@ export const useUser = () => {
   const userList = useAppSelector(selectors.selectUserList);
   const pagination = useAppSelector(selectors.selectPagination);
   const checkedUsers = useAppSelector(selectors.selectChecked);
-  const profileAppendix = useAppSelector(selectors.selectProfileAppendix);
+  const appendix = useAppSelector(selectors.selectAppendix);
   const edit = useAppSelector(selectors.selectEdit);
 
   const email = useAppSelector(selectors.selectUserEmail);
@@ -26,7 +26,7 @@ export const useUser = () => {
     userList,
     pagination,
     checkedUsers,
-    profileAppendix,
+    appendix,
     edit,
 
     loading,

@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import InputRhf from 'components/InputRhf';
+import InputText from 'components/InputText';
 import Button from 'components/ui/Button';
 import H3 from 'components/ui/Typography/H3';
 import { Resolver, SubmitHandler, useForm } from 'react-hook-form';
@@ -41,7 +41,7 @@ const PasswordForm: FC<TPasswordForm> = ({ setIsModal }) => {
       </div>
 
       {inputFields.map(el => (
-        <InputRhf
+        <InputText
           key={el}
           inputField={el}
           errors={formState.errors}

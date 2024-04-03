@@ -20,8 +20,7 @@ const token = {
 // response interseptor
 apiClient.interceptors.response.use(
   res => {
-    // const { detail, result } = res.data;
-    // toast.success(!result.user_id  && detail);
+    // const { detail, result } = res.data; toast.success(!result.user_id  && detail);
     return res;
   },
   async err => {

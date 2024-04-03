@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import InputRhf from 'components/InputRhf';
+import InputText from 'components/InputText';
 import Button from 'components/ui/Button';
 import { Resolver, SubmitHandler, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
@@ -114,7 +114,7 @@ const ProfileForm = () => {
   return (
     <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
       {inputFields.map(el => (
-        <InputRhf
+        <InputText
           key={el}
           style={{ display: hiddenLinks.includes(el) ? 'none' : 'block' }}
           inputField={el}

@@ -1,18 +1,12 @@
-import {
-  TEdit,
-  TPagination,
-  TProfileAppendix,
-  TUser,
-  TUserFromList,
-} from 'store';
+import { TAppendix, TEdit, TPagination, TUser } from 'store';
 
 export type TInitialState = {
   owner: Partial<TUser> | null;
   user: TUser | null;
-  userList: TUserFromList[];
+  userList: TUser[];
   pagination: TPagination;
   checked: Pick<TUser, 'user_id'>[];
-  profileAppendix: TProfileAppendix;
+  appendix: TAppendix;
   edit: TEdit;
 
   loading: boolean;
@@ -25,7 +19,7 @@ export const initialState: TInitialState = {
   userList: [],
   pagination: { current_page: 0, total_page: 0 },
   checked: [],
-  profileAppendix: false,
+  appendix: false,
   edit: false,
 
   loading: false,

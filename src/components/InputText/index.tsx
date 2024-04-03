@@ -24,7 +24,7 @@ type TInputProps<T extends FieldValues> = {
   size?: 's' | 'm' | 'l';
 };
 
-const InputRhf = <T extends FieldValues>(props: TInputProps<T>) => {
+const InputText = <T extends FieldValues>(props: TInputProps<T>) => {
   const { inputField, label, errors, register, style } = props;
   const { placeholder = '', size = 'm', className } = props;
 
@@ -53,4 +53,4 @@ const InputRhf = <T extends FieldValues>(props: TInputProps<T>) => {
   );
 };
 
-export default InputRhf;
+export default InputText;

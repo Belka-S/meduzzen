@@ -1,8 +1,8 @@
-import { IRegister, TPaginationParams, TUser } from 'store';
+import { TPaginationParams, TRegister, TUser } from 'store';
 
 import { apiClient, token } from './apiHttp';
 
-export const register = async (credentials: IRegister) => {
+export const register = async (credentials: TRegister) => {
   const { data } = await apiClient.post('/user/', credentials);
   const user_email = credentials.user_email;
   data.result = { ...data.result, user_email };
@@ -15,15 +15,23 @@ export const getMe = async (accessToken: string) => {
   return data;
 };
 
-export const getUser = async (accessToken: string, id: number) => {
+export const getUser = async (
+  accessToken: string,
+  params: { user_id: number },
+) => {
   token.set(accessToken);
-  const { data } = await apiClient.get(`/user/${id}`);
+  const { user_id } = params;
+  const { data } = await apiClient.get(`/user/${user_id}`);
   return data;
 };
 
-export const deleteUser = async (accessToken: string, id: number) => {
+export const deleteUser = async (
+  accessToken: string,
+  params: { user_id: number },
+) => {
   token.set(accessToken);
-  const { data } = await apiClient.delete(`/user/${id}`);
+  const { user_id } = params;
+  const { data } = await apiClient.delete(`/user/${user_id}`);
   return data;
 };
 

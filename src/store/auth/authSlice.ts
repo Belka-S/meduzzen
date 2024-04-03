@@ -30,8 +30,8 @@ const authSlice = createSlice({
     logout: () => initialState,
   },
   extraReducers: builder => {
-    // success
     builder
+      // success
       .addCase(TNK.loginThunk.fulfilled, handleLoginSuccess)
       // loading, error
       .addMatcher(isAnyOf(...fn('pending')), state => {

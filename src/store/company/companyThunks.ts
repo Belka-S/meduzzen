@@ -20,11 +20,11 @@ export const createCompanyThunk = createAppAsyncThunk(
 
 export const getCompanyThunk = createAppAsyncThunk(
   'company/get',
-  async (id: number, thunkAPI) => {
+  async (params: { company_id: number }, thunkAPI) => {
     const access_token = store.getState().auth.token?.access_token;
     if (!access_token) return;
     try {
-      return await API.getCompany(access_token, id);
+      return await API.getCompany(access_token, params);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -35,11 +35,11 @@ export const getCompanyThunk = createAppAsyncThunk(
 
 export const deleteCompanyThunk = createAppAsyncThunk(
   'company/delete',
-  async (id: number, thunkAPI) => {
+  async (params: { company_id: number }, thunkAPI) => {
     const access_token = store.getState().auth.token?.access_token;
     if (!access_token) return;
     try {
-      return await API.deleteCompany(access_token, id);
+      return await API.deleteCompany(access_token, params);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -84,10 +84,9 @@ export const updateAvatarThunk = createAppAsyncThunk(
     const access_token = store.getState().auth.token?.access_token;
     if (!access_token) return;
     const company_id = store.getState().companies.company?.company_id;
+    if (!company_id) return;
     try {
-      if (access_token && company_id) {
-        return await API.updateAvatar(access_token, company_id, formData);
-      }
+      return await API.updateAvatar(access_token, company_id, formData);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);

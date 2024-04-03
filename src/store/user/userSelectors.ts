@@ -5,8 +5,7 @@ export const selectUser = (state: TRootState) => state.users.user;
 export const selectEdit = (state: TRootState) => state.users.edit;
 export const selectUserList = (state: TRootState) => state.users.userList;
 export const selectChecked = (state: TRootState) => state.users.checked;
-export const selectProfileAppendix = (state: TRootState) =>
-  state.users.profileAppendix;
+export const selectAppendix = (state: TRootState) => state.users.appendix;
 export const selectPagination = (state: TRootState) => state.users.pagination;
 
 export const selectUserEmail = (state: TRootState) =>

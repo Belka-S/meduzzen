@@ -15,7 +15,7 @@ import { getCompanyThunk } from 'store/company';
 import { editCompany } from 'store/company';
 import { getArrFromObj } from 'utils/helpers/getArrFromObj';
 import { useCompany, useUser } from 'utils/hooks';
-import { useAction } from 'utils/hooks/useAction';
+import { useAction } from 'utils/hooks';
 
 import s from './index.module.scss';
 
@@ -24,11 +24,11 @@ const CompanyPage = () => {
   const dispatchExtra = useAppExtraDispatch();
   const { id } = useParams();
   const { owner, userList, checkedUsers } = useUser();
-  const { company, profileInfo, profileAppendix, edit, loading } = useCompany();
+  const { company, profileInfo, appendix, edit, loading } = useCompany();
   const { companyData } = useAction();
 
   useEffect(() => {
-    dispatchExtra(getCompanyThunk(Number(id)));
+    dispatchExtra(getCompanyThunk({ company_id: Number(id) }));
   }, [dispatchExtra, id]);
 
   if (!company) return;
@@ -60,13 +60,13 @@ const CompanyPage = () => {
   };
 
   const getListToRender = () => {
-    if (profileAppendix === 'checked') {
+    if (appendix === 'checked') {
       return [...checkedUsers]
         .sort((a, b) => a.user_id - b.user_id)
         .map(el => userList.find(item => item.user_id === el.user_id));
-    } else if (profileAppendix === 'invites') {
+    } else if (appendix === 'invites') {
       return [...companyData.invites].sort((a, b) => a.user_id - b.user_id);
-    } else if (profileAppendix === 'requests') {
+    } else if (appendix === 'requests') {
       return [...companyData.requests].sort((a, b) => a.user_id - b.user_id);
     }
   };
@@ -95,8 +95,8 @@ const CompanyPage = () => {
         {!isProfileForm && <ProfileCard info={info} links={links} />}
       </div>
 
-      <div className={s.additional}>
-        <H3 className={s.appendix_title}>{`My ${profileAppendix}:`}</H3>
+      <div className={s.appendix}>
+        {appendix ? <H3 className={s.title}>{`My ${appendix}:`}</H3> : <span />}
         {companies?.map(el => el && <UserItem key={el?.user_id} props={el} />)}
       </div>
     </Section>

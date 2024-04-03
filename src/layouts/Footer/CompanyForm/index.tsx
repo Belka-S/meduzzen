@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import InputCheck from 'components/InputCheck';
-import InputRhf from 'components/InputRhf';
+import InputText from 'components/InputText';
 import Button from 'components/ui/Button';
 import H3 from 'components/ui/Typography/H3';
 import { Resolver, SubmitHandler, useForm } from 'react-hook-form';
@@ -44,7 +44,7 @@ const CompanyForm: FC<TCompanyForm> = ({ setIsModal }) => {
         <H3 className={s.title}>Create company</H3>
       </div>
 
-      <InputRhf
+      <InputText
         inputField={company_name}
         errors={formState.errors}
         register={register}

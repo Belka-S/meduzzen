@@ -5,7 +5,7 @@ import { createAppAsyncThunk } from 'store';
 
 export const loginThunk = createAppAsyncThunk(
   'auth/token',
-  async (credentials: API.IAuthCredentials, thunkAPI) => {
+  async (credentials: API.TAuthCredentials, thunkAPI) => {
     try {
       return await API.login(credentials);
     } catch (error) {

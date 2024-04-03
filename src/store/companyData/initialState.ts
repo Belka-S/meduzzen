@@ -3,17 +3,17 @@ import {
   TQuiz,
   TRating,
   TRatingAnalytic,
-  TUserFromList,
+  TUserOfAction,
   TUsersWithQuizzesPassed,
 } from 'store';
 
 export type TInitialState = {
-  members: TUserFromList[];
-  invites: TUserFromList[];
-  requests: TUserFromList[];
-  blocked: TUserFromList[];
+  members: TUserOfAction[];
+  invites: TUserOfAction[];
+  requests: TUserOfAction[];
+  blocked: TUserOfAction[];
   quizzes: TQuiz[];
-  quizzesPassed: TUsersWithQuizzesPassed;
+  quizzesPassed: TUsersWithQuizzesPassed[];
 
   answersCompany: TAnswers[];
   answersUser: TAnswers[];

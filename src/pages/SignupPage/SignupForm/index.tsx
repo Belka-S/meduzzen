@@ -1,4 +1,4 @@
-import InputRhf from 'components/InputRhf';
+import InputText from 'components/InputText';
 import Button from 'components/ui/Button';
 import SvgIcon from 'components/ui/SvgIcon';
 import H3 from 'components/ui/Typography/H3';
@@ -46,7 +46,7 @@ const SignupForm = () => {
       </div>
 
       {inputFields.map(el => (
-        <InputRhf
+        <InputText
           key={el}
           inputField={el}
           errors={formState.errors}

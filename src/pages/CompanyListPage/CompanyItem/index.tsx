@@ -5,7 +5,7 @@ import Button from 'components/ui/Button';
 import SvgIcon from 'components/ui/SvgIcon';
 import { NavLink } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { TCompanyFromList, useAppDispatch, useAppExtraDispatch } from 'store';
+import { TCompanyOfList, useAppDispatch, useAppExtraDispatch } from 'store';
 import {
   checkCompany,
   uncheckCompany,
@@ -18,7 +18,7 @@ import { useCompany, useUser } from 'utils/hooks';
 import s from './index.module.scss';
 
 type TCompanyProps = {
-  props: TCompanyFromList;
+  props: TCompanyOfList;
 };
 
 const CompanyItem: FC<TCompanyProps> = ({ props }) => {
@@ -39,7 +39,9 @@ const CompanyItem: FC<TCompanyProps> = ({ props }) => {
     e.preventDefault();
     e.currentTarget.blur();
     if (confirm(`Are you sure you want to delete company: ${company_name}`)) {
-      const { payload } = await dispatchExtra(deleteCompanyThunk(company_id));
+      const { payload } = await dispatchExtra(
+        deleteCompanyThunk({ company_id }),
+      );
       toast.success(payload.detail);
     }
   };

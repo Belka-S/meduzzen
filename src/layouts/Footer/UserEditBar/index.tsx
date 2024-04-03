@@ -7,9 +7,9 @@ import { toast } from 'react-toastify';
 import { useAppDispatch, useAppExtraDispatch } from 'store';
 import { createActionFromUserThunk } from 'store/action';
 import { logout } from 'store/auth';
-import { uncheckAllCompanies } from 'store/company';
+import { setCompanyAppendix, uncheckAllCompanies } from 'store/company';
 import { cleanOwner, deleteUserThunk, editUser } from 'store/user';
-import { setProfileAppendix, uncheckAllUsers } from 'store/user';
+import { setUserAppendix, uncheckAllUsers } from 'store/user';
 import { getIvitesListThunk, getRequestsListThunk } from 'store/userData';
 import { useCompany, useUser } from 'utils/hooks';
 
@@ -20,25 +20,27 @@ const UserEditBar = () => {
   const dispatchExtra = useAppExtraDispatch();
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const { checkedCompanies } = useCompany();
-  const { owner, user, checkedUsers, profileAppendix, edit } = useUser();
+  const { checkedCompanies, appendix } = useCompany();
+  const { owner, user, checkedUsers, edit } = useUser();
 
   const isMyAccount = owner?.user_id === user?.user_id;
-  const isUncheck = checkedUsers.length > 0 && pathname === '/cluster';
-  const isCheck = checkedCompanies.length > 0 && pathname.includes('/cluster/');
+  const isUserProfile = pathname.includes('/cluster/');
+  const isUserList = pathname === '/cluster';
+  const isUsersCheck = checkedUsers.length > 0;
+  const isCompaniesCheck = checkedCompanies.length > 0;
 
-  const getIvitesListList = async (e: MouseEvent<HTMLButtonElement>) => {
+  const getIvitesList = async (e: MouseEvent<HTMLButtonElement>) => {
     e.currentTarget.blur();
     const user_id = owner?.user_id;
     user_id && (await dispatchExtra(getIvitesListThunk({ user_id })));
-    dispatch(setProfileAppendix('invites'));
+    dispatch(setUserAppendix('invites'));
   };
 
   const getRequestsList = async (e: MouseEvent<HTMLButtonElement>) => {
     e.currentTarget.blur();
     const user_id = owner?.user_id;
     user_id && (await dispatchExtra(getRequestsListThunk({ user_id })));
-    dispatch(setProfileAppendix('requests'));
+    dispatch(setUserAppendix('requests'));
   };
 
   const handleUpdateInfo = (e: MouseEvent<HTMLButtonElement>) => {
@@ -66,14 +68,14 @@ const UserEditBar = () => {
       if (confirm(`Are you sure you want to delete user: ${user_email}`)) {
         dispatch(cleanOwner());
         dispatch(logout());
-        const { payload } = await dispatchExtra(deleteUserThunk(user_id));
+        const { payload } = await dispatchExtra(deleteUserThunk({ user_id }));
         toast.success(payload.detail);
         navigate('/cluster', { replace: true });
       }
     }
   };
 
-  const sendRequestToEnterCompany = () => {
+  const requestToJoinCompany = () => {
     checkedCompanies.map(async ({ company_id }) => {
       const params = { company_id };
       console.log('company_id: ', company_id);
@@ -84,9 +86,9 @@ const UserEditBar = () => {
 
   return (
     <div className={s.editbar}>
-      {isMyAccount && pathname.includes('/cluster/') && (
+      {isMyAccount && isUserProfile && !isCompaniesCheck && (
         <>
-          <Button color="outlined" variant="round" onClick={getIvitesListList}>
+          <Button color="outlined" variant="round" onClick={getIvitesList}>
             <SvgIcon svgId="ui-invite" />
           </Button>
           <Button color="outlined" variant="round" onClick={getRequestsList}>
@@ -95,30 +97,13 @@ const UserEditBar = () => {
         </>
       )}
 
-      {isMyAccount &&
-        isCheck &&
-        (profileAppendix !== 'checked' ? (
-          <Button
-            color="outlined"
-            variant="round"
-            onClick={e => {
-              dispatch(setProfileAppendix('checked'));
-              e.currentTarget.blur();
-            }}
-          >
-            <SvgIcon svgId="ui-circle_check" />
-          </Button>
-        ) : (
-          <Button
-            color="outlined"
-            variant="round"
-            onClick={sendRequestToEnterCompany}
-          >
-            <SvgIcon svgId="ui-add_company" size={24} />
-          </Button>
-        ))}
+      {isMyAccount && isCompaniesCheck && appendix !== 'checked' && (
+        <Button color="outlined" variant="round" onClick={requestToJoinCompany}>
+          <SvgIcon svgId="ui-add_company" size={24} />
+        </Button>
+      )}
 
-      {isUncheck && (
+      {isUserList && isUsersCheck && (
         <>
           <Button
             color="outlined"
@@ -131,14 +116,17 @@ const UserEditBar = () => {
           <Button
             color="outlined"
             variant="round"
-            onClick={() => navigate('/company', { replace: true })}
+            onClick={() => {
+              dispatch(setCompanyAppendix('checked'));
+              navigate('/company', { replace: true });
+            }}
           >
             <SvgIcon svgId="ui-add_user" size={24} />
           </Button>
         </>
       )}
 
-      {pathname.includes('/cluster/') && (
+      {isUserProfile && (
         <>
           <Button color="outlined" variant="round" onClick={handleUpdateInfo}>
             <SvgIcon svgId="ui-edit" />

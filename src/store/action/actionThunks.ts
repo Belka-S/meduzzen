@@ -36,11 +36,11 @@ export const createActionFromCompanyThunk = createAppAsyncThunk(
 
 export const acceptActionInviteThunk = createAppAsyncThunk(
   'action/acceptInvite',
-  async (action_id: number, thunkAPI) => {
+  async (params: { action_id: number }, thunkAPI) => {
     const access_token = store.getState().auth.token?.access_token;
     if (!access_token) return;
     try {
-      return await API.acceptActionInvite(access_token, action_id);
+      return await API.acceptActionInvite(access_token, params);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -51,11 +51,11 @@ export const acceptActionInviteThunk = createAppAsyncThunk(
 
 export const acceptActionRequestThunk = createAppAsyncThunk(
   'action/acceptRequest',
-  async (action_id: number, thunkAPI) => {
+  async (params: { action_id: number }, thunkAPI) => {
     const access_token = store.getState().auth.token?.access_token;
     if (!access_token) return;
     try {
-      return await API.acceptActionRequest(access_token, action_id);
+      return await API.acceptActionRequest(access_token, params);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -66,11 +66,11 @@ export const acceptActionRequestThunk = createAppAsyncThunk(
 
 export const declineActionThunk = createAppAsyncThunk(
   'action/decline',
-  async (action_id: number, thunkAPI) => {
+  async (params: { action_id: number }, thunkAPI) => {
     const access_token = store.getState().auth.token?.access_token;
     if (!access_token) return;
     try {
-      return await API.declineAction(access_token, action_id);
+      return await API.declineAction(access_token, params);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -81,11 +81,11 @@ export const declineActionThunk = createAppAsyncThunk(
 
 export const addToAdminThunk = createAppAsyncThunk(
   'action/addMemberToAdmin',
-  async (action_id: number, thunkAPI) => {
+  async (params: { action_id: number }, thunkAPI) => {
     const access_token = store.getState().auth.token?.access_token;
     if (!access_token) return;
     try {
-      return await API.addMemberToAdmin(access_token, action_id);
+      return await API.addMemberToAdmin(access_token, params);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -96,11 +96,11 @@ export const addToAdminThunk = createAppAsyncThunk(
 
 export const removeFromAdminThunk = createAppAsyncThunk(
   'action/removeMemberFromAdmin',
-  async (action_id: number, thunkAPI) => {
+  async (params: { action_id: number }, thunkAPI) => {
     const access_token = store.getState().auth.token?.access_token;
     if (!access_token) return;
     try {
-      return await API.removeMemberFromAdmin(access_token, action_id);
+      return await API.removeMemberFromAdmin(access_token, params);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -111,11 +111,11 @@ export const removeFromAdminThunk = createAppAsyncThunk(
 
 export const addToBlockThunk = createAppAsyncThunk(
   'action/addMemberToBlock',
-  async (action_id: number, thunkAPI) => {
+  async (params: { action_id: number }, thunkAPI) => {
     const access_token = store.getState().auth.token?.access_token;
     if (!access_token) return;
     try {
-      return await API.addMemberToBlock(access_token, action_id);
+      return await API.addMemberToBlock(access_token, params);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -126,11 +126,11 @@ export const addToBlockThunk = createAppAsyncThunk(
 
 export const removeFromBlockThunk = createAppAsyncThunk(
   'action/removeMemberFromBlock',
-  async (action_id: number, thunkAPI) => {
+  async (params: { action_id: number }, thunkAPI) => {
     const access_token = store.getState().auth.token?.access_token;
     if (!access_token) return;
     try {
-      return await API.removeMemberFromBlock(access_token, action_id);
+      return await API.removeMemberFromBlock(access_token, params);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -141,11 +141,11 @@ export const removeFromBlockThunk = createAppAsyncThunk(
 
 export const leaveFromCompanyThunk = createAppAsyncThunk(
   'action/leaveMemberFromCompany',
-  async (action_id: number, thunkAPI) => {
+  async (params: { action_id: number }, thunkAPI) => {
     const access_token = store.getState().auth.token?.access_token;
     if (!access_token) return;
     try {
-      return await API.leaveMemberFromCompany(access_token, action_id);
+      return await API.leaveMemberFromCompany(access_token, params);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);

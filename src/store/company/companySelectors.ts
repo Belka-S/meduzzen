@@ -7,8 +7,7 @@ export const selectPagination = (state: TRootState) =>
   state.companies.pagination;
 export const selectSelect = (state: TRootState) => state.companies.select;
 export const selectChecked = (state: TRootState) => state.companies.checked;
-export const selectProfileAppendix = (state: TRootState) =>
-  state.companies.profileAppendix;
+export const selectAppendix = (state: TRootState) => state.companies.appendix;
 export const selectEdit = (state: TRootState) => state.companies.edit;
 
 export const selectCompanyOwner = (state: TRootState) =>

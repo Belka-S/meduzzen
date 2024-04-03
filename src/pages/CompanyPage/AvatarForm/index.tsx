@@ -41,7 +41,7 @@ const AvatarForm = () => {
     // for (const [key, value] of formData) { console.log(`${key}: ${value}`); }
 
     await dispatchExtra(updateAvatarThunk(formData));
-    await dispatchExtra(getCompanyThunk(Number(id)));
+    await dispatchExtra(getCompanyThunk({ company_id: Number(id) }));
     dispatch(editCompany(false));
   };
 
