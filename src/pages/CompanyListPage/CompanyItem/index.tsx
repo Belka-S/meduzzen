@@ -38,12 +38,9 @@ const CompanyItem: FC<TCompanyProps> = ({ props }) => {
   const handleDelete = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.currentTarget.blur();
-    if (confirm(`Are you sure you want to delete company: ${company_name}`)) {
-      const { payload } = await dispatchExtra(
-        deleteCompanyThunk({ company_id }),
-      );
-      toast.success(payload.detail);
-    }
+    if (!confirm(`Are you sure you want to delete: ${company_name}`)) return;
+    const { payload } = await dispatchExtra(deleteCompanyThunk({ company_id }));
+    toast.success(payload.detail);
   };
 
   const switchVisible = async (e: MouseEvent<HTMLButtonElement>) => {

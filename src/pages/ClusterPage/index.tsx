@@ -42,8 +42,8 @@ const ClusterPage = () => {
             .map(el =>
               companyList.find(item => item.company_id === el.company_id),
             );
-        } else {
-          return el && userData[el];
+        } else if (el) {
+          return [...userData[el]].sort((a, b) => a.company_id - b.company_id);
         }
       }),
     [appendix, checkedCompanies, companyList, userData],

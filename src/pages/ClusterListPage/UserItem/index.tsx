@@ -45,14 +45,13 @@ const UserItem: FC<TUserProps> = ({ props }) => {
         return;
       }
     }
-    if (confirm(`Are you sure you want to delete user: ${user_email}`)) {
-      dispatch(cleanOwner());
-      dispatch(logout());
-      if (user_id) {
-        const { payload } = await dispatchExtra(deleteUserThunk({ user_id }));
-        toast.success(payload.detail);
-        navigate('/cluster', { replace: true });
-      }
+    if (!confirm(`Are you sure you want to delete: ${user_email}`)) return;
+    dispatch(cleanOwner());
+    dispatch(logout());
+    if (user_id) {
+      const { payload } = await dispatchExtra(deleteUserThunk({ user_id }));
+      toast.success(payload.detail);
+      navigate('/cluster', { replace: true });
     }
   };
 

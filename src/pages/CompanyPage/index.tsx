@@ -38,8 +38,8 @@ const CompanyPage = () => {
           return [...checkedUsers]
             .sort((a, b) => a.user_id - b.user_id)
             .map(el => userList.find(item => item.user_id === el.user_id));
-        } else {
-          return el && companyData[el];
+        } else if (el) {
+          return [...companyData[el]].sort((a, b) => a.user_id - b.user_id);
         }
       }),
     [appendix, checkedUsers, companyData, userList],

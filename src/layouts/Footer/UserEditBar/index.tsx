@@ -58,6 +58,7 @@ const UserEditBar = () => {
   };
 
   const declineAction = () => {
+    if (!confirm(`Are you sure you want to decline?`)) return;
     if (checkedInvites[0]) {
       checkedInvites.forEach(async (action_id, i) => {
         action_id && (await dispatchExtra(declineActionThunk({ action_id })));
@@ -101,13 +102,12 @@ const UserEditBar = () => {
         return;
       }
       e.currentTarget.blur();
-      if (confirm(`Are you sure you want to delete user: ${user_email}`)) {
-        dispatch(cleanOwner());
-        dispatch(logout());
-        const { payload } = await dispatchExtra(deleteUserThunk({ user_id }));
-        toast.success(payload.detail);
-        navigate('/cluster', { replace: true });
-      }
+      if (!confirm(`Are you sure you want to delete: ${user_email}`)) return;
+      dispatch(cleanOwner());
+      dispatch(logout());
+      const { payload } = await dispatchExtra(deleteUserThunk({ user_id }));
+      toast.success(payload.detail);
+      navigate('/cluster', { replace: true });
     }
   };
 

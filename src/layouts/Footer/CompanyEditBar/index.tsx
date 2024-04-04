@@ -57,6 +57,7 @@ const CompanyEditBar = () => {
   };
 
   const declineAction = () => {
+    if (!confirm(`Are you sure you want to decline?`)) return;
     if (checkedInvites[0]) {
       checkedInvites.forEach(async (action_id, i) => {
         action_id && (await dispatchExtra(declineActionThunk({ action_id })));
@@ -101,14 +102,13 @@ const CompanyEditBar = () => {
       const { company_name, company_id } = company;
       e.preventDefault();
       e.currentTarget.blur();
-      if (confirm(`Are you sure you want to delete company: ${company_name}`)) {
-        if (!company_id) return;
-        const { payload } = await dispatchExtra(
-          deleteCompanyThunk({ company_id }),
-        );
-        toast.success(payload.detail);
-        navigate('/company', { replace: true });
-      }
+      if (!confirm(`Are you sure you want to delete: ${company_name}?`)) return;
+      if (!company_id) return;
+      const { payload } = await dispatchExtra(
+        deleteCompanyThunk({ company_id }),
+      );
+      toast.success(payload.detail);
+      navigate('/company', { replace: true });
     }
   };
 
