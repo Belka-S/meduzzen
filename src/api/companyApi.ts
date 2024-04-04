@@ -1,44 +1,32 @@
 import { TCompany, TPaginationParams } from 'store';
 
-import { apiClient, token } from './apiHttp';
+import { apiClientToken } from './apiHttp';
 
 export const createCompany = async (
   credentials: Pick<TCompany, 'company_name' | 'is_visible'>,
 ) => {
-  const { data } = await apiClient.post('/company/', credentials);
+  const { data } = await apiClientToken.post('/company/', credentials);
   const { company_name, is_visible } = credentials;
   data.result = { ...data.result, company_name, is_visible };
   return data;
 };
 
-export const getCompany = async (
-  accessToken: string,
-  params: { company_id: number },
-) => {
-  token.set(accessToken);
+export const getCompany = async (params: { company_id: number }) => {
   const { company_id } = params;
-  const { data } = await apiClient.get(`/company/${company_id}`);
+  const { data } = await apiClientToken.get(`/company/${company_id}`);
   return data;
 };
 
-export const deleteCompany = async (
-  accessToken: string,
-  params: { company_id: number },
-) => {
-  token.set(accessToken);
+export const deleteCompany = async (params: { company_id: number }) => {
   const { company_id } = params;
-  const { data } = await apiClient.delete(`/company/${company_id}`);
+  const { data } = await apiClientToken.delete(`/company/${company_id}`);
   data.result = { ...data.result, company_id };
   return data;
 };
 
-export const updateCompanyInfo = async (
-  accessToken: string,
-  company: Partial<TCompany>,
-) => {
+export const updateCompanyInfo = async (company: Partial<TCompany>) => {
   const { company_id, ...credentials } = company;
-  token.set(accessToken);
-  const { data } = await apiClient.put(
+  const { data } = await apiClientToken.put(
     `/company/${company_id}/update_info/`,
     credentials,
   );
@@ -46,25 +34,18 @@ export const updateCompanyInfo = async (
 };
 
 export const updateVisible = async (
-  accessToken: string,
   company: Pick<TCompany, 'is_visible' | 'company_id'>,
 ) => {
   const { company_id, ...credentials } = company;
-  token.set(accessToken);
-  const { data } = await apiClient.put(
+  const { data } = await apiClientToken.put(
     `/company/${company_id}/update_visible/`,
     credentials,
   );
   return data;
 };
 
-export const updateAvatar = async (
-  accessToken: string,
-  company_id: number,
-  formData: FormData,
-) => {
-  token.set(accessToken);
-  const { data } = await apiClient.put(
+export const updateAvatar = async (company_id: number, formData: FormData) => {
+  const { data } = await apiClientToken.put(
     `/company/${company_id}/update_avatar/`,
     formData,
     { headers: { 'Content-Type': 'multipart/form-data' } },
@@ -72,11 +53,7 @@ export const updateAvatar = async (
   return data;
 };
 
-export const getAllCompanies = async (
-  accessToken: string,
-  params: TPaginationParams,
-) => {
-  token.set(accessToken);
-  const { data } = await apiClient.get('/companies/', { params });
+export const getAllCompanies = async (params: TPaginationParams) => {
+  const { data } = await apiClientToken.get('/companies/', { params });
   return data;
 };

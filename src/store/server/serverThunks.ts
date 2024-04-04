@@ -1,5 +1,6 @@
 import * as API from 'api/commonApi';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import { createAppAsyncThunk } from 'store';
 
 export const checkStatusThunk = createAppAsyncThunk(

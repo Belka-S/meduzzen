@@ -1,6 +1,6 @@
 import { TPaginationParams, TRegister, TUser } from 'store';
 
-import { apiClient, token } from './apiHttp';
+import { apiClient, apiClientToken } from './apiHttp';
 
 export const register = async (credentials: TRegister) => {
   const { data } = await apiClient.post('/user/', credentials);
@@ -20,65 +20,45 @@ export const register = async (credentials: TRegister) => {
   return data;
 };
 
-export const getMe = async (accessToken: string) => {
-  token.set(accessToken);
-  const { data } = await apiClient.get('/auth/me/');
+export const getMe = async () => {
+  const { data } = await apiClientToken.get('/auth/me/');
   return data;
 };
 
-export const getUser = async (
-  accessToken: string,
-  params: { user_id: number },
-) => {
-  token.set(accessToken);
+export const getUser = async (params: { user_id: number }) => {
   const { user_id } = params;
-  const { data } = await apiClient.get(`/user/${user_id}`);
+  const { data } = await apiClientToken.get(`/user/${user_id}`);
   return data;
 };
 
-export const deleteUser = async (
-  accessToken: string,
-  params: { user_id: number },
-) => {
-  token.set(accessToken);
+export const deleteUser = async (params: { user_id: number }) => {
   const { user_id } = params;
-  const { data } = await apiClient.delete(`/user/${user_id}`);
+  const { data } = await apiClientToken.delete(`/user/${user_id}`);
   return data;
 };
 
-export const updateUserInfo = async (
-  accessToken: string,
-  user: Partial<TUser>,
-) => {
+export const updateUserInfo = async (user: Partial<TUser>) => {
   const { user_id, ...credentials } = user;
-  token.set(accessToken);
-  const { data } = await apiClient.put(
+
+  const { data } = await apiClientToken.put(
     `/user/${user_id}/update_info/`,
     credentials,
   );
   return data;
 };
 
-export const updatePassword = async (
-  accessToken: string,
-  user: Partial<TUser>,
-) => {
+export const updatePassword = async (user: Partial<TUser>) => {
   const { user_id, ...credentials } = user;
-  token.set(accessToken);
-  const { data } = await apiClient.put(
+
+  const { data } = await apiClientToken.put(
     `/user/${user_id}/update_password/`,
     credentials,
   );
   return data;
 };
 
-export const updateAvatar = async (
-  accessToken: string,
-  user_id: number,
-  formData: FormData,
-) => {
-  token.set(accessToken);
-  const { data } = await apiClient.put(
+export const updateAvatar = async (user_id: number, formData: FormData) => {
+  const { data } = await apiClientToken.put(
     `/user/${user_id}/update_avatar/`,
     formData,
     { headers: { 'Content-Type': 'multipart/form-data' } },
@@ -86,11 +66,7 @@ export const updateAvatar = async (
   return data;
 };
 
-export const getAllUsers = async (
-  accessToken: string,
-  params: TPaginationParams,
-) => {
-  token.set(accessToken);
-  const { data } = await apiClient.get('/users/', { params });
+export const getAllUsers = async (params: TPaginationParams) => {
+  const { data } = await apiClientToken.get('/users/', { params });
   return data;
 };

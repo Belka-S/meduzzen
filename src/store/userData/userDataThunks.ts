@@ -1,22 +1,14 @@
 import * as API from 'api/userDataApi';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import {
-  createAppAsyncThunk,
-  store,
-  TActionParams,
-  TNotificationParams,
-  TQuizUserParams,
-  TUser,
-} from 'store';
+import { createAppAsyncThunk, TActionParams } from 'store';
+import { TNotificationParams, TQuizUserParams, TUser } from 'store';
 
 export const getCompaniesListThunk = createAppAsyncThunk(
   'userData/CompaniesList',
   async (params: Pick<TUser, 'user_id'>, thunkAPI) => {
-    const access_token = store.getState().auth.token?.access_token;
-    if (!access_token) return;
     try {
-      return await API.getCompaniesList(access_token, params);
+      return await API.getCompaniesList(params);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -28,10 +20,8 @@ export const getCompaniesListThunk = createAppAsyncThunk(
 export const getIvitesListThunk = createAppAsyncThunk(
   'userData/IvitesList',
   async (params: Pick<TUser, 'user_id'>, thunkAPI) => {
-    const access_token = store.getState().auth.token?.access_token;
-    if (!access_token) return;
     try {
-      return await API.getIvitesList(access_token, params);
+      return await API.getIvitesList(params);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -43,10 +33,8 @@ export const getIvitesListThunk = createAppAsyncThunk(
 export const getRequestsListThunk = createAppAsyncThunk(
   'userData/RequestsList',
   async (params: Pick<TUser, 'user_id'>, thunkAPI) => {
-    const access_token = store.getState().auth.token?.access_token;
-    if (!access_token) return;
     try {
-      return await API.getRequestsList(access_token, params);
+      return await API.getRequestsList(params);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -58,10 +46,8 @@ export const getRequestsListThunk = createAppAsyncThunk(
 export const getRatingThunk = createAppAsyncThunk(
   'userData/GlobalRating',
   async (params: Pick<TUser, 'user_id'>, thunkAPI) => {
-    const access_token = store.getState().auth.token?.access_token;
-    if (!access_token) return;
     try {
-      return await API.getGlobalRating(access_token, params);
+      return await API.getGlobalRating(params);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -73,10 +59,8 @@ export const getRatingThunk = createAppAsyncThunk(
 export const getAnalyticThunk = createAppAsyncThunk(
   'userData/GlobalRatingAnalytic',
   async (params: Pick<TUser, 'user_id'>, thunkAPI) => {
-    const access_token = store.getState().auth.token?.access_token;
-    if (!access_token) return;
     try {
-      return await API.getGlobalRatingAnalytic(access_token, params);
+      return await API.getGlobalRatingAnalytic(params);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -88,10 +72,8 @@ export const getAnalyticThunk = createAppAsyncThunk(
 export const getRatingInCompanyThunk = createAppAsyncThunk(
   'userData/RatingInCompany',
   async (params: TActionParams, thunkAPI) => {
-    const access_token = store.getState().auth.token?.access_token;
-    if (!access_token) return;
     try {
-      return await API.getRatingInCompany(access_token, params);
+      return await API.getRatingInCompany(params);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -103,10 +85,8 @@ export const getRatingInCompanyThunk = createAppAsyncThunk(
 export const getAnalyticInCompanyThunk = createAppAsyncThunk(
   'userData/RatingAnalyticInCompany',
   async (params: TActionParams, thunkAPI) => {
-    const access_token = store.getState().auth.token?.access_token;
-    if (!access_token) return;
     try {
-      return await API.getRatingAnalyticInCompany(access_token, params);
+      return await API.getRatingAnalyticInCompany(params);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -118,10 +98,8 @@ export const getAnalyticInCompanyThunk = createAppAsyncThunk(
 export const getRatingForQuizThunk = createAppAsyncThunk(
   'userData/RatingForQuiz',
   async (params: TQuizUserParams, thunkAPI) => {
-    const access_token = store.getState().auth.token?.access_token;
-    if (!access_token) return;
     try {
-      return await API.getRatingForQuiz(access_token, params);
+      return await API.getRatingForQuiz(params);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -133,10 +111,8 @@ export const getRatingForQuizThunk = createAppAsyncThunk(
 export const getAnalyticForQuizThunk = createAppAsyncThunk(
   'userData/RatingAnalyticForQuiz ',
   async (params: TQuizUserParams, thunkAPI) => {
-    const access_token = store.getState().auth.token?.access_token;
-    if (!access_token) return;
     try {
-      return await API.getRatingAnalyticForQuiz(access_token, params);
+      return await API.getRatingAnalyticForQuiz(params);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -148,10 +124,8 @@ export const getAnalyticForQuizThunk = createAppAsyncThunk(
 export const getLastAnswersListThunk = createAppAsyncThunk(
   'userData/LastAnswersList',
   async (params: Pick<TUser, 'user_id'>, thunkAPI) => {
-    const access_token = store.getState().auth.token?.access_token;
-    if (!access_token) return;
     try {
-      return await API.getLastAnswersList(access_token, params);
+      return await API.getLastAnswersList(params);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -163,10 +137,8 @@ export const getLastAnswersListThunk = createAppAsyncThunk(
 export const getLastAnswersCsvThunk = createAppAsyncThunk(
   'userData/LastAnswersCsv',
   async (params: Pick<TUser, 'user_id'>, thunkAPI) => {
-    const access_token = store.getState().auth.token?.access_token;
-    if (!access_token) return;
     try {
-      return await API.getLastAnswersCsv(access_token, params);
+      return await API.getLastAnswersCsv(params);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -178,10 +150,8 @@ export const getLastAnswersCsvThunk = createAppAsyncThunk(
 export const getQuizzesPassThunk = createAppAsyncThunk(
   'userData/QuizzesLastPass',
   async (params: Pick<TUser, 'user_id'>, thunkAPI) => {
-    const access_token = store.getState().auth.token?.access_token;
-    if (!access_token) return;
     try {
-      return await API.getQuizzesLastPass(access_token, params);
+      return await API.getQuizzesLastPass(params);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -193,10 +163,8 @@ export const getQuizzesPassThunk = createAppAsyncThunk(
 export const getNotificationsThunk = createAppAsyncThunk(
   'userData/NotificationsList',
   async (params: Pick<TUser, 'user_id'>, thunkAPI) => {
-    const access_token = store.getState().auth.token?.access_token;
-    if (!access_token) return;
     try {
-      return await API.getNotificationsList(access_token, params);
+      return await API.getNotificationsList(params);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -208,10 +176,8 @@ export const getNotificationsThunk = createAppAsyncThunk(
 export const markNotificationAsReadThunk = createAppAsyncThunk(
   'userData/NotificationAsRead',
   async (params: TNotificationParams, thunkAPI) => {
-    const access_token = store.getState().auth.token?.access_token;
-    if (!access_token) return;
     try {
-      return await API.markNotificationAsRead(access_token, params);
+      return await API.markNotificationAsRead(params);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
