@@ -46,10 +46,10 @@ const UserEditBar = () => {
   const handleUpdateInfo = (e: MouseEvent<HTMLButtonElement>) => {
     if (!owner?.is_superuser) {
       if (!isMyAccount) {
-        e.currentTarget.blur();
         toast.error("It's not your account");
         return;
       }
+      e.currentTarget.blur();
       !edit && dispatch(editUser('data'));
       edit && dispatch(editUser(false));
     }
@@ -60,7 +60,6 @@ const UserEditBar = () => {
     const { user_email, user_id } = user;
     if (!owner?.is_superuser) {
       if (!isMyAccount) {
-        e.currentTarget.blur();
         toast.error("It's not your account");
         return;
       }

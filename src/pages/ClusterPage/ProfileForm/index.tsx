@@ -77,7 +77,7 @@ const ProfileForm = () => {
       .filter(el => el && el) as string[];
 
     await dispatchExtra(updateInfoThunk({ user_id, ...data, user_links }));
-    const { payload } = await dispatchExtra(getUserThunk(user_id));
+    const { payload } = await dispatchExtra(getUserThunk({ user_id }));
     toast.success(payload.detail);
     dispatch(editUser(false));
   };
@@ -117,7 +117,7 @@ const ProfileForm = () => {
         <InputText
           key={el}
           style={{ display: hiddenLinks.includes(el) ? 'none' : 'block' }}
-          inputField={el}
+          inputName={el}
           errors={errors}
           watch={watch}
           register={register}

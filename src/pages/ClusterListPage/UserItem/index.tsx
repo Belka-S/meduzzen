@@ -60,11 +60,11 @@ const UserItem: FC<TUserProps> = ({ props }) => {
     if (!owner?.is_superuser) {
       if (!isMyAccount) {
         e.preventDefault();
-        e.currentTarget.blur();
         toast.error("It's not your account");
         return;
       }
     }
+    e.currentTarget.blur();
     dispatch(editUser('data'));
   };
 

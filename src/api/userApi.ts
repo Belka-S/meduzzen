@@ -4,8 +4,19 @@ import { apiClient, token } from './apiHttp';
 
 export const register = async (credentials: TRegister) => {
   const { data } = await apiClient.post('/user/', credentials);
-  const user_email = credentials.user_email;
-  data.result = { ...data.result, user_email };
+  const { user_email, user_firstname, user_lastname } = credentials;
+  data.result = {
+    ...data.result,
+    user_email,
+    user_firstname,
+    user_lastname,
+    user_avatar: '',
+    user_status: '',
+    user_city: '',
+    user_phone: '',
+    user_links: [],
+    is_superuser: false,
+  };
   return data;
 };
 

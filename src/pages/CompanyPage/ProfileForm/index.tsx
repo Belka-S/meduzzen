@@ -118,7 +118,7 @@ const ProfileForm = () => {
         <InputText
           key={el}
           style={{ display: hiddenLinks.includes(el) ? 'none' : 'block' }}
-          inputField={el}
+          inputName={el}
           errors={errors}
           watch={watch}
           register={register}

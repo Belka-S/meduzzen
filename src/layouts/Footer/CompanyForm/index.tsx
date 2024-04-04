@@ -45,12 +45,12 @@ const CompanyForm: FC<TCompanyForm> = ({ setIsModal }) => {
       </div>
 
       <InputText
-        inputField={company_name}
+        inputName={company_name}
         errors={formState.errors}
         register={register}
       />
       <InputCheck
-        inputField={is_visible}
+        inputName={is_visible}
         register={register}
         label="the company is visible to all users"
       />

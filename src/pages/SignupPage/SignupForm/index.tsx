@@ -48,7 +48,7 @@ const SignupForm = () => {
       {inputFields.map(el => (
         <InputText
           key={el}
-          inputField={el}
+          inputName={el}
           errors={formState.errors}
           register={register}
         />

@@ -67,7 +67,7 @@ const handleEditSuccess = (
 
 const handleRegisterSuccess = (
   state: TInitialState,
-  action: PayloadAction<{ result: Pick<TUser, 'user_id' | 'user_email'> }>,
+  action: PayloadAction<{ result: TUser }>,
 ) => ({ ...state, owner: action.payload.result });
 
 const handleGetMeSuccess = (

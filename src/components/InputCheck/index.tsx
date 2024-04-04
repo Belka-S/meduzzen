@@ -14,7 +14,7 @@ type TInputProps<T extends FieldValues> = {
   className?: string;
   style?: CSSProperties;
 
-  inputField: Path<T>;
+  inputName: Path<T>;
   label?: string;
   watch?: UseFormWatch<T>;
   register: UseFormRegister<T>;
@@ -24,19 +24,19 @@ type TInputProps<T extends FieldValues> = {
 
 const InputCheck = <T extends FieldValues>(props: TInputProps<T>) => {
   const { className, style } = props;
-  const { inputField, label, register, size = 'm', checked } = props;
+  const { inputName, label, register, size = 'm', checked } = props;
 
   return (
     <label className={classNames(s.wrap, className)} style={style}>
       <span className={classNames(s.label, s[size])}>
-        {label ? label : normalizeText(inputField)}
+        {label ? label : normalizeText(inputName)}
       </span>
 
       <input
         className={classNames(s.input, s[size])}
         type="checkbox"
         checked={checked}
-        {...register(inputField, { required: true })}
+        {...register(inputName, { required: true })}
       />
     </label>
   );

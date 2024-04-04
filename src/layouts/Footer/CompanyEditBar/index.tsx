@@ -48,10 +48,10 @@ const CompanyEditBar = () => {
   const handleUpdateInfo = (e: MouseEvent<HTMLButtonElement>) => {
     if (!owner?.is_superuser) {
       if (!isMyCompany) {
-        e.currentTarget.blur();
         toast.error("It's not your account");
         return;
       }
+      e.currentTarget.blur();
       !edit && dispatch(editCompany('data'));
       edit && dispatch(editCompany(false));
     }
@@ -61,7 +61,6 @@ const CompanyEditBar = () => {
     if (!company) return;
     if (!owner?.is_superuser) {
       if (!isMyCompany) {
-        e.currentTarget.blur();
         toast.error("It's not your account");
         return;
       }

@@ -1,7 +1,7 @@
 import { TAppendix, TEdit, TPagination, TUser } from 'store';
 
 export type TInitialState = {
-  owner: Partial<TUser> | null;
+  owner: TUser | null;
   user: TUser | null;
   userList: TUser[];
   pagination: TPagination;
