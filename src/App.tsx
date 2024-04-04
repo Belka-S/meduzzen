@@ -43,7 +43,6 @@ const App = () => {
   }, [dispatch, dispatchExtra, getAccessTokenSilently, isAuthenticated, owner]);
 
   useEffect(() => {
-    console.log('qwe', accessToken && isTokenExpired(accessToken));
     accessToken && isTokenExpired(accessToken) && dispatch(logout());
 
     isAuth && dispatchExtra(getMeThunk());

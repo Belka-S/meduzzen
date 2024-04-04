@@ -1,4 +1,4 @@
-import { MouseEvent, useEffect } from 'react';
+import { MouseEvent, useEffect, useMemo } from 'react';
 import classNames from 'classnames';
 import ProfileBtn from 'components/ProfileBtn';
 import ProfileCard from 'components/ProfileCard';
@@ -32,6 +32,23 @@ const ClusterPage = () => {
   useEffect(() => {
     dispatchExtra(getUserThunk({ user_id: Number(id) }));
   }, [dispatchExtra, id]);
+
+  const users = useMemo(
+    () =>
+      [appendix].flatMap(el => {
+        if (el === 'checked') {
+          return [...checkedCompanies]
+            .sort((a, b) => a.company_id - b.company_id)
+            .map(el =>
+              companyList.find(item => item.company_id === el.company_id),
+            );
+        } else {
+          return el && userData[el];
+        }
+      }),
+    [appendix, checkedCompanies, companyList, userData],
+  );
+  console.log('users: ', users);
 
   if (!user) return;
   const isMyAccount = owner?.user_id === id;
@@ -67,22 +84,6 @@ const ClusterPage = () => {
     }
     return dispatch(editUser('avatar'));
   };
-
-  const getListToRender = () => {
-    console.log(appendix);
-    if (appendix === 'checked') {
-      return [...checkedCompanies]
-        .sort((a, b) => a.company_id - b.company_id)
-        .map(el => companyList.find(item => item.company_id === el.company_id));
-    }
-    if (appendix === 'invites') {
-      return [...userData.invites].sort((a, b) => a.company_id - b.company_id);
-    }
-    if (appendix === 'requests') {
-      return [...userData.requests].sort((a, b) => a.company_id - b.company_id);
-    }
-  };
-  const users = getListToRender();
 
   if (!isRedyToRender) return <OvalLoader />;
   return (

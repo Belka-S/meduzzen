@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import { TAppendix, TEdit, TPagination, TUser } from 'store';
+import { TAppendix, TEdit, TPagination, TUser, TUserOfList } from 'store';
 import { initialState, TInitialState } from 'store/user';
 import * as TNK from 'store/user/userThunks';
 
@@ -31,7 +31,7 @@ const handleSuccess = () => {
 const handleGetAllSuccess = (
   state: TInitialState,
   action: PayloadAction<{
-    result: { users: TUser[]; pagination: TPagination };
+    result: { users: TUserOfList[]; pagination: TPagination };
   }>,
 ) => ({
   ...state,

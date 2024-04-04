@@ -1,9 +1,9 @@
-import { TAppendix, TEdit, TPagination, TUser } from 'store';
+import { TAppendix, TEdit, TPagination, TUser, TUserOfList } from 'store';
 
 export type TInitialState = {
   owner: TUser | null;
   user: TUser | null;
-  userList: TUser[];
+  userList: TUserOfList[];
   pagination: TPagination;
   checked: Pick<TUser, 'user_id'>[];
   appendix: TAppendix;
@@ -19,7 +19,7 @@ export const initialState: TInitialState = {
   userList: [],
   pagination: { current_page: 0, total_page: 0 },
   checked: [],
-  appendix: false,
+  appendix: null,
   edit: false,
 
   loading: false,

@@ -107,7 +107,10 @@ const UserEditBar = () => {
           <Button
             color="outlined"
             variant="round"
-            onClick={() => dispatch(uncheckAllUsers())}
+            onClick={() => {
+              dispatch(setCompanyAppendix(null));
+              dispatch(uncheckAllUsers());
+            }}
           >
             <SvgIcon svgId="ui-circle_uncheck" />
           </Button>

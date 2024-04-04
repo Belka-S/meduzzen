@@ -1,15 +1,15 @@
 import {
   TAnswers,
-  TMyCompanyFromList,
+  TCompanyOfAction,
   TNotification,
   TQuizPass,
   TRatingAnalytic,
 } from 'store';
 
 export type TInitialState = {
-  myCompanies: TMyCompanyFromList[];
-  invites: TMyCompanyFromList[];
-  requests: TMyCompanyFromList[];
+  myCompanies: TCompanyOfAction[];
+  invites: TCompanyOfAction[];
+  requests: TCompanyOfAction[];
 
   rating: number;
   analytic: TRatingAnalytic[];

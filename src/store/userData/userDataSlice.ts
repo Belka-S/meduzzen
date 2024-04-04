@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import { TAnswers, TMyCompanyFromList, TNotification } from 'store';
+import { TAnswers, TCompanyOfAction, TNotification } from 'store';
 import { TQuizPass, TRatingAnalytic } from 'store';
 import { initialState, TInitialState } from 'store/userData/initialState';
 import * as TNK from 'store/userData/userDataThunks';
@@ -37,17 +37,17 @@ const handleSuccess = () => {
 
 const handleCompaniesSuccess = (
   state: TInitialState,
-  action: PayloadAction<{ result: { companies: TMyCompanyFromList[] } }>,
+  action: PayloadAction<{ result: { companies: TCompanyOfAction[] } }>,
 ) => ({ ...state, myCompanies: action.payload.result.companies });
 
 const handleInvitesSuccess = (
   state: TInitialState,
-  action: PayloadAction<{ result: { companies: TMyCompanyFromList[] } }>,
+  action: PayloadAction<{ result: { companies: TCompanyOfAction[] } }>,
 ) => ({ ...state, invites: action.payload.result.companies });
 
 const handleRequestsSuccess = (
   state: TInitialState,
-  action: PayloadAction<{ result: { companies: TMyCompanyFromList[] } }>,
+  action: PayloadAction<{ result: { companies: TCompanyOfAction[] } }>,
 ) => ({ ...state, requests: action.payload.result.companies });
 
 const handleRatingSuccess = (

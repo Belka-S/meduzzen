@@ -79,7 +79,7 @@ export type TPaginationParams = { page: number; page_size: number };
 export type TEdit = false | 'avatar' | 'data';
 
 // profile appendix
-export type TAppendix = false | 'checked' | 'invites' | 'requests';
+export type TAppendix = null | 'checked' | 'invites' | 'requests';
 
 // actions
 export type TAction = { action_id: number; action: string };
@@ -87,7 +87,7 @@ export type TAction = { action_id: number; action: string };
 export type TActionParams = { user_id: number; company_id: number };
 
 // user data
-export type TMyCompanyFromList = TCompanyOfList & TAction;
+export type TCompanyOfAction = TAction & TCompanyOfList;
 
 export type TQuizUserParams = { user_id: number; quiz_id: number };
 

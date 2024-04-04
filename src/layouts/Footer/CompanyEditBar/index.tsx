@@ -21,7 +21,7 @@ const CompanyEditBar = () => {
   const dispatchExtra = useAppExtraDispatch();
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const { company, checkedCompanies, edit } = useCompany();
+  const { company, checkedCompanies, edit, select } = useCompany();
   const { owner, checkedUsers, appendix } = useUser();
   const [isModal, setIsModal] = useState(false);
 
@@ -119,21 +119,26 @@ const CompanyEditBar = () => {
           <Button
             color="outlined"
             variant="round"
-            onClick={() => dispatch(uncheckAllCompanies())}
+            onClick={() => {
+              dispatch(setUserAppendix(null));
+              dispatch(uncheckAllCompanies());
+            }}
           >
             <SvgIcon svgId="ui-circle_uncheck" />
           </Button>
 
-          <Button
-            color="outlined"
-            variant="round"
-            onClick={() => {
-              dispatch(setUserAppendix('checked'));
-              navigate(`/cluster/${owner?.user_id}`, { replace: true });
-            }}
-          >
-            <SvgIcon svgId="ui-add_company" size={24} />
-          </Button>
+          {select === 'all' && (
+            <Button
+              color="outlined"
+              variant="round"
+              onClick={() => {
+                dispatch(setUserAppendix('checked'));
+                navigate(`/cluster/${owner?.user_id}`, { replace: true });
+              }}
+            >
+              <SvgIcon svgId="ui-add_company" size={24} />
+            </Button>
+          )}
         </>
       )}
 

@@ -1,4 +1,4 @@
-import { MouseEvent, useEffect } from 'react';
+import { MouseEvent, useEffect, useMemo } from 'react';
 import classNames from 'classnames';
 import ProfileBtn from 'components/ProfileBtn';
 import ProfileCard from 'components/ProfileCard';
@@ -31,8 +31,21 @@ const CompanyPage = () => {
     dispatchExtra(getCompanyThunk({ company_id: Number(id) }));
   }, [dispatchExtra, id]);
 
-  if (!company) return;
+  const companies = useMemo(
+    () =>
+      [appendix].flatMap(el => {
+        if (el === 'checked') {
+          return [...checkedUsers]
+            .sort((a, b) => a.user_id - b.user_id)
+            .map(el => userList.find(item => item.user_id === el.user_id));
+        } else {
+          return el && companyData[el];
+        }
+      }),
+    [appendix, checkedUsers, companyData, userList],
+  );
 
+  if (!company) return;
   const isMyCompany = company?.company_owner?.user_id === owner?.user_id;
   const isRedyToRender = !loading && id === company?.company_id?.toString();
   const isAvatarForm = edit === 'avatar' || isMyCompany;
@@ -58,19 +71,6 @@ const CompanyPage = () => {
     }
     return dispatch(editCompany('avatar'));
   };
-
-  const getListToRender = () => {
-    if (appendix === 'checked') {
-      return [...checkedUsers]
-        .sort((a, b) => a.user_id - b.user_id)
-        .map(el => userList.find(item => item.user_id === el.user_id));
-    } else if (appendix === 'invites') {
-      return [...companyData.invites].sort((a, b) => a.user_id - b.user_id);
-    } else if (appendix === 'requests') {
-      return [...companyData.requests].sort((a, b) => a.user_id - b.user_id);
-    }
-  };
-  const companies = getListToRender();
 
   if (!isRedyToRender) return <OvalLoader />;
   return (
@@ -104,22 +104,3 @@ const CompanyPage = () => {
 };
 
 export default CompanyPage;
-
-// ------------------------------ draft ------------------------------ //
-
-// const fields = [
-//   'company_title',
-//   'company_city',
-//   'company_phone',
-//   'company_description',
-// ];
-// const arr = (Object.keys(company) as Array<keyof typeof company>)
-//   .reduce((acc, key) => {
-//     company[key] && acc.push({ [key]: company[key] });
-//     return acc;
-//   }, [] as (typeof company)[keyof typeof company][])
-//   .filter(el => el && el);
-
-// const info = arr.filter(el => el && fields.includes(Object.keys(el)[0]));
-
-// ------------------------------ draft ------------------------------ //

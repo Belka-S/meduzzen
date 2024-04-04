@@ -24,9 +24,9 @@ export const initialState: TInitialState = {
   company: null,
   companyList: [],
   pagination: { current_page: 0, total_page: 0 },
-  select: 'own',
+  select: 'all',
   checked: [],
-  appendix: false,
+  appendix: null,
   edit: false,
 
   loading: false,

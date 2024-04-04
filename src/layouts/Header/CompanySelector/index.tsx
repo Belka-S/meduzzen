@@ -16,22 +16,6 @@ const CompanySelector = () => {
   return (
     <>
       <label
-        className={classNames(s.label, isMy && s.active)}
-        onClick={() => dispatch(selectCompanies('own'))}
-      >
-        my
-        <input
-          className={s.input}
-          type="radio"
-          id="own"
-          name="companies"
-          value={select}
-          checked={isMy}
-          readOnly
-        />
-      </label>
-
-      <label
         className={classNames(s.label, isAll && s.active)}
         onClick={() => dispatch(selectCompanies('all'))}
       >
@@ -43,6 +27,22 @@ const CompanySelector = () => {
           name="companies"
           value={select}
           checked={isAll}
+          readOnly
+        />
+      </label>
+
+      <label
+        className={classNames(s.label, isMy && s.active)}
+        onClick={() => dispatch(selectCompanies('own'))}
+      >
+        my
+        <input
+          className={s.input}
+          type="radio"
+          id="own"
+          name="companies"
+          value={select}
+          checked={isMy}
           readOnly
         />
       </label>

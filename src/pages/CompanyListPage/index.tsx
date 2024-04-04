@@ -22,9 +22,8 @@ const CompanyListPage = () => {
 
   const { current_page: page, total_page } = pagination;
   const page_size = 30;
-  const isAll = select === 'all';
-  const isMy = select === 'own';
-  const companies = isAll ? companyList : myCompanies;
+  const isMyCompanies = select === 'own';
+  const companies = isMyCompanies ? myCompanies : companyList;
 
   useEffect(() => {
     const activeFileEl = document.getElementById('active-company');
@@ -39,13 +38,12 @@ const CompanyListPage = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (owner?.user_id && isMy) {
+    if (owner?.user_id && isMyCompanies) {
       dispatchExtra(getCompaniesListThunk({ user_id: owner?.user_id }));
-    }
-    if (companyList.length === 0 && isAll) {
+    } else if (companyList.length === 0) {
       dispatchExtra(getAllCompaniesThunk({ page: page + 1, page_size }));
     }
-  }, [dispatchExtra, page, companyList.length, owner?.user_id, isMy, isAll]);
+  }, [dispatchExtra, page, companyList.length, owner?.user_id, isMyCompanies]);
 
   const handleLoadMore = (e: MouseEvent<HTMLButtonElement>) => {
     dispatchExtra(getAllCompaniesThunk({ page: page + 1, page_size }));
