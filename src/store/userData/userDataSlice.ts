@@ -10,7 +10,7 @@ const thunkArr = [
   TNK.getCompaniesListThunk,
   TNK.getAnalyticThunk,
   TNK.getRatingThunk,
-  TNK.getIvitesListThunk,
+  TNK.getInvitesListThunk,
   TNK.getLastAnswersCsvThunk,
   TNK.getLastAnswersListThunk,
   TNK.getNotificationsThunk,
@@ -109,7 +109,7 @@ const userDataSlice = createSlice({
     builder
       // success
       .addCase(TNK.getCompaniesListThunk.fulfilled, handleCompaniesSuccess)
-      .addCase(TNK.getIvitesListThunk.fulfilled, handleInvitesSuccess)
+      .addCase(TNK.getInvitesListThunk.fulfilled, handleInvitesSuccess)
       .addCase(TNK.getRequestsListThunk.fulfilled, handleRequestsSuccess)
       .addCase(TNK.getRatingThunk.fulfilled, handleRatingSuccess)
       .addCase(TNK.getAnalyticThunk.fulfilled, handleAnalyticSuccess)

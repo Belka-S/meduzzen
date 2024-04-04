@@ -26,27 +26,34 @@ const fn = (type: 'pending' | 'fulfilled' | 'rejected') =>
   });
 
 // handlers
-const handleSuccess = (
+const handleActionIdSuccess = (
   _: TInitialState,
   action: PayloadAction<{ result: Pick<TAction, 'action_id'> }>,
 ) => {
   toast.success(`Succeed with ${action.payload.result.action_id}`);
 };
 
-const handleActionInviteSuccess = (
-  state: TInitialState,
-  action: PayloadAction<{ result: Pick<TAction, 'action_id'> }>,
-) => ({ ...state, acceptActionInvite: action.payload.result });
+const handleSuccess = (
+  _: TInitialState,
+  action: PayloadAction<{ status_code: number }>,
+) => {
+  if (action.payload.status_code) toast.success(`Succeed`);
+};
 
-const handleActionReqSuccess = (
-  state: TInitialState,
-  action: PayloadAction<{ result: Pick<TAction, 'action_id'> }>,
-) => ({ ...state, acceptActionRequest: action.payload.result });
+// const handleActionInviteSuccess = (
+//   state: TInitialState,
+//   action: PayloadAction<{ result: Pick<TAction, 'action_id'> }>,
+// ) => ({ ...state, acceptActionInvite: action.payload.result });
 
-const handleDeclineActionSuccess = (
-  state: TInitialState,
-  action: PayloadAction<{ result: string }>,
-) => ({ ...state, declineAction: action.payload.result });
+// const handleActionReqSuccess = (
+//   state: TInitialState,
+//   action: PayloadAction<{ result: Pick<TAction, 'action_id'> }>,
+// ) => ({ ...state, acceptActionRequest: action.payload.result });
+
+// const handleDeclineActionSuccess = (
+//   state: TInitialState,
+//   action: PayloadAction<{ result: string }>,
+// ) => ({ ...state, declineAction: action.payload.result });
 
 const handleAddToAdminSuccess = (
   state: TInitialState,
@@ -81,11 +88,14 @@ const actionSlice = createSlice({
   extraReducers: builder => {
     builder
       // success
-      .addCase(TNK.createActionFromUserThunk.fulfilled, handleSuccess)
-      .addCase(TNK.createActionFromCompanyThunk.fulfilled, handleSuccess)
-      .addCase(TNK.acceptActionInviteThunk.fulfilled, handleActionInviteSuccess)
-      .addCase(TNK.acceptActionRequestThunk.fulfilled, handleActionReqSuccess)
-      .addCase(TNK.declineActionThunk.fulfilled, handleDeclineActionSuccess)
+      .addCase(TNK.createActionFromUserThunk.fulfilled, handleActionIdSuccess)
+      .addCase(
+        TNK.createActionFromCompanyThunk.fulfilled,
+        handleActionIdSuccess,
+      )
+      .addCase(TNK.acceptActionInviteThunk.fulfilled, handleActionIdSuccess)
+      .addCase(TNK.acceptActionRequestThunk.fulfilled, handleActionIdSuccess)
+      .addCase(TNK.declineActionThunk.fulfilled, handleSuccess)
       .addCase(TNK.addToAdminThunk.fulfilled, handleAddToAdminSuccess)
       .addCase(TNK.removeFromAdminThunk.fulfilled, handleRemoveFromAdminSuccess)
       .addCase(TNK.addToBlockThunk.fulfilled, handleAddToBlockSuccess)

@@ -48,7 +48,6 @@ const ClusterPage = () => {
       }),
     [appendix, checkedCompanies, companyList, userData],
   );
-  console.log('users: ', users);
 
   if (!user) return;
   const isMyAccount = owner?.user_id === id;

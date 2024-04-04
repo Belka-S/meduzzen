@@ -17,7 +17,7 @@ export const getCompaniesListThunk = createAppAsyncThunk(
   },
 );
 
-export const getIvitesListThunk = createAppAsyncThunk(
+export const getInvitesListThunk = createAppAsyncThunk(
   'userData/IvitesList',
   async (params: Pick<TUser, 'user_id'>, thunkAPI) => {
     try {

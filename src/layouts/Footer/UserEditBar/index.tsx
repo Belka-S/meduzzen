@@ -5,13 +5,13 @@ import H6 from 'components/ui/Typography/H6';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppExtraDispatch } from 'store';
-import { createActionFromUserThunk } from 'store/action';
+import { createActionFromUserThunk, declineActionThunk } from 'store/action';
 import { logout } from 'store/auth';
 import { setCompanyAppendix, uncheckAllCompanies } from 'store/company';
 import { cleanOwner, deleteUserThunk, editUser } from 'store/user';
 import { setUserAppendix, uncheckAllUsers } from 'store/user';
-import { getIvitesListThunk, getRequestsListThunk } from 'store/userData';
-import { useCompany, useUser } from 'utils/hooks';
+import { getInvitesListThunk, getRequestsListThunk } from 'store/userData';
+import { useAction, useCompany, useUser } from 'utils/hooks';
 
 import s from './index.module.scss';
 
@@ -22,6 +22,7 @@ const UserEditBar = () => {
   const { pathname } = useLocation();
   const { checkedCompanies, appendix } = useCompany();
   const { owner, user, checkedUsers, edit } = useUser();
+  const { userData } = useAction();
 
   const isMyAccount = owner?.user_id === user?.user_id;
   const isUserProfile = pathname.includes('/cluster/');
@@ -29,10 +30,23 @@ const UserEditBar = () => {
   const isUsersCheck = checkedUsers.length > 0;
   const isCompaniesCheck = checkedCompanies.length > 0;
 
+  const checkedInvites = checkedCompanies.map(el => {
+    const company = userData.invites.find(
+      item => item.company_id === el.company_id,
+    );
+    return company?.action_id;
+  });
+  const checkedRequests = checkedCompanies.map(el => {
+    const company = userData.requests.find(
+      item => item.company_id === el.company_id,
+    );
+    return company?.action_id;
+  });
+
   const getIvitesList = async (e: MouseEvent<HTMLButtonElement>) => {
     e.currentTarget.blur();
     const user_id = owner?.user_id;
-    user_id && (await dispatchExtra(getIvitesListThunk({ user_id })));
+    user_id && (await dispatchExtra(getInvitesListThunk({ user_id })));
     dispatch(setUserAppendix('invites'));
   };
 
@@ -41,6 +55,29 @@ const UserEditBar = () => {
     const user_id = owner?.user_id;
     user_id && (await dispatchExtra(getRequestsListThunk({ user_id })));
     dispatch(setUserAppendix('requests'));
+  };
+
+  const declineAction = () => {
+    if (checkedInvites[0]) {
+      checkedInvites.forEach(async (action_id, i) => {
+        action_id && (await dispatchExtra(declineActionThunk({ action_id })));
+        if (i + 1 === checkedInvites.length && owner?.user_id) {
+          const { user_id } = owner;
+          await dispatchExtra(getInvitesListThunk({ user_id }));
+          dispatch(uncheckAllCompanies());
+        }
+      });
+    }
+    if (checkedRequests[0]) {
+      checkedRequests.forEach(async (action_id, i) => {
+        action_id && (await dispatchExtra(declineActionThunk({ action_id })));
+        if (i + 1 === checkedInvites.length && owner?.user_id) {
+          const { user_id } = owner;
+          await dispatchExtra(getRequestsListThunk({ user_id }));
+          dispatch(uncheckAllCompanies());
+        }
+      });
+    }
   };
 
   const handleUpdateInfo = (e: MouseEvent<HTMLButtonElement>) => {
@@ -74,13 +111,17 @@ const UserEditBar = () => {
     }
   };
 
-  const requestToJoinCompany = () => {
-    checkedCompanies.map(async ({ company_id }) => {
+  const requestJoinCompany = () => {
+    checkedCompanies.map(async ({ company_id }, i) => {
       const params = { company_id };
-      console.log('company_id: ', company_id);
       await dispatchExtra(createActionFromUserThunk(params));
+      if (i + 1 === checkedCompanies.length && owner?.user_id) {
+        const { user_id } = owner;
+        await dispatchExtra(getRequestsListThunk({ user_id }));
+        dispatch(uncheckAllCompanies());
+        dispatch(setUserAppendix('requests'));
+      }
     });
-    dispatch(uncheckAllCompanies());
   };
 
   return (
@@ -96,10 +137,31 @@ const UserEditBar = () => {
         </>
       )}
 
-      {isMyAccount && isCompaniesCheck && appendix !== 'checked' && (
-        <Button color="outlined" variant="round" onClick={requestToJoinCompany}>
+      {isMyAccount &&
+      isCompaniesCheck &&
+      appendix !== 'checked' &&
+      !checkedInvites[0] &&
+      !checkedRequests[0] ? (
+        <Button color="outlined" variant="round" onClick={requestJoinCompany}>
           <SvgIcon svgId="ui-add_company" size={24} />
         </Button>
+      ) : (
+        (checkedInvites[0] || checkedRequests[0]) && (
+          <>
+            <Button
+              color="outlined"
+              variant="round"
+              onClick={() => {
+                dispatch(setUserAppendix(null));
+              }}
+            >
+              <SvgIcon svgId="ui-accept" size={24} />
+            </Button>
+            <Button color="outlined" variant="round" onClick={declineAction}>
+              <SvgIcon svgId="ui-decline" size={24} />
+            </Button>
+          </>
+        )
       )}
 
       {isUserList && isUsersCheck && (
