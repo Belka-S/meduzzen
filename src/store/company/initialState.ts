@@ -12,7 +12,7 @@ export type TInitialState = {
   companyList: TCompanyOfList[];
   pagination: TPagination;
   select: TCompanySelect;
-  checked: Pick<TCompany, 'company_id'>[];
+  checked: TCompanyOfList[];
   appendix: TCompanyAppendix;
   edit: TEdit;
 

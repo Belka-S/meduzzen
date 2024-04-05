@@ -5,7 +5,7 @@ export type TInitialState = {
   user: TUser | null;
   userList: TUserOfList[];
   pagination: TPagination;
-  checked: Pick<TUser, 'user_id'>[];
+  checked: TUserOfList[];
   appendix: TUserAppendix;
   edit: TEdit;
 

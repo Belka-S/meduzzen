@@ -24,7 +24,7 @@ const ClusterPage = () => {
   const dispatch = useAppDispatch();
   const dispatchExtra = useAppExtraDispatch();
   const { id } = useParams();
-  const { companyList, checkedCompanies } = useCompany();
+  const { checkedCompanies } = useCompany();
   const { owner, user, profileInfo, appendix } = useUser();
   const { edit, loading } = useUser();
   const { userData } = useAction();
@@ -35,18 +35,11 @@ const ClusterPage = () => {
 
   const users = useMemo(
     () =>
-      [appendix].flatMap(el => {
-        if (el === 'checked') {
-          return [...checkedCompanies]
-            .sort((a, b) => a.company_id - b.company_id)
-            .map(el =>
-              companyList.find(item => item.company_id === el.company_id),
-            );
-        } else if (el) {
-          return [...userData[el]].sort((a, b) => a.company_id - b.company_id);
-        }
-      }),
-    [appendix, checkedCompanies, companyList, userData],
+      appendix === 'checked'
+        ? [...checkedCompanies].sort((a, b) => a.company_id - b.company_id)
+        : appendix &&
+          [...userData[appendix]].sort((a, b) => a.company_id - b.company_id),
+    [appendix, checkedCompanies, userData],
   );
 
   if (!user) return;

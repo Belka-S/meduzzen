@@ -7,11 +7,8 @@ import CompanyForm from 'layouts/Footer/CompanyForm';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppExtraDispatch } from 'store';
-import {
-  acceptActionRequestThunk,
-  createActionFromCompanyThunk,
-  declineActionThunk,
-} from 'store/action';
+import { acceptActionRequestThunk, declineActionThunk } from 'store/action';
+import { createActionFromCompanyThunk } from 'store/action';
 import { deleteCompanyThunk, editCompany } from 'store/company';
 import { setCompanyAppendix, uncheckAllCompanies } from 'store/company';
 import { getInvitesListThunk, getRequestsListThunk } from 'store/companyData';

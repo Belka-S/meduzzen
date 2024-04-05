@@ -6,12 +6,8 @@ import SvgIcon from 'components/ui/SvgIcon';
 import { NavLink } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { TCompanyOfList, useAppDispatch, useAppExtraDispatch } from 'store';
-import {
-  checkCompany,
-  setCompanyAppendix,
-  uncheckCompany,
-  updateVisibleThunk,
-} from 'store/company';
+import { checkCompany, setCompanyAppendix } from 'store/company';
+import { uncheckCompany, updateVisibleThunk } from 'store/company';
 import { deleteCompanyThunk, editCompany } from 'store/company';
 import { getCompaniesListThunk } from 'store/userData';
 import { useCompany, useUser } from 'utils/hooks';
@@ -54,7 +50,7 @@ const CompanyItem: FC<TCompanyProps> = ({ props }) => {
 
   const handleCheck = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    dispatch(checkCompany({ company_id }));
+    dispatch(checkCompany(props));
   };
 
   const handleUncheck = (e: MouseEvent<HTMLButtonElement>) => {

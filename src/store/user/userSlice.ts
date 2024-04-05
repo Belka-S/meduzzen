@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import { TAppendix, TEdit, TPagination, TUser, TUserOfList } from 'store';
+import { TEdit, TPagination, TUser, TUserAppendix, TUserOfList } from 'store';
 import { initialState, TInitialState } from 'store/user';
 import * as TNK from 'store/user/userThunks';
 
@@ -41,7 +41,7 @@ const handleGetAllSuccess = (
 
 const handleCheckUser = (
   state: TInitialState,
-  action: PayloadAction<Pick<TUser, 'user_id'>>,
+  action: PayloadAction<TUserOfList>,
 ) => {
   state.checked.push(action.payload);
 };
@@ -57,7 +57,7 @@ const handleUncheckUser = (
 
 const handleAppendix = (
   state: TInitialState,
-  action: PayloadAction<TAppendix>,
+  action: PayloadAction<TUserAppendix>,
 ) => ({ ...state, appendix: action.payload });
 
 const handleEditSuccess = (

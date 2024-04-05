@@ -5,11 +5,8 @@ import H6 from 'components/ui/Typography/H6';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppExtraDispatch } from 'store';
-import {
-  acceptActionInviteThunk,
-  createActionFromUserThunk,
-  declineActionThunk,
-} from 'store/action';
+import { acceptActionInviteThunk, declineActionThunk } from 'store/action';
+import { createActionFromUserThunk } from 'store/action';
 import { logout } from 'store/auth';
 import { setCompanyAppendix, uncheckAllCompanies } from 'store/company';
 import { cleanOwner, deleteUserThunk, editUser } from 'store/user';
@@ -32,6 +29,7 @@ const UserEditBar = () => {
   const isUserProfile = pathname.includes('/cluster/');
   const isUserList = pathname === '/cluster';
   const isUsersCheck = checkedUsers.length > 0;
+  console.log('isUsersCheck: ', isUsersCheck);
   const isCompaniesCheck = checkedCompanies.length > 0;
 
   const checkedInvites = checkedCompanies.map(el => {

@@ -69,7 +69,7 @@ const UserItem: FC<TUserProps> = ({ props }) => {
 
   const handleCheck = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    dispatch(checkUser({ user_id }));
+    dispatch(checkUser(props));
   };
 
   const handleUncheck = (e: MouseEvent<HTMLButtonElement>) => {

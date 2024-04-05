@@ -23,7 +23,7 @@ const CompanyPage = () => {
   const dispatch = useAppDispatch();
   const dispatchExtra = useAppExtraDispatch();
   const { id } = useParams();
-  const { owner, userList, checkedUsers } = useUser();
+  const { owner, checkedUsers } = useUser();
   const { company, profileInfo, appendix, edit, loading } = useCompany();
   const { companyData } = useAction();
 
@@ -33,19 +33,11 @@ const CompanyPage = () => {
 
   const companies = useMemo(
     () =>
-      [appendix].flatMap(el => {
-        if (el === 'checked') {
-          console.log('userList: ', userList);
-          console.log('checkedUsers: ', checkedUsers);
-          return [...checkedUsers]
-            .sort((a, b) => a.user_id - b.user_id)
-            .map(el => userList.find(item => item.user_id === el.user_id));
-        } else if (el) {
-          console.log('companyData: ', companyData);
-          return [...companyData[el]].sort((a, b) => a.user_id - b.user_id);
-        }
-      }),
-    [appendix, checkedUsers, companyData, userList],
+      appendix === 'checked'
+        ? [...checkedUsers].sort((a, b) => a.user_id - b.user_id)
+        : appendix &&
+          [...companyData[appendix]].sort((a, b) => a.user_id - b.user_id),
+    [appendix, checkedUsers, companyData],
   );
 
   if (!company) return;
@@ -99,7 +91,11 @@ const CompanyPage = () => {
       </div>
 
       <div className={s.appendix}>
-        {appendix ? <H3 className={s.title}>{`My ${appendix}:`}</H3> : <span />}
+        {appendix ? (
+          <H3 className={s.title}>{`Company's ${appendix}:`}</H3>
+        ) : (
+          <span />
+        )}
         {companies?.map(el => el && <UserItem key={el?.user_id} props={el} />)}
       </div>
     </Section>

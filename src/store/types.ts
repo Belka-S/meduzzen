@@ -84,7 +84,7 @@ export type TUserAppendix = null | 'checked' | 'invites' | 'requests';
 export type TCompanyAppendix = TUserAppendix | 'members';
 
 // actions
-export type TAction = { action_id: number; action: string };
+export type TAction = { action_id: number; action: 'owner' | 'member' };
 
 export type TActionParams = { user_id: number; company_id: number };
 
