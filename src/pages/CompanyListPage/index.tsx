@@ -1,4 +1,4 @@
-import { MouseEvent, useEffect } from 'react';
+import { MouseEvent, useEffect, useMemo } from 'react';
 import classNames from 'classnames';
 import Button from 'components/ui/Button';
 import Section from 'components/ui/Section';
@@ -23,7 +23,11 @@ const CompanyListPage = () => {
   const { current_page: page, total_page } = pagination;
   const page_size = 30;
   const isMyCompanies = select === 'own';
-  const companies = isMyCompanies ? myCompanies : companyList;
+
+  const companies = useMemo(() => {
+    if (!isMyCompanies) return companyList;
+    return [...myCompanies].sort((a, b) => a.company_id - b.company_id);
+  }, [companyList, isMyCompanies, myCompanies]);
 
   useEffect(() => {
     const activeFileEl = document.getElementById('active-company');

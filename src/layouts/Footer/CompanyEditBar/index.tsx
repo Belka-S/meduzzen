@@ -11,6 +11,7 @@ import { createActionFromCompanyThunk, declineActionThunk } from 'store/action';
 import { deleteCompanyThunk, editCompany } from 'store/company';
 import { setCompanyAppendix, uncheckAllCompanies } from 'store/company';
 import { getInvitesListThunk, getRequestsListThunk } from 'store/companyData';
+import { getMembersListThunk } from 'store/companyData';
 import { setUserAppendix, uncheckAllUsers } from 'store/user';
 import { useAction, useCompany, useUser } from 'utils/hooks';
 
@@ -22,6 +23,7 @@ const CompanyEditBar = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { company, checkedCompanies, edit, select } = useCompany();
+  const { appendix: appendixCompany } = useCompany();
   const { owner, checkedUsers, appendix } = useUser();
   const { companyData } = useAction();
   const [isModal, setIsModal] = useState(false);
@@ -42,6 +44,8 @@ const CompanyEditBar = () => {
     return user?.action_id;
   });
 
+  console.log('checkedRequests: ', checkedRequests);
+
   const getIvitesList = async (e: MouseEvent<HTMLButtonElement>) => {
     e.currentTarget.blur();
     const company_id = company?.company_id;
@@ -54,6 +58,14 @@ const CompanyEditBar = () => {
     const company_id = company?.company_id;
     company_id && (await dispatchExtra(getRequestsListThunk({ company_id })));
     dispatch(setCompanyAppendix('requests'));
+  };
+
+  const getMembersList = async (e: MouseEvent<HTMLButtonElement>) => {
+    e.currentTarget.blur();
+    const company_id = company?.company_id;
+    console.log('company_id: ', company_id);
+    company_id && (await dispatchExtra(getMembersListThunk({ company_id })));
+    dispatch(setCompanyAppendix('members'));
   };
 
   const declineAction = () => {
@@ -71,13 +83,25 @@ const CompanyEditBar = () => {
     if (checkedRequests[0]) {
       checkedRequests.forEach(async (action_id, i) => {
         action_id && (await dispatchExtra(declineActionThunk({ action_id })));
-        if (i + 1 === checkedInvites.length && company?.company_id) {
+        if (i + 1 === checkedRequests.length && company?.company_id) {
           const { company_id } = company;
           await dispatchExtra(getRequestsListThunk({ company_id }));
           dispatch(uncheckAllUsers());
         }
       });
     }
+  };
+
+  const acceptRequest = () => {
+    if (!confirm(`Are you sure you want to accept?`)) return;
+    checkedRequests.forEach(async (action_id, i) => {
+      action_id && (await dispatchExtra(declineActionThunk({ action_id })));
+      if (i + 1 === checkedRequests.length && company?.company_id) {
+        const { company_id } = company;
+        await dispatchExtra(getRequestsListThunk({ company_id }));
+        dispatch(uncheckAllUsers());
+      }
+    });
   };
 
   const handleUpdateInfo = (e: MouseEvent<HTMLButtonElement>) => {
@@ -159,11 +183,10 @@ const CompanyEditBar = () => {
         (checkedInvites[0] || checkedRequests[0]) && (
           <>
             <Button
+              className={appendixCompany === 'requests' ? '' : 'hidden'}
               color="outlined"
               variant="round"
-              onClick={() => {
-                dispatch(setUserAppendix(null));
-              }}
+              onClick={acceptRequest}
             >
               <SvgIcon svgId="ui-accept" size={24} />
             </Button>
@@ -204,6 +227,9 @@ const CompanyEditBar = () => {
 
       {isCompanyProfile && (
         <>
+          <Button color="outlined" variant="round" onClick={getMembersList}>
+            <SvgIcon svgId="ui-members" />
+          </Button>
           <Button color="outlined" variant="round" onClick={handleUpdateInfo}>
             <SvgIcon svgId="ui-edit" />
           </Button>
@@ -213,13 +239,15 @@ const CompanyEditBar = () => {
         </>
       )}
 
-      <Button
-        color="outlined"
-        variant="round"
-        onClick={() => setIsModal(!isModal)}
-      >
-        <SvgIcon svgId="ui-plus" />
-      </Button>
+      {!isCompanyProfile && (
+        <Button
+          color="outlined"
+          variant="round"
+          onClick={() => setIsModal(!isModal)}
+        >
+          <SvgIcon svgId="ui-plus" />
+        </Button>
+      )}
 
       <H6>COMPANY</H6>
 

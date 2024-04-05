@@ -30,6 +30,7 @@ const handleActionIdSuccess = (
   _: TInitialState,
   action: PayloadAction<{ result: Pick<TAction, 'action_id'> }>,
 ) => {
+  console.log('action.payload: ', action.payload);
   toast.success(`Succeed with ${action.payload.result.action_id}`);
 };
 

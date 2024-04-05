@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import { TCompanyOfList, useAppDispatch, useAppExtraDispatch } from 'store';
 import {
   checkCompany,
+  setCompanyAppendix,
   uncheckCompany,
   updateVisibleThunk,
 } from 'store/company';
@@ -27,10 +28,9 @@ const CompanyItem: FC<TCompanyProps> = ({ props }) => {
   const dispatch = useAppDispatch();
   const dispatchExtra = useAppExtraDispatch();
   const { company, checkedCompanies } = useCompany();
-  const { owner } = useUser();
+  const { owner, checkedUsers } = useUser();
 
   if (!company_id) return;
-  // const isMyCompany = company?.company_owner?.user_id === owner?.user_id;
   const isChecked = checkedCompanies.some(el => el.company_id === company_id);
   const isActive = company_id === company?.company_id;
   const ava = { id: company_id, url: company_avatar, name: company_name };
@@ -67,6 +67,9 @@ const CompanyItem: FC<TCompanyProps> = ({ props }) => {
       to={`/company/${company_id}`}
       id={isActive ? 'active-company' : ''}
       className={classNames(s.item, s.hover, isActive && s.active)}
+      onClick={() =>
+        !checkedUsers.length && dispatch(setCompanyAppendix('members'))
+      }
     >
       <ProfileBtn className={s.avatar} ava={ava} />
 

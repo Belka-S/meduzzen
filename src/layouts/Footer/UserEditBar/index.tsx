@@ -21,7 +21,7 @@ const UserEditBar = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { checkedCompanies, appendix } = useCompany();
-  const { owner, user, checkedUsers, edit } = useUser();
+  const { owner, user, checkedUsers, edit, appendix: appendixUser } = useUser();
   const { userData } = useAction();
 
   const isMyAccount = owner?.user_id === user?.user_id;
@@ -72,13 +72,25 @@ const UserEditBar = () => {
     if (checkedRequests[0]) {
       checkedRequests.forEach(async (action_id, i) => {
         action_id && (await dispatchExtra(declineActionThunk({ action_id })));
-        if (i + 1 === checkedInvites.length && owner?.user_id) {
+        if (i + 1 === checkedRequests.length && owner?.user_id) {
           const { user_id } = owner;
           await dispatchExtra(getRequestsListThunk({ user_id }));
           dispatch(uncheckAllCompanies());
         }
       });
     }
+  };
+
+  const acceptInvite = () => {
+    if (!confirm(`Are you sure you want to accept?`)) return;
+    checkedInvites.forEach(async (action_id, i) => {
+      action_id && (await dispatchExtra(declineActionThunk({ action_id })));
+      if (i + 1 === checkedInvites.length && owner?.user_id) {
+        const { user_id } = owner;
+        await dispatchExtra(getInvitesListThunk({ user_id }));
+        dispatch(uncheckAllCompanies());
+      }
+    });
   };
 
   const handleUpdateInfo = (e: MouseEvent<HTMLButtonElement>) => {
@@ -149,14 +161,14 @@ const UserEditBar = () => {
         (checkedInvites[0] || checkedRequests[0]) && (
           <>
             <Button
+              className={appendixUser === 'invites' ? '' : 'hidden'}
               color="outlined"
               variant="round"
-              onClick={() => {
-                dispatch(setUserAppendix(null));
-              }}
+              onClick={acceptInvite}
             >
               <SvgIcon svgId="ui-accept" size={24} />
             </Button>
+
             <Button color="outlined" variant="round" onClick={declineAction}>
               <SvgIcon svgId="ui-decline" size={24} />
             </Button>

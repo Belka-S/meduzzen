@@ -1,4 +1,4 @@
-import { TAppendix, TEdit, TPagination, TUser, TUserOfList } from 'store';
+import { TEdit, TPagination, TUser, TUserAppendix, TUserOfList } from 'store';
 
 export type TInitialState = {
   owner: TUser | null;
@@ -6,7 +6,7 @@ export type TInitialState = {
   userList: TUserOfList[];
   pagination: TPagination;
   checked: Pick<TUser, 'user_id'>[];
-  appendix: TAppendix;
+  appendix: TUserAppendix;
   edit: TEdit;
 
   loading: boolean;

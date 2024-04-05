@@ -78,7 +78,7 @@ const handleUpdateVisibleSuccess = (
   const { company_id } = action.payload.result;
   const index = state.companyList.findIndex(el => el.company_id === company_id);
   const company = state.companyList.at(index);
-  if (company) {
+  if (state.select === 'all' && company) {
     const is_visible = !company.is_visible;
     state.companyList.splice(index, 1, { ...company, is_visible });
   }

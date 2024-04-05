@@ -79,7 +79,9 @@ export type TPaginationParams = { page: number; page_size: number };
 export type TEdit = false | 'avatar' | 'data';
 
 // profile appendix
-export type TAppendix = null | 'checked' | 'invites' | 'requests';
+export type TUserAppendix = null | 'checked' | 'invites' | 'requests';
+
+export type TCompanyAppendix = TUserAppendix | 'members';
 
 // actions
 export type TAction = { action_id: number; action: string };
