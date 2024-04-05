@@ -35,10 +35,13 @@ const CompanyPage = () => {
     () =>
       [appendix].flatMap(el => {
         if (el === 'checked') {
+          console.log('userList: ', userList);
+          console.log('checkedUsers: ', checkedUsers);
           return [...checkedUsers]
             .sort((a, b) => a.user_id - b.user_id)
             .map(el => userList.find(item => item.user_id === el.user_id));
         } else if (el) {
+          console.log('companyData: ', companyData);
           return [...companyData[el]].sort((a, b) => a.user_id - b.user_id);
         }
       }),

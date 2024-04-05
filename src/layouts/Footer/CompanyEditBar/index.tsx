@@ -7,7 +7,11 @@ import CompanyForm from 'layouts/Footer/CompanyForm';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppExtraDispatch } from 'store';
-import { createActionFromCompanyThunk, declineActionThunk } from 'store/action';
+import {
+  acceptActionRequestThunk,
+  createActionFromCompanyThunk,
+  declineActionThunk,
+} from 'store/action';
 import { deleteCompanyThunk, editCompany } from 'store/company';
 import { setCompanyAppendix, uncheckAllCompanies } from 'store/company';
 import { getInvitesListThunk, getRequestsListThunk } from 'store/companyData';
@@ -43,8 +47,6 @@ const CompanyEditBar = () => {
     const user = companyData.requests.find(item => item.user_id === el.user_id);
     return user?.action_id;
   });
-
-  console.log('checkedRequests: ', checkedRequests);
 
   const getIvitesList = async (e: MouseEvent<HTMLButtonElement>) => {
     e.currentTarget.blur();
@@ -95,7 +97,8 @@ const CompanyEditBar = () => {
   const acceptRequest = () => {
     if (!confirm(`Are you sure you want to accept?`)) return;
     checkedRequests.forEach(async (action_id, i) => {
-      action_id && (await dispatchExtra(declineActionThunk({ action_id })));
+      action_id &&
+        (await dispatchExtra(acceptActionRequestThunk({ action_id })));
       if (i + 1 === checkedRequests.length && company?.company_id) {
         const { company_id } = company;
         await dispatchExtra(getRequestsListThunk({ company_id }));

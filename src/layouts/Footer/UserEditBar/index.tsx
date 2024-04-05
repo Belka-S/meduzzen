@@ -5,7 +5,11 @@ import H6 from 'components/ui/Typography/H6';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppExtraDispatch } from 'store';
-import { createActionFromUserThunk, declineActionThunk } from 'store/action';
+import {
+  acceptActionInviteThunk,
+  createActionFromUserThunk,
+  declineActionThunk,
+} from 'store/action';
 import { logout } from 'store/auth';
 import { setCompanyAppendix, uncheckAllCompanies } from 'store/company';
 import { cleanOwner, deleteUserThunk, editUser } from 'store/user';
@@ -84,7 +88,8 @@ const UserEditBar = () => {
   const acceptInvite = () => {
     if (!confirm(`Are you sure you want to accept?`)) return;
     checkedInvites.forEach(async (action_id, i) => {
-      action_id && (await dispatchExtra(declineActionThunk({ action_id })));
+      action_id &&
+        (await dispatchExtra(acceptActionInviteThunk({ action_id })));
       if (i + 1 === checkedInvites.length && owner?.user_id) {
         const { user_id } = owner;
         await dispatchExtra(getInvitesListThunk({ user_id }));
