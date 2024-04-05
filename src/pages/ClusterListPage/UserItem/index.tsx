@@ -5,7 +5,7 @@ import Button from 'components/ui/Button';
 import SvgIcon from 'components/ui/SvgIcon';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { TUserOfList, useAppDispatch } from 'store';
+import { TUserOfAction, useAppDispatch } from 'store';
 import { useAppExtraDispatch } from 'store';
 import { logout } from 'store/auth';
 import { checkUser, cleanOwner, deleteUserThunk } from 'store/user';
@@ -16,7 +16,7 @@ import { useUser } from 'utils/hooks';
 import s from './index.module.scss';
 
 type TUserProps = {
-  props: TUserOfList;
+  props: TUserOfAction;
 };
 
 const UserItem: FC<TUserProps> = ({ props }) => {

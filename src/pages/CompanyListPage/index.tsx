@@ -22,12 +22,13 @@ const CompanyListPage = () => {
 
   const { current_page: page, total_page } = pagination;
   const page_size = 30;
-  const isMyCompanies = select === 'own';
 
   const companies = useMemo(() => {
-    if (!isMyCompanies) return companyList;
-    return [...myCompanies].sort((a, b) => a.company_id - b.company_id);
-  }, [companyList, isMyCompanies, myCompanies]);
+    if (select === 'all') return companyList;
+    return [...myCompanies]
+      .filter(el => el.action === select)
+      .sort((a, b) => a.company_id - b.company_id);
+  }, [companyList, myCompanies, select]);
 
   useEffect(() => {
     const activeFileEl = document.getElementById('active-company');
@@ -42,12 +43,12 @@ const CompanyListPage = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (owner?.user_id && isMyCompanies) {
-      dispatchExtra(getCompaniesListThunk({ user_id: owner?.user_id }));
-    } else if (companyList.length === 0) {
+    if (select === 'all') {
       dispatchExtra(getAllCompaniesThunk({ page: page + 1, page_size }));
+    } else if (owner?.user_id) {
+      dispatchExtra(getCompaniesListThunk({ user_id: owner?.user_id }));
     }
-  }, [dispatchExtra, page, companyList.length, owner?.user_id, isMyCompanies]);
+  }, [dispatchExtra, page, companyList.length, owner?.user_id, select]);
 
   const handleLoadMore = (e: MouseEvent<HTMLButtonElement>) => {
     dispatchExtra(getAllCompaniesThunk({ page: page + 1, page_size }));

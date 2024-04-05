@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { useAppDispatch } from 'store';
+import { TCompanySelect, useAppDispatch } from 'store';
 import { selectCompanies } from 'store/company';
 import { useCompany } from 'utils/hooks';
 
@@ -9,45 +9,27 @@ const CompanySelector = () => {
   const dispatch = useAppDispatch();
   const { select } = useCompany();
 
-  const isAll = select === 'all';
-  const isMy = select === 'own';
+  const companies: TCompanySelect[] = ['all', 'owner', 'member'];
 
   if (!select) return;
-  return (
-    <>
-      <label
-        className={classNames(s.label, isAll && s.active)}
-        onClick={() => dispatch(selectCompanies('all'))}
-      >
-        all
-        <input
-          className={s.input}
-          type="radio"
-          id="all"
-          name="companies"
-          value={select}
-          checked={isAll}
-          readOnly
-        />
-      </label>
-
-      <label
-        className={classNames(s.label, isMy && s.active)}
-        onClick={() => dispatch(selectCompanies('own'))}
-      >
-        my
-        <input
-          className={s.input}
-          type="radio"
-          id="own"
-          name="companies"
-          value={select}
-          checked={isMy}
-          readOnly
-        />
-      </label>
-    </>
-  );
+  return companies.map(el => (
+    <label
+      key={el}
+      className={classNames(s.label, select === el && s.active)}
+      onClick={() => dispatch(selectCompanies(el))}
+    >
+      {el}
+      <input
+        className={s.input}
+        type="radio"
+        id="all"
+        name="companies"
+        value={select}
+        checked={select === el}
+        readOnly
+      />
+    </label>
+  ));
 };
 
 export default CompanySelector;

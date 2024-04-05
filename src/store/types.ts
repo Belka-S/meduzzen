@@ -64,7 +64,7 @@ export type TCompany = {
   company_owner: TUserOfList;
 };
 
-export type TCompanySelect = 'all' | 'own';
+export type TCompanySelect = 'all' | 'owner' | 'member';
 
 // pagination
 export type TPagination = {

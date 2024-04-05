@@ -1,5 +1,10 @@
 import { toast } from 'react-toastify';
-import { TCompany, TCompanyAppendix, TCompanyOfList } from 'store';
+import {
+  TCompany,
+  TCompanyAppendix,
+  TCompanyOfAction,
+  TCompanyOfList,
+} from 'store';
 import { TCompanySelect, TEdit, TPagination } from 'store';
 import { initialState, TInitialState } from 'store/company';
 import * as TNK from 'store/company/companyThunks';
@@ -35,7 +40,7 @@ const handleSelectCompanies = (
 
 const handleCheckCompany = (
   state: TInitialState,
-  action: PayloadAction<TCompanyOfList>,
+  action: PayloadAction<TCompanyOfAction>,
 ) => {
   state.checked.push(action.payload);
 };

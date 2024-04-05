@@ -13,7 +13,7 @@ const thunkArr = [
   TNK.createActionFromCompanyThunk,
   TNK.createActionFromUserThunk,
   TNK.declineActionThunk,
-  TNK.leaveFromCompanyThunk,
+  TNK.leaveCompanyThunk,
   TNK.removeFromAdminThunk,
   TNK.removeFromBlockThunk,
 ];
@@ -26,60 +26,18 @@ const fn = (type: 'pending' | 'fulfilled' | 'rejected') =>
   });
 
 // handlers
-const handleActionIdSuccess = (
-  _: TInitialState,
-  action: PayloadAction<{ result: Pick<TAction, 'action_id'> }>,
+const handleActionSuccess = (
+  state: TInitialState,
+  action: PayloadAction<{
+    result: Pick<TAction, 'action_id'> | string | null;
+    detail: string;
+    status_code: number;
+  }>,
 ) => {
-  console.log('action.payload: ', action.payload);
-  toast.success(`Succeed with ${action.payload.result.action_id}`);
+  const { result, detail, status_code } = action.payload;
+  status_code < 300 ? toast.success(detail) : toast.error(detail);
+  return { ...state, result };
 };
-
-const handleSuccess = (
-  _: TInitialState,
-  action: PayloadAction<{ status_code: number }>,
-) => {
-  if (action.payload.status_code) toast.success(`Succeed`);
-};
-
-// const handleActionInviteSuccess = (
-//   state: TInitialState,
-//   action: PayloadAction<{ result: Pick<TAction, 'action_id'> }>,
-// ) => ({ ...state, acceptActionInvite: action.payload.result });
-
-// const handleActionReqSuccess = (
-//   state: TInitialState,
-//   action: PayloadAction<{ result: Pick<TAction, 'action_id'> }>,
-// ) => ({ ...state, acceptActionRequest: action.payload.result });
-
-// const handleDeclineActionSuccess = (
-//   state: TInitialState,
-//   action: PayloadAction<{ result: string }>,
-// ) => ({ ...state, declineAction: action.payload.result });
-
-const handleAddToAdminSuccess = (
-  state: TInitialState,
-  action: PayloadAction<{ result: Pick<TAction, 'action_id'> }>,
-) => ({ ...state, addToAdmin: action.payload.result });
-
-const handleRemoveFromAdminSuccess = (
-  state: TInitialState,
-  action: PayloadAction<{ result: Pick<TAction, 'action_id'> }>,
-) => ({ ...state, removeFromAdmin: action.payload.result });
-
-const handleAddToBlockSuccess = (
-  state: TInitialState,
-  action: PayloadAction<{ result: Pick<TAction, 'action_id'> }>,
-) => ({ ...state, addToBlock: action.payload.result });
-
-const handleRemoveFromBlockSuccess = (
-  state: TInitialState,
-  action: PayloadAction<{ result: Pick<TAction, 'action_id'> }>,
-) => ({ ...state, removeFromBlock: action.payload.result });
-
-const handleLeaveCompanySuccess = (
-  state: TInitialState,
-  action: PayloadAction<{ result: string }>,
-) => ({ ...state, leaveFromCompany: action.payload.result });
 
 // slice
 const actionSlice = createSlice({
@@ -89,19 +47,16 @@ const actionSlice = createSlice({
   extraReducers: builder => {
     builder
       // success
-      .addCase(TNK.createActionFromUserThunk.fulfilled, handleActionIdSuccess)
-      .addCase(
-        TNK.createActionFromCompanyThunk.fulfilled,
-        handleActionIdSuccess,
-      )
-      .addCase(TNK.acceptActionInviteThunk.fulfilled, handleActionIdSuccess)
-      .addCase(TNK.acceptActionRequestThunk.fulfilled, handleActionIdSuccess)
-      .addCase(TNK.declineActionThunk.fulfilled, handleSuccess)
-      .addCase(TNK.addToAdminThunk.fulfilled, handleAddToAdminSuccess)
-      .addCase(TNK.removeFromAdminThunk.fulfilled, handleRemoveFromAdminSuccess)
-      .addCase(TNK.addToBlockThunk.fulfilled, handleAddToBlockSuccess)
-      .addCase(TNK.removeFromBlockThunk.fulfilled, handleRemoveFromBlockSuccess)
-      .addCase(TNK.leaveFromCompanyThunk.fulfilled, handleLeaveCompanySuccess)
+      .addCase(TNK.createActionFromUserThunk.fulfilled, handleActionSuccess)
+      .addCase(TNK.createActionFromCompanyThunk.fulfilled, handleActionSuccess)
+      .addCase(TNK.acceptActionInviteThunk.fulfilled, handleActionSuccess)
+      .addCase(TNK.acceptActionRequestThunk.fulfilled, handleActionSuccess)
+      .addCase(TNK.declineActionThunk.fulfilled, handleActionSuccess)
+      // .addCase(TNK.addToAdminThunk.fulfilled, handleAddToAdminSuccess)
+      // .addCase(TNK.removeFromAdminThunk.fulfilled, handleRemoveFromAdminSuccess)
+      // .addCase(TNK.addToBlockThunk.fulfilled, handleAddToBlockSuccess)
+      // .addCase(TNK.removeFromBlockThunk.fulfilled, handleRemoveFromBlockSuccess)
+      .addCase(TNK.leaveCompanyThunk.fulfilled, handleActionSuccess)
       // loading, error
       .addMatcher(isAnyOf(...fn('pending')), state => {
         return { ...state, loading: true, error: false };

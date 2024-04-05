@@ -7,13 +7,18 @@ import CompanyForm from 'layouts/Footer/CompanyForm';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppExtraDispatch } from 'store';
-import { acceptActionRequestThunk, declineActionThunk } from 'store/action';
+import {
+  acceptActionRequestThunk,
+  declineActionThunk,
+  leaveCompanyThunk,
+} from 'store/action';
 import { createActionFromCompanyThunk } from 'store/action';
 import { deleteCompanyThunk, editCompany } from 'store/company';
 import { setCompanyAppendix, uncheckAllCompanies } from 'store/company';
 import { getInvitesListThunk, getRequestsListThunk } from 'store/companyData';
 import { getMembersListThunk } from 'store/companyData';
 import { setUserAppendix, uncheckAllUsers } from 'store/user';
+import { getCompaniesListThunk } from 'store/userData';
 import { useAction, useCompany, useUser } from 'utils/hooks';
 
 import s from './index.module.scss';
@@ -31,9 +36,6 @@ const CompanyEditBar = () => {
 
   const isMyCompany = company?.company_owner?.user_id === owner?.user_id;
   const isCompanyProfile = pathname.includes('/company/');
-  const isCompanyList = pathname === '/company';
-  const isUsersCheck = checkedUsers.length > 0;
-  const isCompaniesCheck = checkedCompanies.length > 0;
 
   const checkedInvites = checkedUsers.map(el => {
     const user = companyData.invites.find(item => item.user_id === el.user_id);
@@ -62,13 +64,11 @@ const CompanyEditBar = () => {
   const getMembersList = async (e: MouseEvent<HTMLButtonElement>) => {
     e.currentTarget.blur();
     const company_id = company?.company_id;
-    console.log('company_id: ', company_id);
     company_id && (await dispatchExtra(getMembersListThunk({ company_id })));
     dispatch(setCompanyAppendix('members'));
   };
 
   const declineAction = () => {
-    if (!confirm(`Are you sure you want to decline?`)) return;
     if (checkedInvites[0]) {
       checkedInvites.forEach(async (action_id, i) => {
         action_id && (await dispatchExtra(declineActionThunk({ action_id })));
@@ -92,7 +92,6 @@ const CompanyEditBar = () => {
   };
 
   const acceptRequest = () => {
-    if (!confirm(`Are you sure you want to accept?`)) return;
     checkedRequests.forEach(async (action_id, i) => {
       action_id &&
         (await dispatchExtra(acceptActionRequestThunk({ action_id })));
@@ -102,6 +101,29 @@ const CompanyEditBar = () => {
         dispatch(uncheckAllUsers());
       }
     });
+  };
+
+  const leaveCompany = () => {
+    if (checkedCompanies[0]) {
+      checkedCompanies.forEach(async ({ action_id }, i) => {
+        await dispatchExtra(leaveCompanyThunk({ action_id }));
+        if (i + 1 === checkedCompanies.length && owner?.user_id) {
+          const { user_id } = owner;
+          await dispatchExtra(getCompaniesListThunk({ user_id }));
+          dispatch(uncheckAllCompanies());
+        }
+      });
+    }
+    if (checkedUsers[0]) {
+      checkedUsers.forEach(async ({ action_id }, i) => {
+        await dispatchExtra(leaveCompanyThunk({ action_id }));
+        if (i + 1 === checkedUsers.length && company?.company_id) {
+          const { company_id } = company;
+          await dispatchExtra(getMembersListThunk({ company_id }));
+          dispatch(uncheckAllUsers());
+        }
+      });
+    }
   };
 
   const handleUpdateInfo = (e: MouseEvent<HTMLButtonElement>) => {
@@ -123,10 +145,9 @@ const CompanyEditBar = () => {
         toast.error("It's not your account");
         return;
       }
-      const { company_name, company_id } = company;
+      const { company_id } = company;
       e.preventDefault();
       e.currentTarget.blur();
-      if (!confirm(`Are you sure you want to delete: ${company_name}?`)) return;
       if (!company_id) return;
       const { payload } = await dispatchExtra(
         deleteCompanyThunk({ company_id }),
@@ -160,7 +181,7 @@ const CompanyEditBar = () => {
 
   return (
     <div className={s.editbar}>
-      {isMyCompany && isCompanyProfile && !isUsersCheck && (
+      {isMyCompany && isCompanyProfile && !checkedUsers[0] && (
         <>
           <Button color="outlined" variant="round" onClick={getIvitesList}>
             <SvgIcon svgId="ui-invite" />
@@ -172,7 +193,7 @@ const CompanyEditBar = () => {
       )}
 
       {isMyCompany &&
-      isUsersCheck &&
+      checkedUsers[0] &&
       appendix !== 'checked' &&
       !checkedInvites[0] &&
       !checkedRequests[0] ? (
@@ -197,7 +218,7 @@ const CompanyEditBar = () => {
         )
       )}
 
-      {isCompanyList && isCompaniesCheck && (
+      {pathname === '/company' && checkedCompanies[0] && (
         <>
           <Button
             color="outlined"
@@ -210,19 +231,33 @@ const CompanyEditBar = () => {
             <SvgIcon svgId="ui-circle_uncheck" />
           </Button>
 
-          {select === 'all' && (
-            <Button
-              color="outlined"
-              variant="round"
-              onClick={() => {
-                dispatch(setUserAppendix('checked'));
-                navigate(`/cluster/${owner?.user_id}`, { replace: true });
-              }}
-            >
-              <SvgIcon svgId="ui-add_company" size={24} />
-            </Button>
-          )}
+          <Button
+            className={select === 'all' ? '' : 'hidden'}
+            color="outlined"
+            variant="round"
+            onClick={() => {
+              dispatch(setUserAppendix('checked'));
+              navigate(`/cluster/${owner?.user_id}`, { replace: true });
+            }}
+          >
+            <SvgIcon svgId="ui-add_company" size={24} />
+          </Button>
+
+          <Button
+            className={select === 'member' ? '' : 'hidden'}
+            color="outlined"
+            variant="round"
+            onClick={leaveCompany}
+          >
+            <SvgIcon svgId="ui-member_block" size={24} />
+          </Button>
         </>
+      )}
+
+      {pathname.includes('/company/') && checkedUsers[0] && (
+        <Button color="outlined" variant="round" onClick={leaveCompany}>
+          <SvgIcon svgId="ui-member_block" size={24} />
+        </Button>
       )}
 
       {isCompanyProfile && (

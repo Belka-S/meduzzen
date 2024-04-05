@@ -121,7 +121,7 @@ export const removeFromBlockThunk = createAppAsyncThunk(
   },
 );
 
-export const leaveFromCompanyThunk = createAppAsyncThunk(
+export const leaveCompanyThunk = createAppAsyncThunk(
   'action/leaveMemberFromCompany',
   async (params: { action_id: number }, thunkAPI) => {
     try {

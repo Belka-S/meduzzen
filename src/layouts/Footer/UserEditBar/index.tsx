@@ -60,7 +60,6 @@ const UserEditBar = () => {
   };
 
   const declineAction = () => {
-    if (!confirm(`Are you sure you want to decline?`)) return;
     if (checkedInvites[0]) {
       checkedInvites.forEach(async (action_id, i) => {
         action_id && (await dispatchExtra(declineActionThunk({ action_id })));
@@ -84,7 +83,6 @@ const UserEditBar = () => {
   };
 
   const acceptInvite = () => {
-    if (!confirm(`Are you sure you want to accept?`)) return;
     checkedInvites.forEach(async (action_id, i) => {
       action_id &&
         (await dispatchExtra(acceptActionInviteThunk({ action_id })));
@@ -110,14 +108,13 @@ const UserEditBar = () => {
 
   const handleDelete = async (e: MouseEvent<HTMLButtonElement>) => {
     if (!user) return;
-    const { user_email, user_id } = user;
+    const {  user_id } = user;
     if (!owner?.is_superuser) {
       if (!isMyAccount) {
         toast.error("It's not your account");
         return;
       }
       e.currentTarget.blur();
-      if (!confirm(`Are you sure you want to delete: ${user_email}`)) return;
       dispatch(cleanOwner());
       dispatch(logout());
       const { payload } = await dispatchExtra(deleteUserThunk({ user_id }));
