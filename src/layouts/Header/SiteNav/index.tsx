@@ -1,6 +1,6 @@
-import SvgIcon from 'components/ui/SvgIcon';
 import CompanySelector from 'layouts/Header/CompanySelector';
-import { NavLink, useLocation } from 'react-router-dom';
+import SiteNavLink from 'layouts/Header/SiteNav/SiteNavLink';
+import { useLocation } from 'react-router-dom';
 import { useAuth, useCompany, useUser } from 'utils/hooks';
 
 import s from './index.module.scss';
@@ -11,42 +11,45 @@ const SiteNav = () => {
   const { owner, user, loading: userLoading } = useUser();
   const { company, loading: companyLoading } = useCompany();
 
-  const isHome = pathname === '/';
-  const isAbout = pathname === '/about';
-  const isUser = pathname === '/cluster';
-  const isCompany = pathname === '/company';
   const isUserPage = pathname.includes('/cluster/') && !userLoading;
   const isCompanyPage = pathname.includes('/company/') && !companyLoading;
+  const isCompany = pathname === '/company';
 
   return (
     <>
-      <NavLink to={'/'} className={isHome ? s.active : ''}>
-        <SvgIcon svgId="menu-home" size={32} />
-      </NavLink>
-      <NavLink to={'/about'} className={isAbout ? s.active : ''}>
-        About
-      </NavLink>
+      <SiteNavLink
+        to={'/'}
+        activeIf={pathname === '/'}
+        svgId="menu-home"
+        size={32}
+      />
 
-      {isAuth && owner && (
-        <>
-          <NavLink to={'/cluster'} className={isUser ? s.active : ''}>
-            Users
-          </NavLink>
-          <NavLink to={'/company'} className={isCompany ? s.active : ''}>
-            Companies
-          </NavLink>
-        </>
-      )}
+      <SiteNavLink
+        to={'/about'}
+        activeIf={pathname === '/about'}
+        label="About"
+      />
 
-      {isUserPage && (
-        <span className={s.active}>{`Profile of ${user?.user_firstname}`}</span>
-      )}
+      <SiteNavLink
+        to={'/cluster'}
+        shownIf={isAuth && !!owner}
+        activeIf={pathname === '/cluster'}
+        label="Users"
+      />
+
+      <SiteNavLink
+        to={'/company'}
+        shownIf={isAuth && !!owner}
+        activeIf={isCompany}
+        label={isCompany ? 'Companies:' : 'Companies'}
+      />
 
       {isCompany && <CompanySelector />}
-      {isCompanyPage && (
-        <span
-          className={s.active}
-        >{`Profile of ${company?.company_name}`}</span>
+
+      {(isUserPage || isCompanyPage) && (
+        <span className={s.active}>{`Profile of ${
+          isUserPage ? user?.user_firstname : company?.company_name
+        }`}</span>
       )}
     </>
   );

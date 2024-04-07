@@ -5,7 +5,7 @@ import Button from 'components/ui/Button';
 import SvgIcon from 'components/ui/SvgIcon';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { TUserOfAction, useAppDispatch } from 'store';
+import { TUserOfList, useAppDispatch } from 'store';
 import { useAppExtraDispatch } from 'store';
 import { logout } from 'store/auth';
 import { checkUser, cleanOwner, deleteUserThunk } from 'store/user';
@@ -16,7 +16,7 @@ import { useUser } from 'utils/hooks';
 import s from './index.module.scss';
 
 type TUserProps = {
-  props: TUserOfAction;
+  props: TUserOfList;
 };
 
 const UserItem: FC<TUserProps> = ({ props }) => {
@@ -102,6 +102,7 @@ const UserItem: FC<TUserProps> = ({ props }) => {
       >
         <SvgIcon className={s.icon_svg} svgId="ui-edit" />
       </Button>
+
       <Button
         className={s.button}
         variant="round"
@@ -118,7 +119,7 @@ const UserItem: FC<TUserProps> = ({ props }) => {
           color="transparent"
           onClick={handleCheck}
         >
-          <SvgIcon className={s.icon_svg} svgId="ui-circle_uncheck" />
+          <SvgIcon className={s.icon_svg} svgId="ui-uncheck" />
         </Button>
       )}
 
@@ -129,7 +130,7 @@ const UserItem: FC<TUserProps> = ({ props }) => {
           color="transparent"
           onClick={handleUncheck}
         >
-          <SvgIcon className={s.icon_svg__shown} svgId="ui-circle_check" />
+          <SvgIcon className={s.icon_svg__shown} svgId="ui-check" />
         </Button>
       )}
 

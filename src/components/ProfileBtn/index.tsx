@@ -17,7 +17,8 @@ const ProfileBtn: FC<TProfileBtnProps> = props => {
   const { ava, size = 'm', onClick, className } = props;
 
   // profile button styles
-  const btnId = `profile-${ava.id}`;
+  const abbr = ava.name ? getAbbreviation(ava.name) : '';
+  const btnId = `profile-${ava.id}-${abbr}`;
   const color = getRandomColor(60);
 
   useEffect(() => {
@@ -26,14 +27,12 @@ const ProfileBtn: FC<TProfileBtnProps> = props => {
         `#${btnId} {background-image: url(${ava.url})}`,
         0,
       );
-    } else if (ava.name) {
-      const abbr = getAbbreviation(ava.name);
-      // document.styleSheets[0].deleteRule(0);
+    } else {
       document.styleSheets[0].insertRule(
         `#${btnId}::after { background-color: ${color}; color: #ffffff; content: '${abbr}'}`,
       );
     }
-  }, [btnId, color, ava]);
+  }, [abbr, ava.url, btnId, color]);
 
   return (
     <>

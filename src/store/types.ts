@@ -31,6 +31,9 @@ export type TUserOfList = {
   user_firstname: string;
   user_lastname: string;
   user_avatar: string;
+
+  action_id?: number;
+  action?: 'owner' | 'member';
 };
 
 export type TUser = TUserOfList & {
@@ -48,6 +51,9 @@ export type TCompanyOfList = {
   company_title: string;
   company_avatar: string;
   is_visible: boolean;
+
+  action_id?: number;
+  action?: 'owner' | 'member';
 };
 
 export type TCompany = {
@@ -89,7 +95,6 @@ export type TAction = { action_id: number; action: 'owner' | 'member' };
 export type TActionParams = { user_id: number; company_id: number };
 
 // user data
-export type TCompanyOfAction = TAction & TCompanyOfList;
 
 export type TQuizUserParams = { user_id: number; quiz_id: number };
 
@@ -141,5 +146,3 @@ export type TNotification = {
 
 // company data
 export type TQuizCompanyParams = { company_id: number; quiz_id: number };
-
-export type TUserOfAction = TAction & TUserOfList;

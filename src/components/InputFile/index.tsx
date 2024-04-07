@@ -65,21 +65,21 @@ const InputFile = <T extends FieldValues>(props: TInputProps<T>) => {
       {fileError && fileError !== 'noError' && (
         <SvgIcon
           className={classNames(s.validation, s.exclamation)}
-          svgId="ui-exclamation"
+          svgId="menu-exclamation"
           size={24}
         />
       )}
       {fileError === 'noError' && (
         <SvgIcon
           className={classNames(s.validation, s.check)}
-          svgId="ui-check"
+          svgId="menu-check"
           size={24}
         />
       )}
       {activeIcon && (
         <SvgIcon
           className={classNames(s.validation, s.plus)}
-          svgId="ui-plus"
+          svgId="menu-plus"
           size={24}
         />
       )}

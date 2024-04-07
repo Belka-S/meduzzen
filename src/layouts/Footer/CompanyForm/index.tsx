@@ -6,8 +6,10 @@ import H3 from 'components/ui/Typography/H3';
 import { Resolver, SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useAppExtraDispatch } from 'store';
-import { createCompanyThunk } from 'store/company';
+import { useAppDispatch, useAppExtraDispatch } from 'store';
+import { createCompanyThunk, selectCompanies } from 'store/company';
+import { getCompaniesListThunk } from 'store/userData';
+import { useUser } from 'utils/hooks';
 import { companySchema } from 'utils/validation';
 import { InferType } from 'yup';
 
@@ -21,7 +23,9 @@ const inputFields = Object.keys(companySchema.fields) as Array<keyof TInput>;
 
 const CompanyForm: FC<TCompanyForm> = ({ setIsModal }) => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const dispatchExtra = useAppExtraDispatch();
+  const { owner } = useUser();
   const [company_name, is_visible] = inputFields;
   // RHF
   const resolver: Resolver<TInput> = yupResolver(companySchema);
@@ -34,6 +38,11 @@ const CompanyForm: FC<TCompanyForm> = ({ setIsModal }) => {
   const onSubmit: SubmitHandler<TInput> = async data => {
     const { payload } = await dispatchExtra(createCompanyThunk(data));
     toast.success(payload.detail);
+    if (owner) {
+      const { user_id } = owner;
+      await dispatchExtra(getCompaniesListThunk({ user_id }));
+      dispatch(selectCompanies('owner'));
+    }
     navigate('/company', { replace: true });
     setIsModal();
   };
