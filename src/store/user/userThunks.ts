@@ -1,13 +1,13 @@
 import * as API from 'api/userApi';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { store } from 'store';
+import { store, TPaginationParams, TRegister } from 'store';
 import { createAppAsyncThunk } from 'store';
-import { TUser } from 'store/user';
+import { TPassword, TUser } from 'store';
 
 export const registerThunk = createAppAsyncThunk(
   'users/register',
-  async (credentials: API.IRegisterCredentials, thunkAPI) => {
+  async (credentials: TRegister, thunkAPI) => {
     try {
       return await API.register(credentials);
     } catch (error) {
@@ -21,11 +21,8 @@ export const registerThunk = createAppAsyncThunk(
 export const getMeThunk = createAppAsyncThunk(
   'auth/login',
   async (_, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
     try {
-      if (access_token) {
-        return await API.getMe(access_token);
-      }
+      return await API.getMe();
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -36,12 +33,9 @@ export const getMeThunk = createAppAsyncThunk(
 
 export const getUserThunk = createAppAsyncThunk(
   'users/get',
-  async (id: number, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+  async (params: { user_id: number }, thunkAPI) => {
     try {
-      if (access_token) {
-        return await API.getUser(access_token, id);
-      }
+      return await API.getUser(params);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -52,14 +46,12 @@ export const getUserThunk = createAppAsyncThunk(
 
 export const deleteUserThunk = createAppAsyncThunk(
   'users/delete',
-  async (id: number, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+  async (params: { user_id: number }, thunkAPI) => {
     try {
-      if (access_token) {
-        return await API.deleteUser(access_token, id);
-      }
+      return await API.deleteUser(params);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
+      toast.error(error.message);
       return thunkAPI.rejectWithValue(error.response?.data);
     }
   },
@@ -67,12 +59,9 @@ export const deleteUserThunk = createAppAsyncThunk(
 
 export const updateInfoThunk = createAppAsyncThunk(
   'users/updateInfo',
-  async (user: TUser, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+  async (user: Partial<TUser>, thunkAPI) => {
     try {
-      if (access_token) {
-        return await API.updateUserInfo(access_token, user);
-      }
+      return await API.updateUserInfo(user);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -83,12 +72,9 @@ export const updateInfoThunk = createAppAsyncThunk(
 
 export const updatePasswordThunk = createAppAsyncThunk(
   'users/updatePassword',
-  async (user: TUser, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+  async (user: TPassword, thunkAPI) => {
     try {
-      if (access_token) {
-        return await API.updatePassword(access_token, user);
-      }
+      return await API.updatePassword(user);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -100,12 +86,10 @@ export const updatePasswordThunk = createAppAsyncThunk(
 export const updateAvatarThunk = createAppAsyncThunk(
   'users/updateAvatar',
   async (formData: FormData, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
     const user_id = store.getState().users.user?.user_id;
+    if (!user_id) return;
     try {
-      if (access_token && user_id) {
-        return await API.updateAvatar(access_token, user_id, formData);
-      }
+      return await API.updateAvatar(user_id, formData);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -116,12 +100,9 @@ export const updateAvatarThunk = createAppAsyncThunk(
 
 export const getAllUsersThunk = createAppAsyncThunk(
   'users/getAll',
-  async (params: API.TPaginationParams, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+  async (params: TPaginationParams, thunkAPI) => {
     try {
-      if (access_token) {
-        return await API.getAllUsers(access_token, params);
-      }
+      return await API.getAllUsers(params);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);

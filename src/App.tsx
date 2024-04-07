@@ -6,10 +6,11 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import PrivateRoutes from 'routes/PrivateRoutes';
 import PublicRoutes from 'routes/PublicRoutes';
 import { useAppDispatch, useAppExtraDispatch } from 'store';
-import { login } from 'store/auth';
+import { login, logout } from 'store/auth';
 import { getMeThunk } from 'store/user';
 import { loadWebFonts } from 'styles/loadWebFonts';
-import { useUser } from 'utils/hooks';
+import { isTokenExpired } from 'utils/helpers';
+import { useAuth, useUser } from 'utils/hooks';
 
 import { useAuth0 } from '@auth0/auth0-react';
 
@@ -25,7 +26,8 @@ const CompanyPage = lazy(() => import('pages/CompanyPage'));
 const App = () => {
   const dispatch = useAppDispatch();
   const dispatchExtra = useAppExtraDispatch();
-  const { isLoading, owner } = useUser();
+  const { accessToken, isAuth } = useAuth();
+  const { loading, owner } = useUser();
   const { getAccessTokenSilently, isAuthenticated } = useAuth0();
 
   useEffect(() => {
@@ -41,12 +43,14 @@ const App = () => {
   }, [dispatch, dispatchExtra, getAccessTokenSilently, isAuthenticated, owner]);
 
   useEffect(() => {
-    // add GetMe
-  }, []);
+    accessToken && isTokenExpired(accessToken) && dispatch(logout());
+
+    isAuth && dispatchExtra(getMeThunk());
+  }, [accessToken, dispatch, dispatchExtra, isAuth]);
 
   return (
     <>
-      {(!isLoading || owner) && (
+      {(!loading || owner) && (
         <Routes>
           <Route path="/" element={<SharedLayout />}>
             <Route index element={<HomePage />} />
@@ -66,7 +70,7 @@ const App = () => {
         </Routes>
       )}
 
-      {isLoading && <OvalLoader />}
+      {loading && <OvalLoader />}
 
       <Toast />
     </>

@@ -1,13 +1,15 @@
 import { toast } from 'react-toastify';
-import { initialState, TCompany, TEdit, TPagination } from 'store/company';
+import {
+  TCompany,
+  TCompanyAppendix,
+  TCompanyOfAction,
+  TCompanyOfList,
+} from 'store';
+import { TCompanySelect, TEdit, TPagination } from 'store';
+import { initialState, TInitialState } from 'store/company';
 import * as TNK from 'store/company/companyThunks';
 
-import {
-  combineReducers,
-  createSlice,
-  isAnyOf,
-  PayloadAction,
-} from '@reduxjs/toolkit';
+import { createSlice, isAnyOf, PayloadAction } from '@reduxjs/toolkit';
 
 const thunkArr = [TNK.createCompanyThunk, TNK.getCompanyThunk];
 
@@ -18,139 +20,140 @@ const fn = (type: 'pending' | 'fulfilled' | 'rejected') =>
     else return el.rejected;
   });
 
-// fulfilled slice
-const handleGetSuccess = (
-  state: TCompany | null,
-  action: PayloadAction<{ result: TCompany }>,
-) => ({ ...state, ...action.payload?.result });
-
-const handleUpdateSuccess = (
-  state: TCompany | null,
-  action: PayloadAction<{ result: TCompany }>,
-) => ({ ...state, ...action.payload.result });
-
-const handleAvatarPreviewSuccess = (
-  state: TCompany | null,
-  action: PayloadAction<Pick<TCompany, 'company_avatar'>>,
-) => ({ ...state, ...action.payload });
-
-const handleGetAllSuccess = (
-  state: TCompany[],
-  action: PayloadAction<{ result: { companies: TCompany[] } }>,
-) => state.concat(action.payload.result.companies);
-
-const handleCreateCompanySuccess = (
-  state: TCompany[],
-  action: PayloadAction<{ result: TCompany }>,
-) => {
-  state.push(action.payload.result);
-};
-
-const handleDeleteSuccess = (
-  state: TCompany[],
-  action: PayloadAction<{ result: Pick<TCompany, 'company_id'> }>,
-) => {
-  const { company_id } = action.payload.result;
-  const index = state.findIndex(el => el.company_id === company_id);
-  console.log('index: ', index);
-  state.splice(index, 1);
-};
-
-const handlePaginationSuccess = (
-  _: TPagination,
-  action: PayloadAction<{ result: { pagination: TPagination } }>,
-) => action.payload.result.pagination;
-
-const handleEditSuccess = (_: TEdit, action: PayloadAction<TEdit>) =>
-  action.payload;
-
+// handlers
 const handleSuccess = () => {
   toast.success('Success');
 };
 
-// company
+const handleAvatarPreviewSuccess = (
+  state: TInitialState,
+  action: PayloadAction<Pick<TCompany, 'company_avatar'>>,
+) => {
+  if (!state || !state.company) return;
+  return { ...state, company: { ...state.company, ...action.payload } };
+};
+
+const handleSelectCompanies = (
+  state: TInitialState,
+  action: PayloadAction<TCompanySelect>,
+) => ({ ...state, select: action.payload });
+
+const handleCheckCompany = (
+  state: TInitialState,
+  action: PayloadAction<TCompanyOfAction>,
+) => {
+  state.checked.push(action.payload);
+};
+
+const handleUncheckCompany = (
+  state: TInitialState,
+  action: PayloadAction<Pick<TCompany, 'company_id'>>,
+) => {
+  const { company_id } = action.payload;
+  const index = state.checked.findIndex(el => el.company_id === company_id);
+  state.checked.splice(index, 1);
+};
+
+const handleAppendix = (
+  state: TInitialState,
+  action: PayloadAction<TCompanyAppendix>,
+) => ({ ...state, appendix: action.payload });
+
+const handleEditSuccess = (
+  state: TInitialState,
+  action: PayloadAction<TEdit>,
+) => ({ ...state, edit: action.payload });
+
+const handleCreateSuccess = (
+  state: TInitialState,
+  action: PayloadAction<{ result: TCompanyOfList }>,
+) => {
+  state.companyList.push({ ...action.payload.result });
+};
+
+const handleGetSuccess = (
+  state: TInitialState,
+  action: PayloadAction<{ result: TCompany }>,
+) => ({ ...state, company: action.payload.result });
+
+const handleUpdateVisibleSuccess = (
+  state: TInitialState,
+  action: PayloadAction<{ result: Pick<TCompany, 'company_id'> }>,
+) => {
+  const { company_id } = action.payload.result;
+  const index = state.companyList.findIndex(el => el.company_id === company_id);
+  const company = state.companyList.at(index);
+  if (state.select === 'all' && company) {
+    const is_visible = !company.is_visible;
+    state.companyList.splice(index, 1, { ...company, is_visible });
+  }
+};
+
+const handleDeleteSuccess = (
+  state: TInitialState,
+  action: PayloadAction<{ result: Pick<TCompany, 'company_id'> }>,
+) => {
+  const { company_id } = action.payload.result;
+  const index = state.companyList.findIndex(el => el.company_id === company_id);
+  state.companyList.splice(index, 1);
+};
+
+const handleGetAllSuccess = (
+  state: TInitialState,
+  action: PayloadAction<{
+    result: { companies: TCompanyOfList[]; pagination: TPagination };
+  }>,
+) => ({
+  ...state,
+  companyList: state.companyList.concat(action.payload.result.companies),
+  pagination: action.payload.result.pagination,
+});
+
+// slice
 const companySlice = createSlice({
-  name: 'company',
-  initialState: initialState.company,
+  name: 'companies',
+  initialState,
   reducers: {
     updateAvatarPreview: handleAvatarPreviewSuccess,
+    selectCompanies: handleSelectCompanies,
+    checkCompany: handleCheckCompany,
+    uncheckCompany: handleUncheckCompany,
+    uncheckAllCompanies: state => ({ ...state, checked: [] }),
+    setCompanyAppendix: handleAppendix,
+    editCompany: handleEditSuccess,
   },
   extraReducers: builder => {
     builder
+      // company success
+      .addCase(TNK.createCompanyThunk.fulfilled, handleCreateSuccess)
       .addCase(TNK.getCompanyThunk.fulfilled, handleGetSuccess)
-      .addCase(TNK.updateInfoThunk.fulfilled, handleUpdateSuccess)
-      .addCase(TNK.updateVisibleThunk.fulfilled, handleSuccess)
-      .addCase(TNK.updateAvatarThunk.fulfilled, handleSuccess);
-  },
-});
-
-// edit
-const editSlice = createSlice({
-  name: 'edit',
-  initialState: initialState.edit,
-  reducers: { editCompany: handleEditSuccess },
-});
-
-// companyList
-const companyListSlice = createSlice({
-  name: 'companyList',
-  initialState: initialState.companyList,
-  reducers: {},
-  extraReducers: builder => {
-    builder
+      .addCase(TNK.updateInfoThunk.fulfilled, () => {})
+      .addCase(TNK.updateVisibleThunk.fulfilled, handleUpdateVisibleSuccess)
+      .addCase(TNK.updateAvatarThunk.fulfilled, handleSuccess)
+      .addCase(TNK.deleteCompanyThunk.fulfilled, handleDeleteSuccess)
+      // companyList success
       .addCase(TNK.getAllCompaniesThunk.fulfilled, handleGetAllSuccess)
-      .addCase(TNK.createCompanyThunk.fulfilled, handleCreateCompanySuccess)
-      .addCase(TNK.deleteCompanyThunk.fulfilled, handleDeleteSuccess);
+      // loading, error
+      .addMatcher(isAnyOf(...fn('pending')), state => {
+        return { ...state, loading: true, error: false };
+      })
+      .addMatcher(isAnyOf(...fn('fulfilled')), state => {
+        return { ...state, loading: false, error: false };
+      })
+      .addMatcher(isAnyOf(...fn('rejected')), (state, action) => {
+        return { ...state, loading: false, error: action.payload };
+      });
   },
 });
 
-// pagination
-const paginationSlice = createSlice({
-  name: 'pagination',
-  initialState: initialState.pagination,
-  reducers: {},
-  extraReducers: builder => {
-    builder.addCase(
-      TNK.getAllCompaniesThunk.fulfilled,
-      handlePaginationSuccess,
-    );
-  },
-});
+export const companyReducer = companySlice.reducer;
 
-// loading slice
-const companyLoadingSlice = createSlice({
-  name: 'loading',
-  initialState: false,
-  reducers: {},
-  extraReducers: builder => {
-    builder
-      .addMatcher(isAnyOf(...fn('pending')), () => true)
-      .addMatcher(isAnyOf(...fn('fulfilled')), () => false)
-      .addMatcher(isAnyOf(...fn('rejected')), () => false);
-  },
-});
-
-// error slice
-const companyErrorSlice = createSlice({
-  name: 'error',
-  initialState: false,
-  reducers: {},
-  extraReducers: builder => {
-    builder
-      .addMatcher(isAnyOf(...fn('pending')), () => false)
-      .addMatcher(isAnyOf(...fn('fulfilled')), () => false)
-      .addMatcher(isAnyOf(...fn('rejected')), (_, action) => action.payload);
-  },
-});
-
-export const companyReducer = combineReducers({
-  company: companySlice.reducer,
-  companyList: companyListSlice.reducer,
-  pagination: paginationSlice.reducer,
-  edit: editSlice.reducer,
-  loading: companyLoadingSlice.reducer,
-  error: companyErrorSlice.reducer,
-});
-
-export const { editCompany } = editSlice.actions;
-export const { updateAvatarPreview } = companySlice.actions;
+export const {
+  updateAvatarPreview,
+  selectCompanies,
+  checkCompany,
+  uncheckAllCompanies,
+  uncheckCompany,
+  setCompanyAppendix,
+  editCompany,
+} = companySlice.actions;

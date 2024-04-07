@@ -47,12 +47,10 @@ const link = Yup.string()
 const MAX_SIZE = 1024 * 1024;
 const MB = 1024 * 1024; // const kB = 1024;
 
-const file = Yup.mixed().test(
+const file = Yup.mixed<File>().test(
   'size',
   ` max file size: ${MAX_SIZE / MB}MB`,
-  (file: any) => (!file ? true : file.size <= MAX_SIZE),
-);
-// .test('type', 'invalid file type', (file: any) =>
-//   !file ? true : file.type.includes('image'), );
+  file => (!file ? true : file.size <= MAX_SIZE),
+); // .test('type', 'invalid file type', (file: any) => !file ? true : file.type.includes('image'), );
 
 export { address, email, file, link, name, password, phone, text };

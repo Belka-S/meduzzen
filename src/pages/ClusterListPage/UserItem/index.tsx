@@ -5,16 +5,18 @@ import Button from 'components/ui/Button';
 import SvgIcon from 'components/ui/SvgIcon';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useAppDispatch, useAppExtraDispatch } from 'store';
+import { TUserOfAction, useAppDispatch } from 'store';
+import { useAppExtraDispatch } from 'store';
 import { logout } from 'store/auth';
-import { cleanOwner, deleteUserThunk, editUser, TUser } from 'store/user';
+import { checkUser, cleanOwner, deleteUserThunk } from 'store/user';
+import { editUser, uncheckUser } from 'store/user';
 import { trimName } from 'utils/helpers';
 import { useUser } from 'utils/hooks';
 
 import s from './index.module.scss';
 
 type TUserProps = {
-  props: TUser;
+  props: TUserOfAction;
 };
 
 const UserItem: FC<TUserProps> = ({ props }) => {
@@ -23,10 +25,10 @@ const UserItem: FC<TUserProps> = ({ props }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const dispatchExtra = useAppExtraDispatch();
-  const { user, owner } = useUser();
+  const { user, owner, checkedUsers } = useUser();
 
   if (!user_id) return;
-
+  const isChecked = checkedUsers.some(el => el.user_id === user_id);
   const isMyAccount = owner?.user_id === user_id;
   const isActive = user_id === user?.user_id;
   const isOwner = user_id === owner?.user_id;
@@ -34,7 +36,7 @@ const UserItem: FC<TUserProps> = ({ props }) => {
   const name = `${user_firstname} ${user_lastname}`;
   const ava = { id: user_id, url: user_avatar, name };
 
-  const handleDelete = (e: MouseEvent<HTMLButtonElement>) => {
+  const handleDelete = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.currentTarget.blur();
     if (!owner?.is_superuser) {
@@ -43,13 +45,12 @@ const UserItem: FC<TUserProps> = ({ props }) => {
         return;
       }
     }
-    if (confirm(`Are you sure you want to delete user: ${user_email}`)) {
-      dispatch(cleanOwner());
-      dispatch(logout());
-      user_id &&
-        dispatchExtra(deleteUserThunk(user_id))
-          .unwrap()
-          .then(res => toast.success(res?.detail));
+    if (!confirm(`Are you sure you want to delete: ${user_email}`)) return;
+    dispatch(cleanOwner());
+    dispatch(logout());
+    if (user_id) {
+      const { payload } = await dispatchExtra(deleteUserThunk({ user_id }));
+      toast.success(payload.detail);
       navigate('/cluster', { replace: true });
     }
   };
@@ -58,12 +59,22 @@ const UserItem: FC<TUserProps> = ({ props }) => {
     if (!owner?.is_superuser) {
       if (!isMyAccount) {
         e.preventDefault();
-        e.currentTarget.blur();
         toast.error("It's not your account");
         return;
       }
     }
+    e.currentTarget.blur();
     dispatch(editUser('data'));
+  };
+
+  const handleCheck = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    dispatch(checkUser(props));
+  };
+
+  const handleUncheck = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    dispatch(uncheckUser({ user_id }));
   };
 
   return (
@@ -99,6 +110,28 @@ const UserItem: FC<TUserProps> = ({ props }) => {
       >
         <SvgIcon className={s.icon_svg} svgId="ui-trash" />
       </Button>
+
+      {!isChecked && (
+        <Button
+          className={s.button}
+          variant="round"
+          color="transparent"
+          onClick={handleCheck}
+        >
+          <SvgIcon className={s.icon_svg} svgId="ui-circle_uncheck" />
+        </Button>
+      )}
+
+      {isChecked && (
+        <Button
+          className={s.button}
+          variant="round"
+          color="transparent"
+          onClick={handleUncheck}
+        >
+          <SvgIcon className={s.icon_svg__shown} svgId="ui-circle_check" />
+        </Button>
+      )}
 
       <span>{user_id}</span>
     </NavLink>

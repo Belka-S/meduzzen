@@ -1,15 +1,15 @@
 import * as API from 'api/companyApi';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { store } from 'store';
+import { store, TPaginationParams } from 'store';
 import { createAppAsyncThunk } from 'store';
-import { TCompany } from 'store/company';
+import { TCompany } from 'store';
 
 export const createCompanyThunk = createAppAsyncThunk(
-  'company/register',
-  async (credentials: API.ICreateCompanyCredentials, thunkAPI) => {
+  'company/create',
+  async (company: Pick<TCompany, 'is_visible' | 'company_name'>, thunkAPI) => {
     try {
-      return await API.createCompany(credentials);
+      return await API.createCompany(company);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -20,12 +20,9 @@ export const createCompanyThunk = createAppAsyncThunk(
 
 export const getCompanyThunk = createAppAsyncThunk(
   'company/get',
-  async (id: number, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+  async (params: { company_id: number }, thunkAPI) => {
     try {
-      if (access_token) {
-        return await API.getCompany(access_token, id);
-      }
+      return await API.getCompany(params);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -36,14 +33,12 @@ export const getCompanyThunk = createAppAsyncThunk(
 
 export const deleteCompanyThunk = createAppAsyncThunk(
   'company/delete',
-  async (id: number, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+  async (params: { company_id: number }, thunkAPI) => {
     try {
-      if (access_token) {
-        return await API.deleteCompany(access_token, id);
-      }
+      return await API.deleteCompany(params);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
+      toast.error(error.message);
       return thunkAPI.rejectWithValue(error.response?.data);
     }
   },
@@ -51,12 +46,9 @@ export const deleteCompanyThunk = createAppAsyncThunk(
 
 export const updateInfoThunk = createAppAsyncThunk(
   'company/updateInfo',
-  async (company: TCompany, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+  async (company: Partial<TCompany>, thunkAPI) => {
     try {
-      if (access_token) {
-        return await API.updateCompanyInfo(access_token, company);
-      }
+      return await API.updateCompanyInfo(company);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -67,12 +59,9 @@ export const updateInfoThunk = createAppAsyncThunk(
 
 export const updateVisibleThunk = createAppAsyncThunk(
   'company/updatePassword',
-  async (company: TCompany, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+  async (company: Pick<TCompany, 'is_visible' | 'company_id'>, thunkAPI) => {
     try {
-      if (access_token) {
-        return await API.updateVisible(access_token, company);
-      }
+      return await API.updateVisible(company);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -84,12 +73,10 @@ export const updateVisibleThunk = createAppAsyncThunk(
 export const updateAvatarThunk = createAppAsyncThunk(
   'company/updateAvatar',
   async (formData: FormData, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
     const company_id = store.getState().companies.company?.company_id;
+    if (!company_id) return;
     try {
-      if (access_token && company_id) {
-        return await API.updateAvatar(access_token, company_id, formData);
-      }
+      return await API.updateAvatar(company_id, formData);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);
@@ -100,12 +87,9 @@ export const updateAvatarThunk = createAppAsyncThunk(
 
 export const getAllCompaniesThunk = createAppAsyncThunk(
   'company/getAll',
-  async (params: API.TPaginationParams, thunkAPI) => {
-    const { access_token } = store.getState().auth.token;
+  async (params: TPaginationParams, thunkAPI) => {
     try {
-      if (access_token) {
-        return await API.getAllCompanies(access_token, params);
-      }
+      return await API.getAllCompanies(params);
     } catch (error) {
       if (!axios.isAxiosError(error)) throw error;
       toast.error(error.message);

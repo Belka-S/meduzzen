@@ -1,4 +1,4 @@
-import InputRhf from 'components/InputRhf';
+import InputText from 'components/InputText';
 import Button from 'components/ui/Button';
 import SvgIcon from 'components/ui/SvgIcon';
 import H3 from 'components/ui/Typography/H3';
@@ -6,7 +6,6 @@ import { Resolver, SubmitHandler, useForm } from 'react-hook-form';
 import { NavLink } from 'react-router-dom';
 import { useAppExtraDispatch } from 'store';
 import { loginThunk } from 'store/auth';
-import { getMeThunk } from 'store/user';
 import { useUser } from 'utils/hooks';
 import { signinSchema } from 'utils/validation';
 import { InferType } from 'yup';
@@ -17,7 +16,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import s from './index.module.scss';
 
 type TInput = InferType<typeof signinSchema>;
-
 const inputFields = Object.keys(signinSchema.fields) as Array<keyof TInput>;
 
 const SigninForm = () => {
@@ -25,21 +23,16 @@ const SigninForm = () => {
   const { owner } = useUser();
   const { loginWithRedirect } = useAuth0();
 
+  // RHF
   const resolver: Resolver<TInput> = yupResolver(signinSchema);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<TInput>({
+  const { register, handleSubmit, formState } = useForm<TInput>({
     resolver,
     mode: 'onChange',
     defaultValues: { ...owner },
   });
 
-  const onSubmit: SubmitHandler<TInput> = data => {
-    dispatch(loginThunk(data))
-      .unwrap()
-      .then(() => dispatch(getMeThunk()));
+  const onSubmit: SubmitHandler<TInput> = async data => {
+    await dispatch(loginThunk(data));
   };
 
   return (
@@ -52,7 +45,12 @@ const SigninForm = () => {
       </div>
 
       {inputFields.map(el => (
-        <InputRhf key={el} inputName={el} errors={errors} register={register} />
+        <InputText
+          key={el}
+          inputName={el}
+          errors={formState.errors}
+          register={register}
+        />
       ))}
 
       <Button

@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import InputRhf from 'components/InputRhf';
+import { useEffect, useMemo } from 'react';
+import InputText from 'components/InputText';
 import Button from 'components/ui/Button';
 import { Resolver, SubmitHandler, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
@@ -15,7 +15,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import s from './index.module.scss';
 
 type TInput = InferType<typeof companyProfileSchema>;
-
 const inputFields = Object.keys(companyProfileSchema.fields) as Array<
   keyof TInput
 >;
@@ -27,39 +26,62 @@ const ProfileForm = () => {
   const { company } = useCompany();
 
   // all link inputs
-  const allLinks = inputFields.filter(el => el.includes('link'));
+  const allLinks = useMemo(
+    () => inputFields.filter(el => el.includes('link')),
+    [],
+  );
 
   // hidden link inputs
-  let hiddenLinks = allLinks
-    .map((el, i) => {
-      if (company?.company_links && !company.company_links[i]) return el;
-    })
-    .filter(el => el && el)
-    .slice(1);
+  let hiddenLinks = useMemo(
+    () =>
+      allLinks
+        .map((el, i) => {
+          if (company?.company_links && !company.company_links[i]) return el;
+        })
+        .filter(el => el && el)
+        .slice(1),
+    [allLinks, company?.company_links],
+  );
 
-  hiddenLinks =
-    hiddenLinks.length > 0
-      ? hiddenLinks
-      : inputFields.filter(el => el.includes('_link'));
+  hiddenLinks = useMemo(
+    () =>
+      hiddenLinks.length > 0
+        ? hiddenLinks
+        : inputFields.filter(el => el.includes('_link')),
+    [hiddenLinks],
+  );
 
   // initial link inputs
-  const initialLinks = allLinks.reduce((acc, el, i) => {
-    if (company?.company_links && company?.company_links[i]) {
-      return { ...acc, [el]: company?.company_links[i] };
-    } else return acc;
-  }, {});
+  const initialLinks = useMemo(
+    () =>
+      allLinks.reduce((acc, el, i) => {
+        if (company?.company_links && company?.company_links[i]) {
+          return { ...acc, [el]: company?.company_links[i] };
+        } else return acc;
+      }, {}),
+    [allLinks, company?.company_links],
+  );
 
+  // RHF
   const resolver: Resolver<TInput> = yupResolver(companyProfileSchema);
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors, isValid, touchedFields },
-  } = useForm<TInput>({
+  const { register, handleSubmit, watch, formState } = useForm<TInput>({
     resolver,
     mode: 'onChange',
     defaultValues: { ...company, ...initialLinks },
   });
+  const { errors, isValid, touchedFields } = formState;
+
+  const onSubmit: SubmitHandler<TInput> = async data => {
+    const company_id = Number(id);
+    const company_links = allLinks
+      .map(el => data[el])
+      .filter(el => el && el) as string[];
+    const company = { company_id, ...data, company_links };
+    const { payload } = await dispatchExtra(updateInfoThunk(company));
+    toast.success(payload.detail);
+    dispatch(editCompany(false));
+    await dispatchExtra(getCompanyThunk({ company_id: Number(id) }));
+  };
 
   // automaticly open new link input
   inputFields.map(el => watch(el));
@@ -88,22 +110,12 @@ const ProfileForm = () => {
     }
   }, [initialLinks]);
 
-  const onSubmit: SubmitHandler<TInput> = data => {
-    const company_id = Number(id);
-    const company_links = allLinks.map(el => data[el]).filter(el => el && el);
-
-    dispatchExtra(updateInfoThunk({ company_id, ...data, company_links }))
-      .then(res => toast.success(res.payload.detail))
-      .then(() => dispatchExtra(getCompanyThunk(Number(id))))
-      .finally(() => dispatch(editCompany(false)));
-  };
-
   const isDisabled = !isValid || Object.keys(touchedFields).length === 0;
 
   return (
     <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
       {inputFields.map(el => (
-        <InputRhf
+        <InputText
           key={el}
           style={{ display: hiddenLinks.includes(el) ? 'none' : 'block' }}
           inputName={el}

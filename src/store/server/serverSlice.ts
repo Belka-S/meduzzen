@@ -18,7 +18,7 @@ const fn = (type: 'pending' | 'fulfilled' | 'rejected') =>
     else return el.rejected;
   });
 
-// fulfilled slice
+// handlers
 const handleCheckStatusSuccess = (
   state: TCommonInitialState,
   action: PayloadAction<{ result: string }>,
@@ -40,7 +40,7 @@ const handlePingSuccess = (
   }>,
 ) => ({ ...state, ping: action.payload.result });
 
-// server
+// fulfilled slice
 const commonSlice = createSlice({
   name: 'common',
   initialState: commonInitialState,

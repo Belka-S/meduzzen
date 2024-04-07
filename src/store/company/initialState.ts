@@ -1,41 +1,35 @@
-export type TCompany = {
-  company_id?: number;
-  company_name?: string;
-  company_title?: string | null;
-  company_description?: string | null;
-  company_city?: string | null;
-  company_phone?: string | null;
-  company_avatar?: string;
-  is_visible?: boolean;
-
-  company_links?: string[];
-  company_owner?: {
-    user_id?: number;
-    user_email?: string;
-    user_firstname?: string;
-    user_lastname?: string;
-    user_avatar?: string;
-  };
-};
-
-export type TPagination = {
-  current_page: number;
-  total_page: number;
-  total_results?: number;
-};
-
-export type TEdit = false | 'avatar' | 'data';
+import {
+  TCompany,
+  TCompanyAppendix,
+  TCompanyOfAction,
+  TCompanyOfList,
+  TCompanySelect,
+  TEdit,
+  TPagination,
+} from 'store';
 
 export type TInitialState = {
   company: TCompany | null;
-  companyList: TCompany[];
+  companyList: TCompanyOfList[];
   pagination: TPagination;
+  select: TCompanySelect;
+  checked: TCompanyOfAction[];
+  appendix: TCompanyAppendix;
   edit: TEdit;
+
+  loading: boolean;
+  error: boolean | string;
 };
 
 export const initialState: TInitialState = {
   company: null,
   companyList: [],
   pagination: { current_page: 0, total_page: 0 },
+  select: 'all',
+  checked: [],
+  appendix: null,
   edit: false,
+
+  loading: false,
+  error: false,
 };

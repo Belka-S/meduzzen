@@ -1,19 +1,22 @@
-import { MouseEvent, useEffect } from 'react';
+import { MouseEvent, useEffect, useMemo } from 'react';
 import classNames from 'classnames';
 import ProfileBtn from 'components/ProfileBtn';
 import ProfileCard from 'components/ProfileCard';
 import OvalLoader from 'components/ui/Loader';
 import Section from 'components/ui/Section';
-import H2 from 'components/ui/Typography/H2';
+import H3 from 'components/ui/Typography/H3';
 import AvatarForm from 'pages/ClusterPage/AvatarForm';
 import ProfileForm from 'pages/ClusterPage/ProfileForm';
+import CompanyItem from 'pages/CompanyListPage/CompanyItem';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppExtraDispatch } from 'store';
 import { getUserThunk } from 'store/user';
 import { editUser } from 'store/user';
 import { trimName } from 'utils/helpers';
-import { useUser } from 'utils/hooks';
+import { getArrFromObj } from 'utils/helpers/getArrFromObj';
+import { useCompany, useUser } from 'utils/hooks';
+import { useAction } from 'utils/hooks';
 
 import s from './index.module.scss';
 
@@ -21,16 +24,27 @@ const ClusterPage = () => {
   const dispatch = useAppDispatch();
   const dispatchExtra = useAppExtraDispatch();
   const { id } = useParams();
-  const { user, profileInfo, edit, owner, isLoading } = useUser();
+  const { checkedCompanies } = useCompany();
+  const { owner, user, profileInfo, appendix } = useUser();
+  const { edit, loading } = useUser();
+  const { userData } = useAction();
 
   useEffect(() => {
-    dispatchExtra(getUserThunk(Number(id)));
+    dispatchExtra(getUserThunk({ user_id: Number(id) }));
   }, [dispatchExtra, id]);
 
-  if (!user) return;
+  const users = useMemo(
+    () =>
+      appendix === 'checked'
+        ? [...checkedCompanies].sort((a, b) => a.company_id - b.company_id)
+        : appendix &&
+          [...userData[appendix]].sort((a, b) => a.company_id - b.company_id),
+    [appendix, checkedCompanies, userData],
+  );
 
+  if (!user) return;
   const isMyAccount = owner?.user_id === id;
-  const isRedyToRender = !isLoading && id === user?.user_id?.toString();
+  const isRedyToRender = !loading && id === user?.user_id?.toString();
   const isAvatarForm = edit === 'avatar' || id === owner?.user_id?.toString();
   const isProfileForm = edit === 'data';
 
@@ -40,7 +54,7 @@ const ClusterPage = () => {
     name: `${user?.user_firstname} ${user?.user_lastname}`,
   };
 
-  const info = profileInfo.filter(el => Object.values(el)[0] && el);
+  const info = getArrFromObj(profileInfo) as Array<{ [key: string]: string }>;
   const links = user.user_links ? user.user_links : [];
 
   const getUserName = () => {
@@ -79,14 +93,19 @@ const ClusterPage = () => {
             />
           )}
 
-          <H2 className={s.name}>{getUserName()}</H2>
+          <H3 className={s.name}>{getUserName()}</H3>
         </div>
 
         {isProfileForm && <ProfileForm />}
         {!isProfileForm && <ProfileCard info={info} links={links} />}
       </div>
 
-      <div className={s.additional}></div>
+      <div className={s.appendix}>
+        {appendix ? <H3 className={s.title}>{`My ${appendix}:`}</H3> : <span />}
+        {users?.map(
+          el => el && <CompanyItem key={el?.company_id} props={el} />,
+        )}
+      </div>
     </Section>
   );
 };

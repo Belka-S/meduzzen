@@ -1,11 +1,38 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { store } from 'store';
 
 // base URL
 const baseURL = import.meta.env.VITE_PROD_BACK_HTTP;
 
 // axios instance
 const apiClient = axios.create({ baseURL });
+const apiClientToken = axios.create({ baseURL });
+
+// request interseptor
+apiClientToken.interceptors.request.use(
+  config => {
+    const acessToken = store.getState().auth.token?.access_token;
+    config.headers['Authorization'] = `Bearer ${acessToken}`;
+    return config;
+  },
+  err => {
+    toast.error(err.response.data.detail);
+    return Promise.reject(err);
+  },
+);
+
+// response interseptor
+apiClient.interceptors.response.use(
+  res => {
+    // const { detail, result } = res.data; toast.success(!result.user_id  && detail);
+    return res;
+  },
+  async err => {
+    toast.error(err.response.data.detail);
+    return Promise.reject(err);
+  },
+);
 
 // set token
 const token = {
@@ -17,17 +44,4 @@ const token = {
   },
 };
 
-// response interseptor
-apiClient.interceptors.response.use(
-  res => {
-    // const { detail, result } = res.data;
-    // toast.success(!result.user_id  && detail);
-    return res;
-  },
-  async err => {
-    toast.error(err.response.data.detail);
-    return Promise.reject(err);
-  },
-);
-
-export { apiClient, baseURL, token };
+export { apiClient, apiClientToken, baseURL, token };

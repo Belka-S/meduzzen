@@ -1,12 +1,7 @@
 import { CSSProperties } from 'react';
 import classNames from 'classnames';
-import {
-  FieldValues,
-  GlobalError,
-  Path,
-  UseFormRegister,
-  UseFormWatch,
-} from 'react-hook-form';
+import { FieldValues, GlobalError, Path } from 'react-hook-form';
+import { UseFormRegister, UseFormWatch } from 'react-hook-form';
 import { normalizeText } from 'utils/helpers';
 
 import s from './index.module.scss';
@@ -24,7 +19,7 @@ type TInputProps<T extends FieldValues> = {
   size?: 's' | 'm' | 'l';
 };
 
-const InputRhf = <T extends FieldValues>(props: TInputProps<T>) => {
+const InputText = <T extends FieldValues>(props: TInputProps<T>) => {
   const { inputName, label, errors, register, style } = props;
   const { placeholder = '', size = 'm', className } = props;
 
@@ -53,4 +48,4 @@ const InputRhf = <T extends FieldValues>(props: TInputProps<T>) => {
   );
 };
 
-export default InputRhf;
+export default InputText;

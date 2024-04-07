@@ -26,7 +26,7 @@
   padding-block: 4px;
 
   display: grid;
-  grid-template-columns: 2fr 25fr 33fr 1.5fr 1.5fr 2fr 1.5fr;
+  grid-template-columns: 2fr 25fr 30fr 1.5fr 1.5fr 1.5fr 2fr 35px;
   align-items: center;
 
   line-height: 1.5;
@@ -47,7 +47,7 @@
   }
 
   & span:last-of-type {
-    justify-self: center;
+    justify-self: right;
   }
 
   &:hover .icon_svg {
@@ -71,12 +71,15 @@
 
 .avatar {
   margin-left: 0;
-  margin-right: auto;
+  margin-right: 10px;
 }
 
 .button {
   &:hover .icon_svg {
     fill: var(--placeholder-color);
+  }
+  &:hover .icon_svg__shown {
+    opacity: 1;
   }
   &:hover .vision_svg {
     opacity: 0.65;
@@ -90,6 +93,10 @@
   fill: var(--border-color);
   opacity: 0;
   transition: opacity 250ms fill 250ms;
+}
+
+.icon_svg__shown {
+  opacity: 0.3;
 }
 
 .vision_svg {

@@ -1,10 +1,11 @@
-import { MouseEvent, useEffect } from 'react';
+import { MouseEvent, useEffect, useMemo } from 'react';
 import classNames from 'classnames';
 import ProfileBtn from 'components/ProfileBtn';
 import ProfileCard from 'components/ProfileCard';
 import OvalLoader from 'components/ui/Loader';
 import Section from 'components/ui/Section';
 import H3 from 'components/ui/Typography/H3';
+import UserItem from 'pages/ClusterListPage/UserItem';
 import AvatarForm from 'pages/CompanyPage/AvatarForm';
 import ProfileForm from 'pages/CompanyPage/ProfileForm';
 import { useParams } from 'react-router-dom';
@@ -12,7 +13,9 @@ import { toast } from 'react-toastify';
 import { useAppDispatch, useAppExtraDispatch } from 'store';
 import { getCompanyThunk } from 'store/company';
 import { editCompany } from 'store/company';
+import { getArrFromObj } from 'utils/helpers/getArrFromObj';
 import { useCompany, useUser } from 'utils/hooks';
+import { useAction } from 'utils/hooks';
 
 import s from './index.module.scss';
 
@@ -20,17 +23,26 @@ const CompanyPage = () => {
   const dispatch = useAppDispatch();
   const dispatchExtra = useAppExtraDispatch();
   const { id } = useParams();
-  const { owner } = useUser();
-  const { company, profileInfo, edit, isLoading } = useCompany();
+  const { owner, checkedUsers } = useUser();
+  const { company, profileInfo, appendix, edit, loading } = useCompany();
+  const { companyData } = useAction();
 
   useEffect(() => {
-    dispatchExtra(getCompanyThunk(Number(id)));
+    dispatchExtra(getCompanyThunk({ company_id: Number(id) }));
   }, [dispatchExtra, id]);
 
-  if (!company) return;
+  const companies = useMemo(
+    () =>
+      appendix === 'checked'
+        ? [...checkedUsers].sort((a, b) => a.user_id - b.user_id)
+        : appendix &&
+          [...companyData[appendix]].sort((a, b) => a.user_id - b.user_id),
+    [appendix, checkedUsers, companyData],
+  );
 
+  if (!company) return;
   const isMyCompany = company?.company_owner?.user_id === owner?.user_id;
-  const isRedyToRender = !isLoading && id === company?.company_id?.toString();
+  const isRedyToRender = !loading && id === company?.company_id?.toString();
   const isAvatarForm = edit === 'avatar' || isMyCompany;
   const isProfileForm = edit === 'data' && isMyCompany;
 
@@ -40,7 +52,7 @@ const CompanyPage = () => {
     name: company?.company_name,
   };
 
-  const info = profileInfo.filter(el => Object.values(el)[0] && el);
+  const info = getArrFromObj(profileInfo) as Array<{ [key: string]: string }>;
   const links = company.company_links ? company.company_links : [];
 
   const handleUpdateAvatar = (e: MouseEvent<HTMLDivElement>) => {
@@ -78,28 +90,16 @@ const CompanyPage = () => {
         {!isProfileForm && <ProfileCard info={info} links={links} />}
       </div>
 
-      <div className={s.additional}></div>
+      <div className={s.appendix}>
+        {appendix ? (
+          <H3 className={s.title}>{`Company's ${appendix}:`}</H3>
+        ) : (
+          <span />
+        )}
+        {companies?.map(el => el && <UserItem key={el?.user_id} props={el} />)}
+      </div>
     </Section>
   );
 };
 
 export default CompanyPage;
-
-// ------------------------------ draft ------------------------------ //
-
-// const fields = [
-//   'company_title',
-//   'company_city',
-//   'company_phone',
-//   'company_description',
-// ];
-// const arr = (Object.keys(company) as Array<keyof typeof company>)
-//   .reduce((acc, key) => {
-//     company[key] && acc.push({ [key]: company[key] });
-//     return acc;
-//   }, [] as (typeof company)[keyof typeof company][])
-//   .filter(el => el && el);
-
-// const info = arr.filter(el => el && fields.includes(Object.keys(el)[0]));
-
-// ------------------------------ draft ------------------------------ //

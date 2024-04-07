@@ -1,8 +1,7 @@
-import { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
-import classNames from 'classnames';
+import { ChangeEvent, useEffect, useState } from 'react';
+import InputFile from 'components/InputFile';
 import Button from 'components/ui/Button';
-import SvgIcon from 'components/ui/SvgIcon';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppExtraDispatch } from 'store';
@@ -23,16 +22,25 @@ const AvatarForm = () => {
   const dispatch = useAppDispatch();
   const dispatchExtra = useAppExtraDispatch();
   const { company } = useCompany();
+  const [fileError, setFileError] = useState<'noError' | string>('');
 
-  const [avatarError, setAvatarError] = useState('');
-  const [activeIcon, setActiveIcon] = useState(false);
+  // RHF
+  const { register, control, handleSubmit, formState } = useForm<TInput>({
+    mode: 'onChange',
+  });
 
-  const {
-    register,
-    control,
-    handleSubmit,
-    formState: { touchedFields },
-  } = useForm<TInput>({ mode: 'onChange' });
+  const onSubmit: SubmitHandler<TInput> = async data => {
+    const formData = new FormData();
+    let file = (data.file as unknown as FileList)[0];
+    if (!file?.type) {
+      file = data.file as File;
+    }
+    formData.append('file', file);
+    // for (const [key, value] of formData) { console.log(`${key}: ${value}`); }
+    await dispatchExtra(updateAvatarThunk(formData));
+    await dispatchExtra(getCompanyThunk({ company_id: Number(id) }));
+    dispatch(editCompany(false));
+  };
 
   // avatar file, preview image
   const setAvatar = async (e: Event | ChangeEvent) => {
@@ -42,12 +50,12 @@ const AvatarForm = () => {
     dispatch(updateAvatarPreview({ company_avatar }));
     try {
       await avatarSchema.validate({ file: avatar }, { abortEarly: false });
-      setAvatarError('noError');
+      setFileError('noError');
     } catch (err) {
       if (err instanceof ValidationError) {
         const msg = err.inner[0].message;
         toast.error(msg);
-        setAvatarError(msg);
+        setFileError(msg);
       }
       return err;
     }
@@ -72,85 +80,25 @@ const AvatarForm = () => {
     }
   }, [btnId, color, company]);
 
-  const onSubmit: SubmitHandler<TInput> = data => {
-    const formData = new FormData();
-    let file = (data.avatar as FileList)[0];
-    if (!file?.type) {
-      file = data.avatar as File;
-    } // for (const [key, value] of formData) { console.log(`${key}: ${value}`); }
-    formData.append('file', file);
-
-    dispatchExtra(updateAvatarThunk(formData))
-      .unwrap()
-      .then(() => dispatchExtra(getCompanyThunk(Number(id))))
-      .finally(() => dispatch(editCompany(false)));
-  };
-
   // input validation
-  const errorMessage = avatarError === 'noError' ? '' : avatarError;
-  const isDisabled = errorMessage || Object.keys(touchedFields).length === 0;
-
-  const onMouseOver = () => setActiveIcon(true);
-  const onMouseOut = (e: MouseEvent<HTMLInputElement>) => {
-    setActiveIcon(false);
-    e.currentTarget.blur();
-  };
+  const errorMessage = fileError === 'noError' ? '' : fileError;
+  const isModified = Object.keys(formState.touchedFields).length > 0;
+  const isDisabled = !isModified || errorMessage;
 
   return (
     <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
-      <label>
-        <span className={s.error}>{errorMessage}</span>
+      <InputFile
+        inputName={'file'}
+        register={register}
+        control={control}
+        callback={setAvatar}
+        accept={'image/*'}
+        btnId={btnId}
+        fileError={fileError}
+        errorMessage={errorMessage}
+      />
 
-        <Controller
-          control={control}
-          name="avatar"
-          render={({ field: { onChange } }) => (
-            <input
-              id={`${btnId}`}
-              className={classNames(
-                s.avatar,
-                avatarError && s.border__error,
-                avatarError === 'noError' && s.border__success,
-              )}
-              type="file"
-              accept="image/*"
-              {...register('avatar', { required: true })}
-              onChange={e => {
-                setAvatar(e);
-                if (e.target.files) {
-                  return onChange(e.target.files[0]);
-                }
-              }}
-              onMouseOut={onMouseOut}
-              onMouseOver={onMouseOver}
-            />
-          )}
-        />
-
-        {avatarError && avatarError !== 'noError' && (
-          <SvgIcon
-            className={classNames(s.validation, s.exclamation)}
-            svgId="ui-exclamation"
-            size={24}
-          />
-        )}
-        {avatarError === 'noError' && (
-          <SvgIcon
-            className={classNames(s.validation, s.check)}
-            svgId="ui-check"
-            size={24}
-          />
-        )}
-        {activeIcon && (
-          <SvgIcon
-            className={classNames(s.validation, s.plus)}
-            svgId="ui-plus"
-            size={24}
-          />
-        )}
-      </label>
-
-      {Object.keys(touchedFields).length > 0 && (
+      {Object.keys(formState.touchedFields).length > 0 && (
         <Button
           className={s.button}
           type="submit"
