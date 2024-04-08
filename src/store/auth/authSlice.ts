@@ -18,7 +18,7 @@ const handleLoginSuccess = (
   state: TInitialStae,
   action: PayloadAction<{ result: TAuth }>,
 ) => {
-  return { ...state, token: action.payload.result };
+  state.token = action.payload.result;
 };
 
 // slice

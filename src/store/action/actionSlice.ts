@@ -36,7 +36,7 @@ const handleActionSuccess = (
 ) => {
   const { result, detail, status_code } = action.payload;
   status_code < 300 ? toast.success(detail) : toast.error(detail);
-  return { ...state, result };
+  state.result = result;
 };
 
 // slice
