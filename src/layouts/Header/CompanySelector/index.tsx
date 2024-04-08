@@ -16,7 +16,9 @@ const CompanySelector = () => {
     <label
       key={el}
       className={classNames(s.label, select === el && s.active)}
-      onClick={() => dispatch(selectCompanies(el))}
+      onClick={() => {
+        dispatch(selectCompanies(el));
+      }}
     >
       {el}
       <input

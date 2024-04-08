@@ -26,10 +26,7 @@ const ProfileForm = () => {
   const { company } = useCompany();
 
   // all link inputs
-  const allLinks = useMemo(
-    () => inputFields.filter(el => el.includes('link')),
-    [],
-  );
+  const allLinks = inputFields.filter(el => el.includes('link'));
 
   // hidden link inputs
   let hiddenLinks = useMemo(

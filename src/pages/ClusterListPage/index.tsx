@@ -33,9 +33,8 @@ const ClusterListPage = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    userList.length === 0 &&
-      dispatchExtra(getAllUsersThunk({ page: page + 1, page_size }));
-  }, [dispatchExtra, page, userList.length]);
+    !userList[0] && dispatchExtra(getAllUsersThunk({ page: 1, page_size }));
+  }, [dispatchExtra, userList]);
 
   const handleLoadMore = (e: MouseEvent<HTMLButtonElement>) => {
     dispatchExtra(getAllUsersThunk({ page: page + 1, page_size }));

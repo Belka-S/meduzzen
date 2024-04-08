@@ -3,27 +3,29 @@ import classNames from 'classnames';
 import ProfileBtn from 'components/ProfileBtn';
 import Button from 'components/ui/Button';
 import SvgIcon from 'components/ui/SvgIcon';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { TCompanyOfAction, useAppDispatch, useAppExtraDispatch } from 'store';
+import { TCompanyOfList, useAppDispatch, useAppExtraDispatch } from 'store';
 import { checkCompany, setCompanyAppendix } from 'store/company';
 import { uncheckCompany, updateVisibleThunk } from 'store/company';
 import { deleteCompanyThunk, editCompany } from 'store/company';
+import { getMembersListThunk } from 'store/companyData';
 import { getCompaniesListThunk } from 'store/userData';
 import { useCompany, useUser } from 'utils/hooks';
 
 import s from './index.module.scss';
 
 type TCompanyProps = {
-  props: TCompanyOfAction;
+  props: TCompanyOfList;
 };
 
 const CompanyItem: FC<TCompanyProps> = ({ props }) => {
   const { company_id, company_name, company_title } = props;
   const { is_visible, company_avatar } = props;
+  const { pathname } = useLocation();
   const dispatch = useAppDispatch();
   const dispatchExtra = useAppExtraDispatch();
-  const { company, checkedCompanies } = useCompany();
+  const { company, checkedCompanies, select } = useCompany();
   const { owner, checkedUsers } = useUser();
 
   if (!company_id) return;
@@ -34,8 +36,12 @@ const CompanyItem: FC<TCompanyProps> = ({ props }) => {
   const handleDelete = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.currentTarget.blur();
+    if (!confirm(`Are you sure you want to delete: ${company_name}`)) return;
     const { payload } = await dispatchExtra(deleteCompanyThunk({ company_id }));
     toast.success(payload.detail);
+    if (!owner) return;
+    const { user_id } = owner;
+    await dispatchExtra(getCompaniesListThunk({ user_id }));
   };
 
   const switchVisible = async (e: MouseEvent<HTMLButtonElement>) => {
@@ -62,9 +68,18 @@ const CompanyItem: FC<TCompanyProps> = ({ props }) => {
       to={`/company/${company_id}`}
       id={isActive ? 'active-company' : ''}
       className={classNames(s.item, s.hover, isActive && s.active)}
-      onClick={() =>
-        !checkedUsers.length && dispatch(setCompanyAppendix('members'))
-      }
+      onClick={async () => {
+        if (
+          !checkedUsers.length &&
+          select !== 'all' &&
+          pathname === '/company'
+        ) {
+          await dispatchExtra(getMembersListThunk({ company_id }));
+          dispatch(setCompanyAppendix('members'));
+        } else {
+          dispatch(setCompanyAppendix(null));
+        }
+      }}
     >
       <ProfileBtn className={s.avatar} ava={ava} />
 
@@ -96,7 +111,7 @@ const CompanyItem: FC<TCompanyProps> = ({ props }) => {
           color="transparent"
           onClick={handleCheck}
         >
-          <SvgIcon className={s.icon_svg} svgId="ui-circle_uncheck" />
+          <SvgIcon className={s.icon_svg} svgId="ui-uncheck" />
         </Button>
       )}
 
@@ -107,7 +122,7 @@ const CompanyItem: FC<TCompanyProps> = ({ props }) => {
           color="transparent"
           onClick={handleUncheck}
         >
-          <SvgIcon className={s.icon_svg__shown} svgId="ui-circle_check" />
+          <SvgIcon className={s.icon_svg__shown} svgId="ui-check" />
         </Button>
       )}
 

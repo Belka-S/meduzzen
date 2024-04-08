@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
-import { TAnswers, TQuiz, TRating, TRatingAnalytic } from 'store';
-import { TUserOfAction, TUsersWithQuizzesPassed } from 'store';
+import { TAnswers, TQuiz, TRating, TRatingAnalytic, TUserOfList } from 'store';
+import { TUsersWithQuizzesPassed } from 'store';
 import * as TNK from 'store/companyData/companyDataThunks';
 import { initialState, TInitialState } from 'store/companyData/initialState';
 
@@ -18,7 +18,7 @@ const thunkArr = [
   TNK.getMembersListThunk,
   TNK.getQuizzesPassInCompanyThunk,
   TNK.getQuizzesListThunk,
-  TNK.getRequestsListThunk,
+  TNK.getCompanyRequestsListThunk,
   TNK.getAnalyticQuizThunk,
   TNK.getAnalyticUserThunk,
   TNK.getAnalyticUsersThunk,
@@ -41,22 +41,22 @@ const handleSuccess = () => {
 
 const handleMembersListSuccess = (
   state: TInitialState,
-  action: PayloadAction<{ result: { users: TUserOfAction[] } }>,
+  action: PayloadAction<{ result: { users: TUserOfList[] } }>,
 ) => ({ ...state, members: action.payload.result.users });
 
 const handleInvitesListSuccess = (
   state: TInitialState,
-  action: PayloadAction<{ result: { users: TUserOfAction[] } }>,
+  action: PayloadAction<{ result: { users: TUserOfList[] } }>,
 ) => ({ ...state, invites: action.payload.result.users });
 
 const handleRequestsListSuccess = (
   state: TInitialState,
-  action: PayloadAction<{ result: { users: TUserOfAction[] } }>,
+  action: PayloadAction<{ result: { users: TUserOfList[] } }>,
 ) => ({ ...state, requests: action.payload.result.users });
 
 const handleBlockedListSuccess = (
   state: TInitialState,
-  action: PayloadAction<{ result: { users: TUserOfAction[] } }>,
+  action: PayloadAction<{ result: { users: TUserOfList[] } }>,
 ) => ({ ...state, blocked: action.payload.result.users });
 
 const handleQuizzesListSuccess = (
@@ -124,7 +124,10 @@ const companyDataSlice = createSlice({
       // success
       .addCase(TNK.getMembersListThunk.fulfilled, handleMembersListSuccess)
       .addCase(TNK.getInvitesListThunk.fulfilled, handleInvitesListSuccess)
-      .addCase(TNK.getRequestsListThunk.fulfilled, handleRequestsListSuccess)
+      .addCase(
+        TNK.getCompanyRequestsListThunk.fulfilled,
+        handleRequestsListSuccess,
+      )
       .addCase(TNK.getBlockedListThunk.fulfilled, handleBlockedListSuccess)
       .addCase(TNK.getQuizzesListThunk.fulfilled, handleQuizzesListSuccess)
       .addCase(TNK.getAnswersCompanyThunk.fulfilled, handleAnswersCompanySs)

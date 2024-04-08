@@ -1,7 +1,6 @@
 import {
   TCompany,
   TCompanyAppendix,
-  TCompanyOfAction,
   TCompanyOfList,
   TCompanySelect,
   TEdit,
@@ -13,7 +12,7 @@ export type TInitialState = {
   companyList: TCompanyOfList[];
   pagination: TPagination;
   select: TCompanySelect;
-  checked: TCompanyOfAction[];
+  checked: TCompanyOfList[];
   appendix: TCompanyAppendix;
   edit: TEdit;
 

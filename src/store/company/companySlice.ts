@@ -1,10 +1,5 @@
 import { toast } from 'react-toastify';
-import {
-  TCompany,
-  TCompanyAppendix,
-  TCompanyOfAction,
-  TCompanyOfList,
-} from 'store';
+import { TCompany, TCompanyAppendix, TCompanyOfList } from 'store';
 import { TCompanySelect, TEdit, TPagination } from 'store';
 import { initialState, TInitialState } from 'store/company';
 import * as TNK from 'store/company/companyThunks';
@@ -40,7 +35,7 @@ const handleSelectCompanies = (
 
 const handleCheckCompany = (
   state: TInitialState,
-  action: PayloadAction<TCompanyOfAction>,
+  action: PayloadAction<TCompanyOfList>,
 ) => {
   state.checked.push(action.payload);
 };
@@ -103,11 +98,14 @@ const handleGetAllSuccess = (
   action: PayloadAction<{
     result: { companies: TCompanyOfList[]; pagination: TPagination };
   }>,
-) => ({
-  ...state,
-  companyList: state.companyList.concat(action.payload.result.companies),
-  pagination: action.payload.result.pagination,
-});
+) => {
+  const { companies, pagination } = action.payload.result;
+  return {
+    ...state,
+    companyList: state.companyList.concat(companies),
+    pagination,
+  };
+};
 
 // slice
 const companySlice = createSlice({

@@ -1,12 +1,5 @@
 import { toast } from 'react-toastify';
-import {
-  TEdit,
-  TPagination,
-  TUser,
-  TUserAppendix,
-  TUserOfAction,
-  TUserOfList,
-} from 'store';
+import { TEdit, TPagination, TUser, TUserAppendix, TUserOfList } from 'store';
 import { initialState, TInitialState } from 'store/user';
 import * as TNK from 'store/user/userThunks';
 
@@ -35,20 +28,9 @@ const handleSuccess = () => {
   toast.success('Success');
 };
 
-const handleGetAllSuccess = (
-  state: TInitialState,
-  action: PayloadAction<{
-    result: { users: TUserOfList[]; pagination: TPagination };
-  }>,
-) => ({
-  ...state,
-  userList: state.userList.concat(action.payload.result.users),
-  pagination: action.payload.result.pagination,
-});
-
 const handleCheckUser = (
   state: TInitialState,
-  action: PayloadAction<TUserOfAction>,
+  action: PayloadAction<TUserOfList>,
 ) => {
   state.checked.push(action.payload);
 };
@@ -93,6 +75,20 @@ const handleAvatarPreviewSuccess = (
 ) => {
   if (!state || !state.user) return;
   return { ...state, user: { ...state.user, ...action.payload } };
+};
+
+const handleGetAllSuccess = (
+  state: TInitialState,
+  action: PayloadAction<{
+    result: { users: TUserOfList[]; pagination: TPagination };
+  }>,
+) => {
+  const { users, pagination } = action.payload.result;
+  return {
+    ...state,
+    userList: state.userList.concat(users),
+    pagination,
+  };
 };
 
 // slice

@@ -17,18 +17,10 @@ const CompanyListPage = () => {
   const dispatch = useAppDispatch();
   const dispatchExtra = useAppExtraDispatch();
   const { owner } = useUser();
-  const { companyList, pagination, select } = useCompany();
   const { myCompanies } = useAction();
-
+  const { companyList, pagination, select } = useCompany();
   const { current_page: page, total_page } = pagination;
   const page_size = 30;
-
-  const companies = useMemo(() => {
-    if (select === 'all') return companyList;
-    return [...myCompanies]
-      .filter(el => el.action === select)
-      .sort((a, b) => a.company_id - b.company_id);
-  }, [companyList, myCompanies, select]);
 
   useEffect(() => {
     const activeFileEl = document.getElementById('active-company');
@@ -43,19 +35,32 @@ const CompanyListPage = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (select === 'all') {
-      dispatchExtra(getAllCompaniesThunk({ page: page + 1, page_size }));
-    } else if (owner?.user_id) {
-      dispatchExtra(getCompaniesListThunk({ user_id: owner?.user_id }));
-    }
-  }, [dispatchExtra, page, companyList.length, owner?.user_id, select]);
+    !companyList[0] &&
+      dispatchExtra(getAllCompaniesThunk({ page: 1, page_size }));
+  }, [companyList, dispatchExtra]);
+
+  useEffect(() => {
+    if (!owner) return;
+    const { user_id } = owner;
+    dispatchExtra(getCompaniesListThunk({ user_id }));
+  }, [dispatchExtra, owner]);
 
   const handleLoadMore = (e: MouseEvent<HTMLButtonElement>) => {
     dispatchExtra(getAllCompaniesThunk({ page: page + 1, page_size }));
     e.currentTarget.blur();
   };
 
-  const isLoadMore = total_page !== 0 && page < total_page;
+  const companies = useMemo(() => {
+    const myIds = myCompanies.map(el => el.company_id);
+
+    return select === 'all'
+      ? companyList.filter(el => !myIds.includes(el.company_id))
+      : myCompanies
+          .filter(el => el.action === select)
+          .sort((a, b) => a.company_id - b.company_id);
+  }, [companyList, myCompanies, select]);
+
+  const isLoadMore = total_page !== 0 && page < total_page && select === 'all';
 
   return (
     <Section className={classNames('container', s.screen)}>

@@ -30,7 +30,7 @@ export const getInvitesListThunk = createAppAsyncThunk(
   },
 );
 
-export const getRequestsListThunk = createAppAsyncThunk(
+export const getCompanyRequestsListThunk = createAppAsyncThunk(
   'companyData/RequestsList',
   async (params: Pick<TCompany, 'company_id'>, thunkAPI) => {
     try {
