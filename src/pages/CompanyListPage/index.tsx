@@ -60,7 +60,7 @@ const CompanyListPage = () => {
           .sort((a, b) => a.company_id - b.company_id);
   }, [companyList, myCompanies, select]);
 
-  const isLoadMore = total_page !== 0 && page < total_page;
+  const isLoadMore = total_page !== 0 && page < total_page && select === 'all';
 
   return (
     <Section className={classNames('container', s.screen)}>

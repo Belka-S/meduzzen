@@ -6,24 +6,18 @@ import CompanyForm from 'layouts/Footer/CompanyForm';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppExtraDispatch } from 'store';
-import {
-  acceptActionRequestThunk,
-  createActionFromUserThunk,
-  declineActionThunk,
-} from 'store/action';
+import { acceptActionRequestThunk, addToAdminThunk } from 'store/action';
+import { declineActionThunk, removeFromAdminThunk } from 'store/action';
+import { createActionFromUserThunk } from 'store/action';
 import { createActionFromCompanyThunk, leaveCompanyThunk } from 'store/action';
 import { deleteCompanyThunk, editCompany } from 'store/company';
 import { setCompanyAppendix, uncheckAllCompanies } from 'store/company';
-import {
-  getCompanyRequestsListThunk,
-  getInvitesListThunk,
-} from 'store/companyData';
+import { getCompanyRequestsListThunk } from 'store/companyData';
+import { getInvitesListThunk } from 'store/companyData';
 import { getMembersListThunk } from 'store/companyData';
 import { setUserAppendix, uncheckAllUsers } from 'store/user';
-import {
-  getCompaniesListThunk,
-  getUserRequestsListThunk,
-} from 'store/userData';
+import { getCompaniesListThunk } from 'store/userData';
+import { getUserRequestsListThunk } from 'store/userData';
 import { useAction, useCompany, useUser } from 'utils/hooks';
 
 import s from './index.module.scss';
@@ -53,110 +47,7 @@ const CompanyEditBar = () => {
     return user?.action_id;
   });
 
-  const uncheckAll = () => {
-    dispatch(setUserAppendix(null));
-    dispatch(uncheckAllCompanies());
-  };
-
-  const navigateToCompany = () => {
-    dispatch(setUserAppendix('checked'));
-    navigate(`/cluster/${owner?.user_id}`, { replace: true });
-  };
-
-  const getIvitesList = async (e: MouseEvent<HTMLButtonElement>) => {
-    e.currentTarget.blur();
-    const company_id = company?.company_id;
-    company_id && (await dispatchExtra(getInvitesListThunk({ company_id })));
-    dispatch(setCompanyAppendix('invites'));
-  };
-
-  const getRequestsList = async (e: MouseEvent<HTMLButtonElement>) => {
-    e.currentTarget.blur();
-    const company_id = company?.company_id;
-    company_id &&
-      (await dispatchExtra(getCompanyRequestsListThunk({ company_id })));
-    dispatch(setCompanyAppendix('requests'));
-  };
-
-  const getMembersList = async (e: MouseEvent<HTMLButtonElement>) => {
-    e.currentTarget.blur();
-    const company_id = company?.company_id;
-    company_id && (await dispatchExtra(getMembersListThunk({ company_id })));
-    dispatch(setCompanyAppendix('members'));
-  };
-
-  const declineAction = () => {
-    if (checkedInvites[0]) {
-      checkedInvites.forEach(async (action_id, i) => {
-        action_id && (await dispatchExtra(declineActionThunk({ action_id })));
-        if (i + 1 === checkedInvites.length && company?.company_id) {
-          const { company_id } = company;
-          await dispatchExtra(getInvitesListThunk({ company_id }));
-          dispatch(uncheckAllUsers());
-        }
-      });
-    }
-    if (checkedRequests[0]) {
-      checkedRequests.forEach(async (action_id, i) => {
-        action_id && (await dispatchExtra(declineActionThunk({ action_id })));
-        if (i + 1 === checkedRequests.length && company?.company_id) {
-          const { company_id } = company;
-          await dispatchExtra(getCompanyRequestsListThunk({ company_id }));
-          dispatch(uncheckAllUsers());
-        }
-      });
-    }
-  };
-
-  const acceptRequest = () => {
-    checkedRequests.forEach(async (action_id, i) => {
-      action_id &&
-        (await dispatchExtra(acceptActionRequestThunk({ action_id })));
-      if (i + 1 === checkedRequests.length && company?.company_id) {
-        const { company_id } = company;
-        await dispatchExtra(getCompanyRequestsListThunk({ company_id }));
-        dispatch(uncheckAllUsers());
-      }
-    });
-  };
-
-  const requestJoinCompany = () => {
-    checkedCompanies.map(async ({ company_id }, i) => {
-      const params = { company_id };
-      await dispatchExtra(createActionFromUserThunk(params));
-      if (i + 1 === checkedCompanies.length && owner?.user_id) {
-        const { user_id } = owner;
-        dispatch(uncheckAllCompanies());
-        dispatch(setUserAppendix('requests'));
-        await dispatchExtra(getUserRequestsListThunk({ user_id }));
-        navigate(`/cluster/${user_id}`, { replace: true });
-      }
-    });
-  };
-
-  const leaveCompany = () => {
-    if (checkedCompanies[0]) {
-      checkedCompanies.forEach(async ({ action_id }, i) => {
-        action_id && (await dispatchExtra(leaveCompanyThunk({ action_id })));
-        if (i + 1 === checkedCompanies.length && owner?.user_id) {
-          const { user_id } = owner;
-          await dispatchExtra(getCompaniesListThunk({ user_id }));
-          dispatch(uncheckAllCompanies());
-        }
-      });
-    }
-    if (checkedUsers[0]) {
-      checkedUsers.forEach(async ({ action_id }, i) => {
-        action_id && (await dispatchExtra(leaveCompanyThunk({ action_id })));
-        console.log('action_id: ', action_id);
-        if (i + 1 === checkedUsers.length && company?.company_id) {
-          navigate('/company', { replace: true });
-          dispatch(uncheckAllUsers());
-        }
-      });
-    }
-  };
-
+  // edit profile
   const handleUpdateInfo = (e: MouseEvent<HTMLButtonElement>) => {
     if (!owner?.is_superuser) {
       if (!isMyCompany) {
@@ -189,7 +80,113 @@ const CompanyEditBar = () => {
     }
   };
 
-  const inviteUsersToCompany = (e: MouseEvent<HTMLButtonElement>) => {
+  // actions
+  const handleUncheckAll = () => {
+    dispatch(setUserAppendix(null));
+    dispatch(uncheckAllCompanies());
+  };
+
+  const handleNavigateToCompany = () => {
+    dispatch(setUserAppendix('checked'));
+    navigate(`/cluster/${owner?.user_id}`, { replace: true });
+  };
+
+  const handleGetIvitesList = async (e: MouseEvent<HTMLButtonElement>) => {
+    e.currentTarget.blur();
+    const company_id = company?.company_id;
+    company_id && (await dispatchExtra(getInvitesListThunk({ company_id })));
+    dispatch(setCompanyAppendix('invites'));
+  };
+
+  const handleGetRequestsList = async (e: MouseEvent<HTMLButtonElement>) => {
+    e.currentTarget.blur();
+    const company_id = company?.company_id;
+    company_id &&
+      (await dispatchExtra(getCompanyRequestsListThunk({ company_id })));
+    dispatch(setCompanyAppendix('requests'));
+  };
+
+  const handleGetMembersList = async (e: MouseEvent<HTMLButtonElement>) => {
+    e.currentTarget.blur();
+    const company_id = company?.company_id;
+    company_id && (await dispatchExtra(getMembersListThunk({ company_id })));
+    dispatch(setCompanyAppendix('members'));
+  };
+
+  const handleDeclineAction = () => {
+    if (checkedInvites[0]) {
+      checkedInvites.forEach(async (action_id, i) => {
+        action_id && (await dispatchExtra(declineActionThunk({ action_id })));
+        if (i + 1 === checkedInvites.length && company?.company_id) {
+          const { company_id } = company;
+          await dispatchExtra(getInvitesListThunk({ company_id }));
+          dispatch(uncheckAllUsers());
+        }
+      });
+    }
+    if (checkedRequests[0]) {
+      checkedRequests.forEach(async (action_id, i) => {
+        action_id && (await dispatchExtra(declineActionThunk({ action_id })));
+        if (i + 1 === checkedRequests.length && company?.company_id) {
+          const { company_id } = company;
+          await dispatchExtra(getCompanyRequestsListThunk({ company_id }));
+          dispatch(uncheckAllUsers());
+        }
+      });
+    }
+  };
+
+  const handleAcceptRequest = () => {
+    checkedRequests.forEach(async (action_id, i) => {
+      if (!action_id) return;
+      await dispatchExtra(acceptActionRequestThunk({ action_id }));
+      if (i + 1 === checkedRequests.length && company?.company_id) {
+        const { company_id } = company;
+        await dispatchExtra(getCompanyRequestsListThunk({ company_id }));
+        dispatch(uncheckAllUsers());
+      }
+    });
+  };
+
+  const handleRequestJoinCompany = () => {
+    checkedCompanies.map(async ({ company_id }, i) => {
+      const params = { company_id };
+      await dispatchExtra(createActionFromUserThunk(params));
+      if (i + 1 === checkedCompanies.length && owner?.user_id) {
+        const { user_id } = owner;
+        dispatch(uncheckAllCompanies());
+        dispatch(setUserAppendix('requests'));
+        await dispatchExtra(getUserRequestsListThunk({ user_id }));
+        navigate(`/cluster/${user_id}`, { replace: true });
+      }
+    });
+  };
+
+  const handleLeaveCompany = () => {
+    if (checkedCompanies[0]) {
+      checkedCompanies.forEach(async ({ action_id }, i) => {
+        if (!action_id) return;
+        await dispatchExtra(leaveCompanyThunk({ action_id }));
+        if (i + 1 === checkedCompanies.length && owner?.user_id) {
+          const { user_id } = owner;
+          await dispatchExtra(getCompaniesListThunk({ user_id }));
+          dispatch(uncheckAllCompanies());
+        }
+      });
+    }
+    if (checkedUsers[0]) {
+      checkedUsers.forEach(async ({ action_id }, i) => {
+        if (!action_id) return;
+        await dispatchExtra(leaveCompanyThunk({ action_id }));
+        if (i + 1 === checkedUsers.length && company?.company_id) {
+          navigate('/company', { replace: true });
+          dispatch(uncheckAllUsers());
+        }
+      });
+    }
+  };
+
+  const handleInviteUsersToCompany = (e: MouseEvent<HTMLButtonElement>) => {
     if (!company) return;
     if (!owner?.is_superuser) {
       if (!isMyCompany) {
@@ -219,23 +216,71 @@ const CompanyEditBar = () => {
     }
   };
 
+  const handleAddToAdmin = () => {
+    checkedUsers.forEach(async ({ action_id }, i) => {
+      if (!action_id) return;
+      await dispatchExtra(addToAdminThunk({ action_id }));
+      if (i + 1 === checkedRequests.length && company?.company_id) {
+        const { company_id } = company;
+        await dispatchExtra(getMembersListThunk({ company_id }));
+        dispatch(uncheckAllUsers());
+      }
+    });
+  };
+
+  const handleRemoveFromAdmin = () => {
+    checkedUsers.forEach(async ({ action_id }, i) => {
+      if (!action_id) return;
+      await dispatchExtra(removeFromAdminThunk({ action_id }));
+      if (i + 1 === checkedRequests.length && company?.company_id) {
+        const { company_id } = company;
+        await dispatchExtra(getMembersListThunk({ company_id }));
+        dispatch(uncheckAllUsers());
+      }
+    });
+  };
+
   return (
     <div className={s.editbar}>
       <EditBarBtn
-        onClick={getIvitesList}
+        onClick={handleAddToAdmin}
+        svgId="ui-admin_add"
+        size={26}
+        shownIf={
+          select === 'owner' &&
+          appendixCompany === 'members' &&
+          !!companyData.members[1] &&
+          !!checkedUsers[0]
+        }
+      />
+
+      <EditBarBtn
+        onClick={handleRemoveFromAdmin}
+        svgId="ui-admin_block"
+        size={26}
+        shownIf={
+          select === 'owner' &&
+          appendixCompany === 'members' &&
+          !!companyData.members[1] &&
+          !!checkedUsers[0]
+        }
+      />
+
+      <EditBarBtn
+        onClick={handleGetIvitesList}
         svgId="ui-invite"
         shownIf={isMyCompany && isCompanyProfile && !checkedUsers[0]}
       />
 
       <EditBarBtn
-        onClick={getRequestsList}
+        onClick={handleGetRequestsList}
         svgId="ui-request"
         shownIf={isMyCompany && isCompanyProfile && !checkedUsers[0]}
         size={24}
       />
 
       <EditBarBtn
-        onClick={inviteUsersToCompany}
+        onClick={handleInviteUsersToCompany}
         svgId="ui-add_user"
         shownIf={
           isMyCompany &&
@@ -247,6 +292,7 @@ const CompanyEditBar = () => {
       />
 
       <EditBarBtn
+        onClick={handleRequestJoinCompany}
         svgId="ui-add_company"
         shownIf={
           !!checkedCompanies[0] &&
@@ -255,11 +301,10 @@ const CompanyEditBar = () => {
           appendix !== 'checked'
         }
         size={24}
-        onClick={requestJoinCompany}
       />
 
       <EditBarBtn
-        onClick={acceptRequest}
+        onClick={handleAcceptRequest}
         svgId="ui-accept"
         shownIf={
           (!!checkedInvites[0] || !!checkedRequests[0]) &&
@@ -269,14 +314,14 @@ const CompanyEditBar = () => {
       />
 
       <EditBarBtn
-        onClick={declineAction}
+        onClick={handleDeclineAction}
         svgId="ui-decline"
         shownIf={!!checkedInvites[0] || !!checkedRequests[0]}
         size={24}
       />
 
       <EditBarBtn
-        onClick={navigateToCompany}
+        onClick={handleNavigateToCompany}
         svgId="ui-add_company"
         shownIf={
           pathname === '/company' &&
@@ -287,7 +332,7 @@ const CompanyEditBar = () => {
       />
 
       <EditBarBtn
-        onClick={leaveCompany}
+        onClick={handleLeaveCompany}
         svgId="ui-member_block"
         shownIf={
           (pathname.includes('/company/') &&
@@ -299,7 +344,7 @@ const CompanyEditBar = () => {
       />
 
       <EditBarBtn
-        onClick={getMembersList}
+        onClick={handleGetMembersList}
         svgId="ui-members"
         shownIf={isCompanyProfile && select !== 'all'}
       />
@@ -317,7 +362,7 @@ const CompanyEditBar = () => {
       />
 
       <EditBarBtn
-        onClick={uncheckAll}
+        onClick={handleUncheckAll}
         svgId="ui-uncheck"
         shownIf={pathname === '/company' && !!checkedCompanies[0]}
       />

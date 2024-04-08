@@ -21,7 +21,7 @@ type TUserProps = {
 
 const UserItem: FC<TUserProps> = ({ props }) => {
   const { user_id, user_email, user_avatar } = props;
-  const { user_firstname, user_lastname } = props;
+  const { user_firstname, user_lastname, action } = props;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const dispatchExtra = useAppExtraDispatch();
@@ -32,6 +32,7 @@ const UserItem: FC<TUserProps> = ({ props }) => {
   const isMyAccount = owner?.user_id === user_id;
   const isActive = user_id === user?.user_id;
   const isOwner = user_id === owner?.user_id;
+  const isAdmin = action === 'admin';
   const isLastName = user_firstname !== user_lastname;
   const name = `${user_firstname} ${user_lastname}`;
   const ava = { id: user_id, url: user_avatar, name };
@@ -89,6 +90,7 @@ const UserItem: FC<TUserProps> = ({ props }) => {
       )}
     >
       <ProfileBtn className={s.avatar} ava={ava} />
+      {isAdmin && <SvgIcon className={s.admin} svgId="ui-gear" size={24} />}
 
       <span>{user_email}</span>
       <span>{trimName(user_firstname ?? '')}</span>

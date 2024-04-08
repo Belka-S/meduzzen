@@ -21,6 +21,7 @@
 }
 
 .item {
+  position: relative;
   padding-block: 4px;
 
   display: grid;
@@ -71,6 +72,13 @@
 .avatar {
   margin-left: 0;
   margin-right: 10px;
+}
+
+.admin {
+  position: absolute;
+  bottom: -1px;
+  left: 38px;
+  fill: var(--active-color);
 }
 
 .button {
