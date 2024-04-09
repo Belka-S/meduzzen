@@ -2,6 +2,7 @@ import { MouseEvent, useState } from 'react';
 import EditBarBtn from 'components/EditBarBtn';
 import Modal from 'components/ui/Modal';
 import H6 from 'components/ui/Typography/H6';
+import QuizForm from 'layouts/Footer//QuizForm';
 import CompanyForm from 'layouts/Footer/CompanyForm';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -32,7 +33,8 @@ const CompanyEditBar = () => {
   const { appendix: appendixCompany, select } = useCompany();
   const { owner, checkedUsers, appendix } = useUser();
   const { companyData } = useAction();
-  const [isModal, setIsModal] = useState(false);
+  const [isAddCompanyModal, setIsAddCompanyModal] = useState(false);
+  const [isAddQuizModal, setIsAddQuizModal] = useState(false);
 
   const isMyCompany = company?.company_owner?.user_id === owner?.user_id;
   const isCompanyProfile = pathname.includes('/company/');
@@ -350,6 +352,17 @@ const CompanyEditBar = () => {
       />
 
       <EditBarBtn
+        onClick={() => setIsAddCompanyModal(!isAddCompanyModal)}
+        svgId="ui-quiz"
+        size={26}
+        shownIf={
+          isCompanyProfile
+          // && (owner?.action === 'admin' || owner?.action === 'owner')
+          // && (select === 'owner' || select === 'member')
+        }
+      />
+
+      <EditBarBtn
         svgId="ui-edit"
         onClick={handleUpdateInfo}
         shownIf={isCompanyProfile}
@@ -368,16 +381,30 @@ const CompanyEditBar = () => {
       />
 
       <EditBarBtn
-        onClick={() => setIsModal(!isModal)}
+        onClick={() => setIsAddCompanyModal(!isAddCompanyModal)}
         svgId="menu-plus"
         shownIf={!isCompanyProfile}
       />
 
       <H6>COMPANY</H6>
 
-      {isModal && (
-        <Modal className={s.modal} setIsModal={() => setIsModal(!isModal)}>
-          <CompanyForm setIsModal={() => setIsModal(!isModal)} />
+      {isAddCompanyModal && (
+        <Modal
+          className={s.modal}
+          setIsModal={() => setIsAddCompanyModal(!isAddCompanyModal)}
+        >
+          <CompanyForm
+            setIsModal={() => setIsAddCompanyModal(!isAddCompanyModal)}
+          />
+        </Modal>
+      )}
+
+      {isAddQuizModal && (
+        <Modal
+          className={s.modal}
+          setIsModal={() => setIsAddQuizModal(!isAddCompanyModal)}
+        >
+          <QuizForm setIsModal={() => setIsAddQuizModal(!isAddCompanyModal)} />
         </Modal>
       )}
     </div>
