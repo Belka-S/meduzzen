@@ -94,7 +94,6 @@ export type TAction = {
 export type TActionParams = { user_id: number; company_id: number };
 
 // user data
-
 export type TQuizUserParams = { user_id: number; quiz_id: number };
 
 export type TNotificationParams = { user_id: number; notification_id: number };
@@ -105,32 +104,6 @@ export type TRatingAnalytic = {
   current_rating: number;
   average_rating: number;
   pass_at: Date;
-};
-
-export type TAnswers = {
-  user_id: number;
-  company_id: number;
-  quiz_id: number;
-  question_id: number;
-  question: string;
-  answer: string;
-  is_correct: boolean;
-  created_at: Date;
-};
-
-export type TQuiz = {
-  quiz_id: number;
-  quiz_name: string;
-  quiz_title: string;
-  quiz_description: string;
-};
-
-export type TQuizPass = TQuiz & { last_quiz_pass_at: Date };
-
-export type TUsersWithQuizzesPassed = {
-  user_id: number;
-  quiz_id: number;
-  last_quiz_pass_at: Date;
 };
 
 export type TNotification = {
@@ -145,3 +118,55 @@ export type TNotification = {
 
 // company data
 export type TQuizCompanyParams = { company_id: number; quiz_id: number };
+
+// quiz
+export type TQuizCreate = {
+  quiz_name: string;
+  quiz_frequency: number;
+  company_id: number;
+  questions_list: Array<TQuestion & { question_correct_answer: number }>;
+};
+
+export type TQuestion = {
+  question_text: string;
+  question_answers: string[];
+  question_correct_answer?: number;
+};
+
+export type TQuizOfList = {
+  quiz_id: number;
+  quiz_name: string;
+  quiz_title: string;
+  quiz_description: string;
+  quiz_frequency?: number;
+};
+
+export type TQuiz = TQuizOfList & {
+  created_by: TUserOfList;
+  questions_list: Array<TQuestion & { question_id: number }>;
+};
+
+export type TAnswer = {
+  user_id: number;
+  company_id: number;
+  quiz_id: number;
+  question_id: number;
+  question: string;
+  answer: string;
+  is_correct: boolean;
+  created_at: Date;
+};
+
+export type TQuizPass = {
+  user_id: number;
+  quizzes: Array<{ quiz_id: number; last_quiz_pass_at: Date }>;
+};
+
+export type TUsersWithQuizzesPassed = {
+  user_id: number;
+  quiz_id: number;
+  last_quiz_pass_at: Date;
+};
+
+// common result
+export type TCommonResult = { [key: string]: number } | string | null;

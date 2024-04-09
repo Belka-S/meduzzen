@@ -26,7 +26,7 @@ const fn = (type: 'pending' | 'fulfilled' | 'rejected') =>
   });
 
 // handlers
-const handleActionSuccess = (
+const handleResultSuccess = (
   state: TInitialState,
   action: PayloadAction<{
     result: Pick<TAction, 'action_id'> | string | null;
@@ -47,16 +47,14 @@ const actionSlice = createSlice({
   extraReducers: builder => {
     builder
       // success
-      .addCase(TNK.createActionFromUserThunk.fulfilled, handleActionSuccess)
-      .addCase(TNK.createActionFromCompanyThunk.fulfilled, handleActionSuccess)
-      .addCase(TNK.acceptActionInviteThunk.fulfilled, handleActionSuccess)
-      .addCase(TNK.acceptActionRequestThunk.fulfilled, handleActionSuccess)
-      .addCase(TNK.declineActionThunk.fulfilled, handleActionSuccess)
-      .addCase(TNK.addToAdminThunk.fulfilled, handleActionSuccess)
-      .addCase(TNK.removeFromAdminThunk.fulfilled, handleActionSuccess)
-      // .addCase(TNK.addToBlockThunk.fulfilled, handleAddToBlockSuccess)
-      // .addCase(TNK.removeFromBlockThunk.fulfilled, handleRemoveFromBlockSuccess)
-      .addCase(TNK.leaveCompanyThunk.fulfilled, handleActionSuccess)
+      .addCase(TNK.createActionFromUserThunk.fulfilled, handleResultSuccess)
+      .addCase(TNK.createActionFromCompanyThunk.fulfilled, handleResultSuccess)
+      .addCase(TNK.acceptActionInviteThunk.fulfilled, handleResultSuccess)
+      .addCase(TNK.acceptActionRequestThunk.fulfilled, handleResultSuccess)
+      .addCase(TNK.declineActionThunk.fulfilled, handleResultSuccess)
+      .addCase(TNK.addToAdminThunk.fulfilled, handleResultSuccess)
+      .addCase(TNK.removeFromAdminThunk.fulfilled, handleResultSuccess)
+      .addCase(TNK.leaveCompanyThunk.fulfilled, handleResultSuccess)
       // loading, error
       .addMatcher(isAnyOf(...fn('pending')), state => {
         return { ...state, loading: true, error: false };

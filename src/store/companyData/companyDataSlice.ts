@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import { TAnswers, TQuiz, TRating, TRatingAnalytic, TUserOfList } from 'store';
+import { TAnswer, TQuiz, TRating, TRatingAnalytic, TUserOfList } from 'store';
 import { TUsersWithQuizzesPassed } from 'store';
 import * as TNK from 'store/companyData/companyDataThunks';
 import { initialState, TInitialState } from 'store/companyData/initialState';
@@ -74,21 +74,21 @@ const handleQuizzesListSuccess = (
 
 const handleAnswersCompanySs = (
   state: TInitialState,
-  action: PayloadAction<{ result: { answers: TAnswers[] } }>,
+  action: PayloadAction<{ result: { answers: TAnswer[] } }>,
 ) => {
   state.answersCompany = action.payload.result.answers;
 };
 
 const handleAnswersUserSs = (
   state: TInitialState,
-  action: PayloadAction<{ result: { answers: TAnswers[] } }>,
+  action: PayloadAction<{ result: { answers: TAnswer[] } }>,
 ) => {
   state.answersUser = action.payload.result.answers;
 };
 
 const handleAnswersQuizSs = (
   state: TInitialState,
-  action: PayloadAction<{ result: { answers: TAnswers[] } }>,
+  action: PayloadAction<{ result: { answers: TAnswer[] } }>,
 ) => {
   state.answersQuiz = action.payload.result.answers;
 };

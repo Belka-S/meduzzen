@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import { TAnswers, TCompanyOfList, TNotification } from 'store';
+import { TAnswer, TCompanyOfList, TNotification } from 'store';
 import { TQuizPass, TRatingAnalytic } from 'store';
 import { initialState, TInitialState } from 'store/userData/initialState';
 import * as TNK from 'store/userData/userDataThunks';
@@ -100,7 +100,7 @@ const handleAnalyticForQuizSs = (
 
 const handleAnswersSuccess = (
   state: TInitialState,
-  action: PayloadAction<{ result: { answers: TAnswers[] } }>,
+  action: PayloadAction<{ result: { answers: TAnswer[] } }>,
 ) => {
   state.answers = action.payload.result.answers;
 };
