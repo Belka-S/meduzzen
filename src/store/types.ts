@@ -81,7 +81,12 @@ export type TPaginationParams = { page: number; page_size: number };
 export type TEdit = false | 'avatar' | 'data';
 
 // profile appendix
-export type TUserAppendix = null | 'checked' | 'invites' | 'requests';
+export type TUserAppendix =
+  | null
+  | 'checked'
+  | 'invites'
+  | 'requests'
+  | 'quizzez';
 
 export type TCompanyAppendix = TUserAppendix | 'members';
 
@@ -124,7 +129,7 @@ export type TQuizCreate = {
   quiz_name: string;
   quiz_frequency: number;
   company_id: number;
-  questions_list: Array<TQuestion & { question_correct_answer: number }>;
+  questions_list: TQuestion[];
 };
 
 export type TQuestion = {

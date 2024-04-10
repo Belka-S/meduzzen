@@ -56,7 +56,12 @@ const CompanyListPage = () => {
     return select === 'all'
       ? companyList.filter(el => !myIds.includes(el.company_id))
       : myCompanies
-          .filter(el => el.action === select)
+          .filter(el => {
+            if (select === 'member') {
+              return el.action === select || el.action === 'admin';
+            }
+            return el.action === select;
+          })
           .sort((a, b) => a.company_id - b.company_id);
   }, [companyList, myCompanies, select]);
 

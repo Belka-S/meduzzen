@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import ProfileBtn from 'components/ProfileBtn';
 import Button from 'components/ui/Button';
 import SvgIcon from 'components/ui/SvgIcon';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { TUserOfList, useAppDispatch } from 'store';
 import { useAppExtraDispatch } from 'store';
@@ -11,7 +11,7 @@ import { logout } from 'store/auth';
 import { checkUser, cleanOwner, deleteUserThunk } from 'store/user';
 import { editUser, uncheckUser } from 'store/user';
 import { trimName } from 'utils/helpers';
-import { useUser } from 'utils/hooks';
+import { useCompany, useUser } from 'utils/hooks';
 
 import s from './index.module.scss';
 
@@ -23,15 +23,20 @@ const UserItem: FC<TUserProps> = ({ props }) => {
   const { user_id, user_email, user_avatar } = props;
   const { user_firstname, user_lastname, action } = props;
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const dispatch = useAppDispatch();
   const dispatchExtra = useAppExtraDispatch();
   const { user, owner, checkedUsers } = useUser();
+  const { company, select } = useCompany();
 
   if (!user_id) return;
   const isChecked = checkedUsers.some(el => el.user_id === user_id);
   const isMyAccount = owner?.user_id === user_id;
   const isActive = user_id === user?.user_id;
-  const isOwner = user_id === owner?.user_id;
+  const isOwner =
+    select === 'member' && pathname.includes('/company/')
+      ? user_id === company?.company_owner?.user_id
+      : user_id === owner?.user_id;
   const isAdmin = action === 'admin';
   const isLastName = user_firstname !== user_lastname;
   const name = `${user_firstname} ${user_lastname}`;
