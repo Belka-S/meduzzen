@@ -22,7 +22,6 @@ type TQuizProps = {
 const QuizItem: FC<TQuizProps> = ({ props }) => {
   const { quiz_id, quiz_name, quiz_title } = props;
   const { quiz_description, quiz_frequency } = props;
-  console.log('props: ', props);
   const { pathname } = useLocation();
   const dispatch = useAppDispatch();
   const dispatchExtra = useAppExtraDispatch();
@@ -63,7 +62,7 @@ const QuizItem: FC<TQuizProps> = ({ props }) => {
 
   return (
     <div
-      // id={isActive ? 'active-company' : ''}
+      // to={`/company/${1}`}
       className={classNames(s.item, s.hover, isActive && s.active)}
       onClick={handleLinkClick}
     >
@@ -72,12 +71,7 @@ const QuizItem: FC<TQuizProps> = ({ props }) => {
       <span>{quiz_description}</span>
       <span>{quiz_frequency}</span>
 
-      <Button
-        className={s.button}
-        variant="round"
-        color="transparent"
-        onClick={() => dispatch(editCompany('data'))}
-      >
+      <Button className={s.button} variant="round" color="transparent">
         <SvgIcon className={s.icon_svg} svgId="ui-edit" />
       </Button>
 

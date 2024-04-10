@@ -13,6 +13,8 @@ const Button: FC<TButtonProps> = props => {
     variant = 'orthogonal',
     type = 'button',
     label,
+    ref,
+    id,
 
     onClick,
     onMouseOver,
@@ -25,6 +27,8 @@ const Button: FC<TButtonProps> = props => {
       type={type}
       onClick={onClick}
       onMouseOver={onMouseOver}
+      ref={ref}
+      id={id}
     >
       {label && label}
       {children}

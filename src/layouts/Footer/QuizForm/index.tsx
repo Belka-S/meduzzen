@@ -1,15 +1,15 @@
-import { FC, useState } from 'react';
+import { FC, useRef, useState } from 'react';
 import InputText from 'components/InputText';
 import Button from 'components/ui/Button';
 import H3 from 'components/ui/Typography/H3';
 import { Resolver, SubmitHandler, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppExtraDispatch } from 'store';
-import { editCompany, setCompanyAppendix } from 'store/company';
+import { setCompanyAppendix } from 'store/company';
 import { getQuizzesListThunk } from 'store/companyData';
 import { createQuizThunk } from 'store/quiz';
+import { getQuestionArr } from 'utils/helpers';
 import { useCompany } from 'utils/hooks';
-import { quizSchema } from 'utils/validation';
+import { questionSchema, quizSchema } from 'utils/validation';
 import { InferType } from 'yup';
 
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -17,127 +17,119 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import s from './index.module.scss';
 
 type TQuizForm = { setIsModal: () => void };
+type TQuiz = InferType<typeof quizSchema>;
+const quizFields = Object.keys(quizSchema.fields) as Array<keyof TQuiz>;
 
-const initialState = { [`question_${1}`]: 1, [`answer_${1}-${1}`]: 1 };
+const answerListInitialState = { [`answer_${1}`]: 1 };
 
 const QuizForm: FC<TQuizForm> = ({ setIsModal }) => {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const dispatchExtra = useAppExtraDispatch();
   const { company } = useCompany();
 
-  const [questionCount, setQuestionCount] = useState(1);
   const [answerCount, setAnswerCount] = useState(1);
-  const [questions, setQuestions] = useState(initialState);
-
-  const schema = quizSchema(questions);
-  type TInput = InferType<typeof schema>;
-  const inputFields = Object.keys(quizSchema(questions).fields) as Array<
-    keyof TInput
-  >;
+  const [answerList, setAnsverList] = useState(answerListInitialState);
+  const [questions_list, setQuestionList] = useState<TQuestion[]>([]);
 
   // RHF
-  const resolver: Resolver<TInput> = yupResolver(quizSchema(questions));
-  const { register, watch, handleSubmit, formState } = useForm<TInput>({
-    resolver,
+  const quizResolver: Resolver<TQuiz> = yupResolver(quizSchema);
+  const { register, handleSubmit, formState } = useForm<TQuiz>({
+    resolver: quizResolver,
     mode: 'onChange',
     // defaultValues: { is_visible: true },
+  });
+
+  const shema = questionSchema(answerList);
+
+  type TQuestion = InferType<typeof shema>;
+  const questionFields = Object.keys(shema.fields) as Array<keyof TQuestion>;
+  const questionResolver: Resolver<TQuestion> = yupResolver(shema);
+  const {
+    reset,
+    register: registerQ,
+    handleSubmit: addQuestion,
+    formState: formStateQ,
+  } = useForm<TQuestion>({
+    resolver: questionResolver,
+    mode: 'onChange',
+    // defaultValues: { question_text: '', question_correct_answer: NaN },
   });
 
   if (!company) return;
   const { company_id } = company;
 
-  const q = inputFields
-    .filter(el => el.includes('question_text_'))
-    .map(el => watch(el));
-
-  const a = inputFields
-    .filter(el => el.includes(`question_answers_${q.length}`))
-    .map(el => watch(el));
-
-  const onSubmit: SubmitHandler<TInput> = async data => {
-    const { quiz_name, quiz_frequency } = data;
-
-    const entries = Object.entries(data);
-    const questions = entries.filter(el => el[0].includes('question_text_'));
-    const answers = entries.filter(el => el[0].includes('question_answers_'));
-    const correct = entries.filter(el => el[0].includes('correct_answer_'));
-
-    const questions_list = questions.map(el => {
-      const qId = Number(el[0].replace('question_text_', ''));
-      const question_answers = answers
-        .filter(el => el[0].includes(`question_answers_${qId}-`))
-        .map(el => el[1])
-        .reverse();
-      const question_correct_answer = correct
-        .filter(el => el[0].includes(`correct_answer_${qId}`))
-        .map(el => el[1])[0];
-
-      // question_answers[1] ? setIsActive(true) : setIsActive(false);
-      console.log('question_answers[1]: ', question_answers[1]);
-
-      return {
-        question_text: el[1],
-        question_answers,
-        question_correct_answer,
-      };
-    });
-    const quiz = { quiz_name, quiz_frequency, company_id, questions_list };
-
-    await dispatchExtra(createQuizThunk(quiz));
+  const onQuizSubmit: SubmitHandler<TQuiz> = async data => {
+    const quiz = { ...data, company_id, questions_list };
+    const { payload } = await dispatchExtra(createQuizThunk(quiz));
+    console.log('payload: ', payload);
     await dispatchExtra(getQuizzesListThunk({ company_id }));
     dispatch(setCompanyAppendix('quizzez'));
     setIsModal();
   };
 
-  const handleAddAnswer = () => {
-    setAnswerCount(answerCount + 1);
-    setQuestions({
-      ...questions,
-      [`question_${questionCount}`]: questionCount,
-      [`answer_${questionCount}-${answerCount + 1}`]: answerCount + 1,
-    });
+  const handleAddQuestion: SubmitHandler<TQuestion> = data => {
+    const { question_text, question_correct_answer } = data;
+    const question = {
+      question_text,
+      question_answers: getQuestionArr(data),
+      question_correct_answer: question_correct_answer - 1,
+    };
+    setQuestionList([...questions_list, question]);
+    setAnsverList(answerListInitialState);
+    setAnswerCount(1);
+    reset();
   };
 
-  const handleAddQuestion = () => {
-    setAnswerCount(1);
-    setQuestionCount(questionCount + 1);
-    setQuestions({
-      ...questions,
-      [`question_${questionCount + 1}`]: questionCount + 1,
-      [`answer_${questionCount + 1}-${1}`]: 1,
+  const handleAddAnswer = () => {
+    setAnswerCount(answerCount + 1);
+    setAnsverList({
+      ...answerList,
+      [`answer_${answerCount + 1}`]: answerCount + 1,
     });
   };
 
   return (
-    <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
-      <div className={s.title__wrap}>
-        <H3 className={s.title}>Create quiz</H3>
-      </div>
+    <div className={s.form_wrap}>
+      <H3 className={s.title}>Create quiz</H3>
 
-      {inputFields.map(el => (
-        <InputText
-          key={el}
-          inputName={el}
-          errors={formState.errors}
-          register={register}
+      <form className={s.form} onSubmit={handleSubmit(onQuizSubmit)}>
+        {quizFields.map(el => (
+          <InputText
+            key={el}
+            inputName={el}
+            errors={formState.errors}
+            register={register}
+          />
+        ))}
+
+        <Button
+          className={s.button}
+          type="submit"
+          variant="smooth"
+          color={questions_list.length > 1 ? 'default' : 'disabled'}
+          label="Submit"
         />
-      ))}
+      </form>
 
-      <Button variant="smooth" label="Add answer" onClick={handleAddAnswer} />
-      <Button
-        variant="smooth"
-        label="Add question"
-        onClick={handleAddQuestion}
-      />
+      <form className={s.form} onSubmit={addQuestion(handleAddQuestion)}>
+        {questionFields.map(el => (
+          <InputText
+            key={el}
+            inputName={el}
+            errors={formStateQ.errors}
+            register={registerQ}
+          />
+        ))}
 
-      <Button
-        type="submit"
-        variant="smooth"
-        color={a.length > 1 && q.length > 1 ? 'default' : 'disabled'}
-        label="Submit"
-      />
-    </form>
+        <Button variant="smooth" label="Add answer" onClick={handleAddAnswer} />
+        <Button
+          color={Object.keys(answerList).length > 1 ? 'default' : 'disabled'}
+          type="submit"
+          variant="smooth"
+          label="Add question"
+        />
+      </form>
+    </div>
   );
 };
 

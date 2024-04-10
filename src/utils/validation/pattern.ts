@@ -6,7 +6,7 @@ const pattern = (regExp: regExp.TRegExp): [RegExp, string] => {
 };
 
 // number
-const number = Yup.number().integer().moreThan(0).required('is required');
+const number = Yup.number().integer().moreThan(-1).required('is required');
 
 // name
 const name = Yup.string()
