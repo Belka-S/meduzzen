@@ -101,7 +101,7 @@ export const updateQuestionThunk = createAppAsyncThunk(
 
 export const deleteQuestionThunk = createAppAsyncThunk(
   'quiz/deleteQuestion',
-  async (params: TQuestion & { question_id: number }, thunkAPI) => {
+  async (params: { question_id: number }, thunkAPI) => {
     try {
       return await API.deleteQuestion(params);
     } catch (error) {

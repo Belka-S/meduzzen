@@ -39,16 +39,9 @@ const handleResultSuccess = (
 
 const handleGetQuizSuccess = (
   state: TInitialState,
-  action: PayloadAction<TQuiz>,
+  action: PayloadAction<{ result: TQuiz }>,
 ) => {
-  state.quiz = action.payload;
-};
-
-const handleTakeQuizSuccess = (
-  state: TInitialState,
-  action: PayloadAction<{ [key: string]: string }>,
-) => {
-  state.answers = action.payload;
+  state.quiz = action.payload.result;
 };
 
 // slice
@@ -62,7 +55,7 @@ const quizSlice = createSlice({
       .addCase(TNK.createQuizThunk.fulfilled, handleResultSuccess)
       .addCase(TNK.getQuizThunk.fulfilled, handleGetQuizSuccess)
       .addCase(TNK.deleteQuizThunk.fulfilled, handleResultSuccess)
-      .addCase(TNK.takeQuizThunk.fulfilled, handleTakeQuizSuccess)
+      .addCase(TNK.takeQuizThunk.fulfilled, handleResultSuccess)
       // question success
       .addCase(TNK.addQuestionThunk.fulfilled, handleResultSuccess)
       .addCase(TNK.updateQuestionThunk.fulfilled, handleResultSuccess)

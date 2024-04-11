@@ -1,8 +1,8 @@
 import { MouseEvent, useState } from 'react';
 import EditBarBtn from 'components/EditBarBtn';
+import QuizAddForm from 'components/QuizForm/AddForm';
 import Modal from 'components/ui/Modal';
 import H6 from 'components/ui/Typography/H6';
-import QuizForm from 'layouts/Footer//QuizForm';
 import CompanyForm from 'layouts/Footer/CompanyForm';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -414,7 +414,7 @@ const CompanyEditBar = () => {
           className={s.modal}
           setIsModal={() => setIsAddQuizModal(!isAddQuizModal)}
         >
-          <QuizForm setIsModal={() => setIsAddQuizModal(!isAddQuizModal)} />
+          <QuizAddForm setIsModal={() => setIsAddQuizModal(!isAddQuizModal)} />
         </Modal>
       )}
     </div>

@@ -1,4 +1,7 @@
-export const getQuestionArr = (obj: { [key: string]: unknown }) => {
+export const getAnswerArr = (
+  obj: { [key: string]: unknown },
+  isReverse: boolean,
+) => {
   const arr = (Object.keys(obj) as Array<keyof typeof obj>).reduce(
     (acc, key) => {
       if (obj[key] && String(key).includes('question_answer_')) {
@@ -9,5 +12,5 @@ export const getQuestionArr = (obj: { [key: string]: unknown }) => {
     [] as (typeof obj)[keyof typeof obj][],
   );
 
-  return arr;
+  return isReverse ? arr.reverse() : arr;
 };

@@ -133,9 +133,10 @@ export type TQuizCreate = {
 };
 
 export type TQuestion = {
+  question_id?: number;
   question_text: string;
   question_answers: string[];
-  question_correct_answer?: number;
+  question_correct_answer: number;
 };
 
 export type TQuizOfList = {

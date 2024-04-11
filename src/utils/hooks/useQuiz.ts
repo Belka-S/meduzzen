@@ -1,18 +1,16 @@
 import { useAppSelector } from 'store';
 import * as selectors from 'store/quiz/quizSelectors';
 
-export const useAction = () => {
-  const quizzes = useAppSelector(selectors.selectQuizzes);
+export const useQuiz = () => {
   const quiz = useAppSelector(selectors.selectQuiz);
-  const answers = useAppSelector(selectors.selectAnswers);
+  const result = useAppSelector(selectors.selectResult);
 
   const loading = useAppSelector(selectors.selectLoading);
   const error = useAppSelector(selectors.selectError);
 
   return {
-    quizzes,
     quiz,
-    answers,
+    result,
 
     loading,
     error,

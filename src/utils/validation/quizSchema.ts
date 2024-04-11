@@ -13,7 +13,9 @@ export const questionSchema = (answers: { [key: string]: number }) => {
   for (let i = 1; i <= answers[`answer_${i}`]; i += 1) {
     answer = {
       ...answer,
-      [`question_answer_${i}`]: Yup.string().required('is required'),
+      [`question_answer_${i}`]: Yup.string()
+        .nullable()
+        .transform(value => (value ? value : null)),
     };
   }
 
