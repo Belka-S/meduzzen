@@ -42,14 +42,14 @@ const QuizItem: FC<TQuizProps> = ({ props }) => {
     setIsAddQuizModal(!isAddQuizModal);
   };
 
-  const handleLinkClick = async () => {
+  const handleTakeQuiz = async () => {
     // console.log('qwe');
   };
 
   return (
     <div
       className={classNames(s.item, s.hover, isActive && s.active)}
-      onClick={handleLinkClick}
+      onClick={handleTakeQuiz}
     >
       <span>{quiz_name}</span>
       <span>{quiz_title}</span>

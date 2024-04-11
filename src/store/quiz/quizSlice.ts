@@ -55,6 +55,7 @@ const quizSlice = createSlice({
       .addCase(TNK.createQuizThunk.fulfilled, handleResultSuccess)
       .addCase(TNK.getQuizThunk.fulfilled, handleGetQuizSuccess)
       .addCase(TNK.deleteQuizThunk.fulfilled, handleResultSuccess)
+      .addCase(TNK.updateQuizThunk.fulfilled, handleResultSuccess)
       .addCase(TNK.takeQuizThunk.fulfilled, handleResultSuccess)
       // question success
       .addCase(TNK.addQuestionThunk.fulfilled, handleResultSuccess)

@@ -1,4 +1,4 @@
-import { TQuestion, TQuizCreate, TQuizOfList } from 'store';
+import { TQuestion, TQuizCreate, TQuizUpdate } from 'store';
 
 import { apiClientToken } from './apiHttp';
 
@@ -13,7 +13,7 @@ export const getQuiz = async (params: { quiz_id: number }) => {
   return data;
 };
 
-export const updateQuiz = async (quizz: TQuizOfList) => {
+export const updateQuiz = async (quizz: TQuizUpdate) => {
   const { quiz_id, ...credentials } = quizz;
   const { data } = await apiClientToken.put(
     `/quiz/${quiz_id}/update_info/`,
@@ -35,10 +35,11 @@ export const takeQuiz = async (params: { quiz_id: number }) => {
 };
 
 export const addQuestion = async (params: TQuestion & { quiz_id: number }) => {
-  const { quiz_id } = params;
-  const { data } = await apiClientToken.post(`/quiz/${quiz_id}/add_question/`, {
-    params,
-  });
+  const { quiz_id, ...question } = params;
+  const { data } = await apiClientToken.post(
+    `/quiz/${quiz_id}/add_question/`,
+    question,
+  );
   return data;
 };
 

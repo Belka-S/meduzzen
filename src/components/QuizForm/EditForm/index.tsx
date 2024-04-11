@@ -3,11 +3,11 @@ import InputText from 'components/InputText';
 import Button from 'components/ui/Button';
 import H3 from 'components/ui/Typography/H3';
 import { Resolver, SubmitHandler, useForm } from 'react-hook-form';
-import { TQuestion, TQuizCreate, useAppDispatch } from 'store';
+import { TQuestion } from 'store';
 import { useAppExtraDispatch } from 'store';
-import { setCompanyAppendix } from 'store/company';
 import { getQuizzesListThunk } from 'store/companyData';
-import { createQuizThunk } from 'store/quiz';
+import { addQuestionThunk, getQuizThunk } from 'store/quiz';
+import { updateQuestionThunk, updateQuizThunk } from 'store/quiz';
 import { getAnswerArr } from 'utils/helpers';
 import { useCompany, useQuiz } from 'utils/hooks';
 import { questionSchema, quizSchema } from 'utils/validation';
@@ -27,16 +27,14 @@ export type TAnswerOfObj = { [key: string]: number };
 const answerObjInitialState: TAnswerOfObj = { [`answer_${1}`]: 1 };
 
 const QuizEditForm: FC<TQuizForm> = ({ setIsModal }) => {
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
   const dispatchExtra = useAppExtraDispatch();
   const { company } = useCompany();
   const { quiz } = useQuiz();
 
   const [count, setCount] = useState(1);
   const [answerObj, setAnswerObj] = useState(answerObjInitialState);
-  const [questions_list, setQuestionList] = useState<TQuestion[]>(
-    quiz?.questions_list ?? [],
-  );
+  const [question_id, setQuestionId] = useState(NaN);
 
   // RHF quiz
   const quizResolver: Resolver<TQuizInput> = yupResolver(quizSchema);
@@ -69,32 +67,40 @@ const QuizEditForm: FC<TQuizForm> = ({ setIsModal }) => {
     // defaultValues: '',
   });
 
-  if (!company) return;
+  if (!quiz || !company) return;
+  const { questions_list, quiz_id } = quiz;
   const { company_id } = company;
 
   const onQuizSubmit: SubmitHandler<TQuizInput> = async data => {
-    const quiz = { ...data, company_id, questions_list } as TQuizCreate;
-    await dispatchExtra(createQuizThunk(quiz));
+    await dispatchExtra(updateQuizThunk({ ...data, quiz_id }));
     await dispatchExtra(getQuizzesListThunk({ company_id }));
-    dispatch(setCompanyAppendix('quizzez'));
+    // dispatch(setCompanyAppendix('quizzez'));
     setIsModal();
   };
 
-  const handleAddQuestion: SubmitHandler<TQuestionInput> = data => {
+  const handleAddQuestion: SubmitHandler<TQuestionInput> = async data => {
     const { question_text, question_correct_answer } = data;
     const { isTouched } = getFieldState('question_correct_answer', formStateQ);
-    if (questions_list.find(el => el.question_text === question_text)) {
-      alert(`You alreddy have ${question_text} question`);
-      return;
-    }
+
     const question: TQuestion = {
+      question_id,
       question_text,
       question_answers: getAnswerArr(data, isTouched) as string[],
       question_correct_answer: question_correct_answer - 1,
     };
-    setQuestionList([...questions_list, question]);
+
+    if (!question_id) {
+      await dispatchExtra(addQuestionThunk({ ...question, quiz_id }));
+    } else {
+      if (questions_list.find(el => el.question_text === question_text)) {
+        return alert(`You alreddy have ${question_text} question`);
+      }
+      await dispatchExtra(updateQuestionThunk({ ...question, question_id }));
+    }
+    await dispatchExtra(getQuizThunk({ quiz_id }));
     setAnswerObj(answerObjInitialState);
     setCount(1);
+    setQuestionId(NaN);
     reset();
   };
 
@@ -122,16 +128,15 @@ const QuizEditForm: FC<TQuizForm> = ({ setIsModal }) => {
           type="submit"
           variant="smooth"
           color={questions_list.length > 1 ? 'default' : 'disabled'}
-          label="Submit"
+          label="Update quiz info"
         />
       </form>
 
       <QuestionEditList
-        questions_list={questions_list}
-        setQuestionList={setQuestionList}
         setAnswerObj={setAnswerObj}
         setCount={setCount}
         setValue={setValue}
+        setQuestionId={setQuestionId}
       />
 
       <form className={s.form} onSubmit={addQuestion(handleAddQuestion)}>
@@ -149,7 +154,7 @@ const QuizEditForm: FC<TQuizForm> = ({ setIsModal }) => {
           color={Object.keys(answerObj).length > 1 ? 'default' : 'disabled'}
           type="submit"
           variant="smooth"
-          label="Add question"
+          label="Add or edit question"
         />
       </form>
     </div>

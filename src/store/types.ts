@@ -126,14 +126,21 @@ export type TQuizCompanyParams = { company_id: number; quiz_id: number };
 
 // quiz
 export type TQuizCreate = {
+  quiz_id: number;
   quiz_name: string;
   quiz_frequency: number;
   company_id: number;
   questions_list: TQuestion[];
 };
 
+export type TQuizUpdate = {
+  quiz_id: number;
+  quiz_name: string;
+  quiz_frequency: number;
+};
+
 export type TQuestion = {
-  question_id?: number;
+  question_id: number;
   question_text: string;
   question_answers: string[];
   question_correct_answer: number;

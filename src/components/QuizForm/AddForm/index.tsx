@@ -33,9 +33,7 @@ const QuizAddForm: FC<TQuizForm> = ({ setIsModal }) => {
 
   const [count, setCount] = useState(1);
   const [answerObj, setAnswerObj] = useState(answerObjInitialState);
-  const [questions_list, setQuestionList] = useState<TQuestion[]>(
-    quiz?.questions_list ?? [],
-  );
+  const [questions_list, setQuestionList] = useState<TQuestion[]>([]);
 
   // RHF quiz
   const quizResolver: Resolver<TQuizInput> = yupResolver(quizSchema);
@@ -65,7 +63,6 @@ const QuizAddForm: FC<TQuizForm> = ({ setIsModal }) => {
   } = useForm<TQuestionInput>({
     resolver: questionResolver,
     mode: 'onChange',
-    // defaultValues: '',
   });
 
   if (!company) return;
@@ -87,6 +84,7 @@ const QuizAddForm: FC<TQuizForm> = ({ setIsModal }) => {
       return;
     }
     const question: TQuestion = {
+      question_id: NaN,
       question_text,
       question_answers: getAnswerArr(data, isTouched) as string[],
       question_correct_answer: question_correct_answer - 1,
@@ -121,7 +119,7 @@ const QuizAddForm: FC<TQuizForm> = ({ setIsModal }) => {
           type="submit"
           variant="smooth"
           color={questions_list.length > 1 ? 'default' : 'disabled'}
-          label="Submit"
+          label="Create quiz"
         />
       </form>
 

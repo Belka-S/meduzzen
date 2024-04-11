@@ -5,7 +5,7 @@ import {
   createAppAsyncThunk,
   TQuestion,
   TQuizCreate,
-  TQuizOfList,
+  TQuizUpdate,
 } from 'store';
 
 export const createQuizThunk = createAppAsyncThunk(
@@ -36,7 +36,7 @@ export const getQuizThunk = createAppAsyncThunk(
 
 export const updateQuizThunk = createAppAsyncThunk(
   'quiz/updateQuiz',
-  async (params: TQuizOfList, thunkAPI) => {
+  async (params: TQuizUpdate, thunkAPI) => {
     try {
       return await API.updateQuiz(params);
     } catch (error) {
@@ -88,7 +88,7 @@ export const addQuestionThunk = createAppAsyncThunk(
 
 export const updateQuestionThunk = createAppAsyncThunk(
   'quiz/updateQuestion',
-  async (params: TQuestion & { question_id: number }, thunkAPI) => {
+  async (params: TQuestion, thunkAPI) => {
     try {
       return await API.updateQuestion(params);
     } catch (error) {
