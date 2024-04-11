@@ -247,7 +247,7 @@ const CompanyEditBar = () => {
     e.currentTarget.blur();
     const company_id = company?.company_id;
     company_id && (await dispatchExtra(getQuizzesListThunk({ company_id })));
-    dispatch(setCompanyAppendix('quizzez'));
+    dispatch(setCompanyAppendix('quizzes'));
   };
 
   return (

@@ -57,7 +57,6 @@ const QuizEditForm: FC<TQuizForm> = ({ setIsModal }) => {
   const {
     reset,
     setValue,
-    getFieldState,
     register: registerQ,
     handleSubmit: addQuestion,
     formState: formStateQ,
@@ -78,12 +77,11 @@ const QuizEditForm: FC<TQuizForm> = ({ setIsModal }) => {
 
   const handleAddQuestion: SubmitHandler<TQuestionInput> = async data => {
     const { question_text, question_correct_answer } = data;
-    const { isTouched } = getFieldState('question_correct_answer', formStateQ);
 
     const question: TQuestion = {
       question_id,
       question_text,
-      question_answers: getAnswerArr(data, isTouched) as string[],
+      question_answers: getAnswerArr(data, true) as string[],
       question_correct_answer: question_correct_answer - 1,
     };
 

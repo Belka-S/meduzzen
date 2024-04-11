@@ -3,6 +3,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import {
   createAppAsyncThunk,
+  TAnswers,
   TQuestion,
   TQuizCreate,
   TQuizUpdate,
@@ -62,7 +63,7 @@ export const deleteQuizThunk = createAppAsyncThunk(
 
 export const takeQuizThunk = createAppAsyncThunk(
   'quiz/takeQuiz',
-  async (params: { quiz_id: number }, thunkAPI) => {
+  async (params: TAnswers & { quiz_id: number }, thunkAPI) => {
     try {
       return await API.takeQuiz(params);
     } catch (error) {

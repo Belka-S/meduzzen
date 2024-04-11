@@ -86,7 +86,7 @@ export type TUserAppendix =
   | 'checked'
   | 'invites'
   | 'requests'
-  | 'quizzez';
+  | 'quizzes';
 
 export type TCompanyAppendix = TUserAppendix | 'members';
 
@@ -168,6 +168,13 @@ export type TAnswer = {
   answer: string;
   is_correct: boolean;
   created_at: Date;
+};
+
+export type TAnswers = { [key: string]: number };
+
+export type TQuizResult = {
+  result_id: number;
+  result_score: number;
 };
 
 export type TQuizPass = {

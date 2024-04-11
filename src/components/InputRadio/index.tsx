@@ -11,8 +11,6 @@ type TInputProps<T extends FieldValues> = {
   style?: CSSProperties;
 
   inputName: Path<T>;
-  type?: 'checkbox' | 'radio';
-  value?: string | number;
   label?: string;
   watch?: UseFormWatch<T>;
   register: UseFormRegister<T>;
@@ -20,8 +18,8 @@ type TInputProps<T extends FieldValues> = {
   checked?: boolean;
 };
 
-const InputCheck = <T extends FieldValues>(props: TInputProps<T>) => {
-  const { className, style, type = 'checkbox', value } = props;
+const InputRadio = <T extends FieldValues>(props: TInputProps<T>) => {
+  const { className, style } = props;
   const { inputName, label, register, size = 'm', checked } = props;
 
   return (
@@ -32,13 +30,12 @@ const InputCheck = <T extends FieldValues>(props: TInputProps<T>) => {
 
       <input
         className={classNames(s.input, s[size])}
-        type={type}
+        type="radio"
         checked={checked}
-        value={value}
         {...register(inputName, { required: true })}
       />
     </label>
   );
 };
 
-export default InputCheck;
+export default InputRadio;

@@ -35,7 +35,6 @@ const QuizAddForm: FC<TQuizForm> = ({ setIsModal }) => {
   const [answerObj, setAnswerObj] = useState(answerObjInitialState);
   const [questions_list, setQuestionList] = useState<TQuestion[]>([]);
 
-  // RHF quiz
   const quizResolver: Resolver<TQuizInput> = yupResolver(quizSchema);
   const { register, handleSubmit, formState } = useForm<TQuizInput>({
     resolver: quizResolver,
@@ -72,7 +71,7 @@ const QuizAddForm: FC<TQuizForm> = ({ setIsModal }) => {
     const quiz = { ...data, company_id, questions_list } as TQuizCreate;
     await dispatchExtra(createQuizThunk(quiz));
     await dispatchExtra(getQuizzesListThunk({ company_id }));
-    dispatch(setCompanyAppendix('quizzez'));
+    dispatch(setCompanyAppendix('quizzes'));
     setIsModal();
   };
 

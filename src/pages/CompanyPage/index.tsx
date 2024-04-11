@@ -35,7 +35,7 @@ const CompanyPage = () => {
   const list = useMemo(() => {
     if (appendix === 'checked') {
       return { users: [...checkedUsers].sort((a, b) => a.user_id - b.user_id) };
-    } else if (appendix === 'quizzez') {
+    } else if (appendix === 'quizzes') {
       return {
         quizzes: [...companyData.quizzes].sort((a, b) => a.quiz_id - b.quiz_id),
       };
