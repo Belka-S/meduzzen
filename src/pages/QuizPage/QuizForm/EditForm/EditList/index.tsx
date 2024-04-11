@@ -1,13 +1,13 @@
 import { FC } from 'react';
-import { TAnswerOfObj } from 'components/QuizForm/AddForm';
 import Button from 'components/ui/Button';
 import SvgIcon from 'components/ui/SvgIcon';
+import { TAnswerOfObj } from 'pages/QuizPage/QuizForm/AddForm';
 import { UseFormSetValue } from 'react-hook-form';
 import { TQuestion, useAppExtraDispatch } from 'store';
 import { deleteQuestionThunk, getQuizThunk } from 'store/quiz';
 import { useQuiz } from 'utils/hooks';
 
-import s from './index.module.scss';
+import s from '../../list.module.scss';
 
 type TQuestionEdit = {
   question_text: string;
@@ -46,8 +46,9 @@ const QuestionEditList: FC<TQuestionListProps> = props => {
   };
 
   const handleDeleteQuestion = async (el: TQuestion) => {
-    const { question_id } = el;
+    const { question_id, question_text } = el;
     if (!question_id) return;
+    if (!confirm(`Are you sure you want to delete: ${question_text}`)) return;
     await dispatchExtra(deleteQuestionThunk({ question_id }));
     await dispatchExtra(getQuizThunk({ quiz_id }));
   };

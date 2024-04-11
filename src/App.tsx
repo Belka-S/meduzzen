@@ -22,6 +22,7 @@ const ClusterListPage = lazy(() => import('pages/ClusterListPage'));
 const ClusterPage = lazy(() => import('pages/ClusterPage'));
 const CompanyListPage = lazy(() => import('pages/CompanyListPage'));
 const CompanyPage = lazy(() => import('pages/CompanyPage'));
+const QuizPage = lazy(() => import('pages/QuizPage'));
 
 const App = () => {
   const dispatch = useAppDispatch();
@@ -64,6 +65,7 @@ const App = () => {
               <Route path="cluster/:id" element={<ClusterPage />} />
               <Route path="company" element={<CompanyListPage />} />
               <Route path="company/:id" element={<CompanyPage />} />
+              <Route path="quiz/:id" element={<QuizPage />} />
             </Route>
           </Route>
           <Route path="*" element={<Navigate to="/" />} />

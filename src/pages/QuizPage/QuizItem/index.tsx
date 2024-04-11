@@ -1,6 +1,6 @@
 import { FC, MouseEvent, useState } from 'react';
 import classNames from 'classnames';
-import QuizEditForm from 'components/QuizForm/EditForm';
+import QuizEditForm from 'pages/QuizPage/QuizForm/EditForm';
 import Button from 'components/ui/Button';
 import Modal from 'components/ui/Modal';
 import SvgIcon from 'components/ui/SvgIcon';

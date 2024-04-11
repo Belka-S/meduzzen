@@ -1,11 +1,11 @@
 import { FC } from 'react';
-import { TAnswerOfObj } from 'components/QuizForm/AddForm';
 import Button from 'components/ui/Button';
 import SvgIcon from 'components/ui/SvgIcon';
+import { TAnswerOfObj } from 'pages/QuizPage/QuizForm/AddForm';
 import { UseFormSetValue } from 'react-hook-form';
 import { TQuestion } from 'store';
 
-import s from './index.module.scss';
+import s from '../../list.module.scss';
 
 type TQuestionEdit = {
   question_text: string;
@@ -44,6 +44,7 @@ const QuestionAddList: FC<TQuestionListProps> = props => {
 
   const handleDeleteQuestion = (el: TQuestion) => {
     const { question_text } = el;
+    if (!confirm(`Are you sure you want to delete: ${question_text}`)) return;
     // delete question from list to edit
     const index = questions_list.findIndex(
       el => el.question_text === question_text,
