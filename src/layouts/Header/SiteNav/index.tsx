@@ -44,6 +44,13 @@ const SiteNav = () => {
         label={isCompany ? 'Companies:' : 'Companies'}
       />
 
+      <SiteNavLink
+        to={'/quiz'}
+        shownIf={pathname.includes('/quiz')}
+        activeIf={pathname.includes('/quiz')}
+        label={'Quiz'}
+      />
+
       {isCompany && <CompanySelector />}
 
       {(isUserPage || isCompanyPage) && (

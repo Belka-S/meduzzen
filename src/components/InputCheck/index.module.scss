@@ -6,7 +6,6 @@
 
 .label {
   margin-bottom: -2px;
-  margin-right: 10px;
   font-style: italic;
   // &::first-letter { text-transform: capitalize; }
 
@@ -19,6 +18,13 @@
   }
   &.l {
     font-size: calc(var(--btn-font-m) - 1px);
+  }
+
+  &.left {
+    margin-right: 10px;
+  }
+  &.right {
+    margin-left: 5px;
   }
 }
 

@@ -14,6 +14,7 @@ type TInputProps<T extends FieldValues> = {
   type?: 'checkbox' | 'radio';
   value?: string | number;
   label?: string;
+  position?: 'left' | 'right';
   watch?: UseFormWatch<T>;
   register: UseFormRegister<T>;
   size?: 's' | 'm' | 'l';
@@ -21,14 +22,16 @@ type TInputProps<T extends FieldValues> = {
 };
 
 const InputCheck = <T extends FieldValues>(props: TInputProps<T>) => {
-  const { className, style, type = 'checkbox', value } = props;
-  const { inputName, label, register, size = 'm', checked } = props;
+  const { className, style, type = 'checkbox', size = 'm', value } = props;
+  const { inputName, label, position = 'left', register, checked } = props;
 
   return (
     <label className={classNames(s.wrap, className)} style={style}>
-      <span className={classNames(s.label, s[size])}>
-        {label ? label : normalizeText(inputName)}
-      </span>
+      {position === 'left' && (
+        <span className={classNames(s.label, s[size], s[position])}>
+          {label ? label : normalizeText(inputName)}
+        </span>
+      )}
 
       <input
         className={classNames(s.input, s[size])}
@@ -37,6 +40,12 @@ const InputCheck = <T extends FieldValues>(props: TInputProps<T>) => {
         value={value}
         {...register(inputName, { required: true })}
       />
+
+      {position === 'right' && (
+        <span className={classNames(s.label, s[size], s[position])}>
+          {label ? label : normalizeText(inputName)}
+        </span>
+      )}
     </label>
   );
 };

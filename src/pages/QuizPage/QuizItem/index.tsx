@@ -8,7 +8,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { TQuizOfList, useAppExtraDispatch } from 'store';
 import { getQuizzesListThunk } from 'store/companyData';
 import { deleteQuizThunk, getQuizThunk } from 'store/quiz';
-import { useCompany } from 'utils/hooks';
+import { useCompany, useQuiz } from 'utils/hooks';
 
 import s from './index.module.scss';
 
@@ -21,10 +21,11 @@ const QuizItem: FC<TQuizProps> = ({ props }) => {
   const { pathname } = useLocation();
   const dispatchExtra = useAppExtraDispatch();
   const { company } = useCompany();
+  const { result, quiz } = useQuiz();
   const [isAddQuizModal, setIsAddQuizModal] = useState(false);
 
   if (!quiz_id || !company) return;
-  const isActive = false;
+  const isActive = quiz?.quiz_id === quiz_id;
 
   const handleDelete = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -48,6 +49,7 @@ const QuizItem: FC<TQuizProps> = ({ props }) => {
       state={{ from: pathname }}
       className={classNames(s.item, s.hover, isActive && s.active)}
     >
+      <span>{quiz_id}</span>
       <span>{quiz_name}</span>
       <span>{quiz_title}</span>
       <span>{quiz_description}</span>
@@ -70,7 +72,7 @@ const QuizItem: FC<TQuizProps> = ({ props }) => {
         <SvgIcon className={s.icon_svg} svgId="ui-trash" />
       </Button>
 
-      <span>{quiz_id}</span>
+      {isActive ? <span>{`result: ${result?.result_score}%`}</span> : <span />}
 
       {isAddQuizModal && (
         <Modal

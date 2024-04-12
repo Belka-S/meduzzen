@@ -3,28 +3,28 @@
 // title
 
 .h1 {
-  margin-bottom: var(--indent-m);
+  margin-bottom: var(--indent-s);
   font-size: 26px;
 
   @include tablet {
-    margin-bottom: var(--indent-l);
+    margin-bottom: var(--indent-m);
     font-size: 32px;
   }
   @include desktop {
-    margin-bottom: var(--indent-xl);
+    margin-bottom: var(--indent-l);
     font-size: 44px;
   }
 }
 .h2 {
   font-size: 24px;
-  margin-bottom: var(--indent-m);
+  margin-bottom: var(--indent-s);
 
   @include tablet {
-    margin-bottom: var(--indent-l);
+    margin-bottom: var(--indent-m);
     font-size: 30px;
   }
   @include desktop {
-    margin-bottom: var(--indent-xl);
+    margin-bottom: var(--indent-l);
     font-size: 36px;
   }
 }

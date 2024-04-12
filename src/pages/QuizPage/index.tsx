@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import InputCheck from 'components/InputCheck';
 import Button from 'components/ui/Button';
 import Section from 'components/ui/Section';
-import H3 from 'components/ui/Typography/H3';
+import H2 from 'components/ui/Typography/H2';
 import H4 from 'components/ui/Typography/H4';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -46,29 +46,45 @@ const QuizPage = () => {
 
   return (
     <Section className={classNames('container', s.screen)}>
-      <H3>{`${quiz_name} (id: ${quiz_id})`}</H3>
-      <H4>{`Frequency ${quiz_frequency}`}</H4>
+      <div className={s.title_wrap}>
+        <H2>{`${quiz_name}`}</H2>
+        <H4>{`id: ${quiz_id}`}</H4>
+        <H4>{`freq: ${quiz_frequency}`}</H4>
+      </div>
 
-      {questions_list.map((el, i) => (
-        <form onSubmit={handleSubmit(handleTakeQuiz)} key={el.question_id}>
-          <H4>{el.question_text}</H4>
+      <div className={s.quiz}>
+        {questions_list.map((el, i) => (
+          <form
+            className={s.form}
+            onSubmit={handleSubmit(handleTakeQuiz)}
+            key={el.question_id}
+          >
+            <H4 className={s.quiz_title}>{el.question_text}</H4>
 
-          {el.question_answers.map(answer => (
-            <InputCheck
-              inputName={`${el.question_id}`}
-              register={register}
-              type="radio"
-              value={answer}
-              label={answer}
-              key={`answer_${answer}`}
-            />
-          ))}
+            {el.question_answers.map(answer => (
+              <InputCheck
+                inputName={`${el.question_id}`}
+                register={register}
+                type="radio"
+                value={answer}
+                label={answer}
+                position="right"
+                key={`answer_${answer}`}
+              />
+            ))}
 
-          {questions_list.length === i + 1 && (
-            <Button type="submit" label="Submit" />
-          )}
-        </form>
-      ))}
+            {questions_list.length === i + 1 && (
+              <Button
+                className={s.button}
+                type="submit"
+                variant="smooth"
+                color="outlined"
+                label="Submit"
+              />
+            )}
+          </form>
+        ))}
+      </div>
     </Section>
   );
 };

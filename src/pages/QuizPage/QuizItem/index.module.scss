@@ -26,10 +26,11 @@
   padding-block: 4px;
 
   display: grid;
-  grid-template-columns: 10fr 10fr 20fr 1.5fr 1.5fr 35px;
+  grid-template-columns: 35px 10fr 10fr 20fr 1.5fr 1.5fr 100px;
   align-items: center;
   justify-items: left;
 
+  text-wrap: nowrap;
   line-height: 1.5;
   border: 1px solid transparent;
   border-bottom-color: var(--border-color);

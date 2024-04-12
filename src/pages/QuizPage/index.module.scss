@@ -1,8 +1,69 @@
 .screen {
-  // height: 100%;
-  display: flex;
+  position: relative;
+  // padding: 20px;
 
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 10fr;
+  gap: 30px;
+}
+
+.title_wrap {
+  display: flex;
   flex-direction: column;
+  gap: 10px;
+
+  text-wrap: nowrap;
+}
+
+.quiz {
+  counter-reset: section;
+}
+
+.form {
+  padding: 10px;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  justify-items: flex-start;
+  align-items: center;
+  gap: 20px;
+
+  border: 1px solid transparent;
+  border-bottom-color: var(--border-color);
+  transition: box-shadow 250ms, border-color 250ms background-color 250ms;
+
+  & span {
+    font-size: 20px !important;
+  }
+
+  &:has(input:focus) {
+    background-color: var(--white-color);
+  }
+}
+
+.quiz_title {
+  margin-right: 30px;
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  &::before {
+    align-self: baseline;
+    counter-increment: section;
+    content: counter(section) ') ';
+    font-size: 20px;
+    font-weight: 400;
+  }
+
+  &::after {
+    content: ' ?';
+    font-size: 20px;
+    font-weight: 400;
+  }
+}
+
+.button {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
 }
