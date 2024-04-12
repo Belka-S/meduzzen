@@ -24,7 +24,6 @@ jobs:
 
       - name: Build project
         run: npm run build
-        working-directory: './client'
         env:
           VITE_PROD_BACK_HTTP: ${{ vars.VITE_PROD_BACK_HTTP }}
           VITE_AUTH0_DOMAIN: ${{vars.VITE_AUTH0_DOMAIN}}
