@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import { TAnswer, TQuiz, TRating, TRatingAnalytic, TUserOfList } from 'store';
+import { TAnswers, TQuiz, TRating, TRatingAnalytic, TUserOfList } from 'store';
 import { TUsersWithQuizzesPassed } from 'store';
 import * as TNK from 'store/companyData/companyDataThunks';
 import { initialState, TInitialState } from 'store/companyData/initialState';
@@ -27,12 +27,8 @@ const thunkArr = [
   TNK.getRatingUsersThunk,
 ];
 
-const fn = (type: 'pending' | 'fulfilled' | 'rejected') =>
-  thunkArr.map(el => {
-    if (type === 'pending') return el.pending;
-    if (type === 'fulfilled') return el.fulfilled;
-    else return el.rejected;
-  });
+type TState = 'pending' | 'fulfilled' | 'rejected';
+const fn = (state: TState) => thunkArr.map(el => el[state]);
 
 // handlers
 const handleSuccess = () => {
@@ -74,21 +70,21 @@ const handleQuizzesListSuccess = (
 
 const handleAnswersCompanySs = (
   state: TInitialState,
-  action: PayloadAction<{ result: { answers: TAnswer[] } }>,
+  action: PayloadAction<{ result: { answers: TAnswers[] } }>,
 ) => {
   state.answersCompany = action.payload.result.answers;
 };
 
 const handleAnswersUserSs = (
   state: TInitialState,
-  action: PayloadAction<{ result: { answers: TAnswer[] } }>,
+  action: PayloadAction<{ result: { answers: TAnswers[] } }>,
 ) => {
   state.answersUser = action.payload.result.answers;
 };
 
 const handleAnswersQuizSs = (
   state: TInitialState,
-  action: PayloadAction<{ result: { answers: TAnswer[] } }>,
+  action: PayloadAction<{ result: { answers: TAnswers[] } }>,
 ) => {
   state.answersQuiz = action.payload.result.answers;
 };
@@ -116,7 +112,9 @@ const handleRatingQuizSuccess = (
 
 const handleAnalyticUsersSuccess = (
   state: TInitialState,
-  action: PayloadAction<{ result: { rating: TRatingAnalytic[] } }>,
+  action: PayloadAction<{
+    result: { rating: Array<{ rating: TRatingAnalytic[]; user_id: number }> };
+  }>,
 ) => {
   state.analyticUsers = action.payload.result.rating;
 };

@@ -54,6 +54,9 @@ const QuizItem: FC<TQuizProps> = ({ props }) => {
       <span>{quiz_title}</span>
       <span>{quiz_description}</span>
 
+      {isActive && <span>{`result: ${result?.result_score}%`}&nbsp;</span>}
+      {!isActive && <span />}
+
       <Button
         className={s.button}
         variant="round"
@@ -71,8 +74,6 @@ const QuizItem: FC<TQuizProps> = ({ props }) => {
       >
         <SvgIcon className={s.icon_svg} svgId="ui-trash" />
       </Button>
-
-      {isActive ? <span>{`result: ${result?.result_score}%`}</span> : <span />}
 
       {isAddQuizModal && (
         <Modal

@@ -11,12 +11,8 @@ import { commonInitialState, TCommonInitialState } from './initialState';
 
 const thunkArr = [TNK.checkStatusThunk, TNK.getLogsThunk, TNK.pingThunk];
 
-const fn = (type: 'pending' | 'fulfilled' | 'rejected') =>
-  thunkArr.map(el => {
-    if (type === 'pending') return el.pending;
-    if (type === 'fulfilled') return el.fulfilled;
-    else return el.rejected;
-  });
+type TState = 'pending' | 'fulfilled' | 'rejected';
+const fn = (state: TState) => thunkArr.map(el => el[state]);
 
 // handlers
 const handleCheckStatusSuccess = (

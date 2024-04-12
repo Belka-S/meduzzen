@@ -23,7 +23,7 @@ export type TInitialState = {
   ratingUser: TRating[];
   ratingQuiz: TRating[];
 
-  analyticUsers: TRatingAnalytic[];
+  analyticUsers: Array<{ rating: TRatingAnalytic[]; user_id: number }>;
   analyticUser: TRatingAnalytic[];
   analyticQuiz: TRatingAnalytic[];
 
