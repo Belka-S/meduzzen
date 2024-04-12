@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import { TAnswers, TCompanyOfList, TNotification } from 'store';
+import { TAnswer, TCompanyOfList, TNotification } from 'store';
 import { TQuizPass, TRatingAnalytic } from 'store';
 import { initialState, TInitialState } from 'store/userData/initialState';
 import * as TNK from 'store/userData/userDataThunks';
@@ -38,67 +38,93 @@ const handleSuccess = () => {
 const handleCompaniesSuccess = (
   state: TInitialState,
   action: PayloadAction<{ result: { companies: TCompanyOfList[] } }>,
-) => ({ ...state, myCompanies: action.payload.result.companies });
+) => {
+  state.myCompanies = action.payload.result.companies;
+};
 
 const handleInvitesSuccess = (
   state: TInitialState,
   action: PayloadAction<{ result: { companies: TCompanyOfList[] } }>,
-) => ({ ...state, invites: action.payload.result.companies });
+) => {
+  state.invites = action.payload.result.companies;
+};
 
 const handleRequestsSuccess = (
   state: TInitialState,
   action: PayloadAction<{ result: { companies: TCompanyOfList[] } }>,
-) => ({ ...state, requests: action.payload.result.companies });
+) => {
+  state.requests = action.payload.result.companies;
+};
 
 const handleRatingSuccess = (
   state: TInitialState,
   action: PayloadAction<{ result: { rating: number } }>,
-) => ({ ...state, rating: action.payload.result.rating });
+) => {
+  state.rating = action.payload.result.rating;
+};
 
 const handleAnalyticSuccess = (
   state: TInitialState,
   action: PayloadAction<{ result: { rating: TRatingAnalytic[] } }>,
-) => ({ ...state, analytic: action.payload.result.rating });
+) => {
+  state.analytic = action.payload.result.rating;
+};
 
 const handleRatingInCompanySs = (
   state: TInitialState,
   action: PayloadAction<{ result: { rating: number } }>,
-) => ({ ...state, ratingInCompany: action.payload.result.rating });
+) => {
+  state.ratingInCompany = action.payload.result.rating;
+};
 
 const handleAnalytInCompanySs = (
   state: TInitialState,
   action: PayloadAction<{ result: { rating: TRatingAnalytic[] } }>,
-) => ({ ...state, analyticInCompany: action.payload.result.rating });
+) => {
+  state.analyticInCompany = action.payload.result.rating;
+};
 
 const handleRatingForQuizSs = (
   state: TInitialState,
   action: PayloadAction<{ result: { rating: number } }>,
-) => ({ ...state, ratingForQuiz: action.payload.result.rating });
+) => {
+  state.ratingForQuiz = action.payload.result.rating;
+};
 
 const handleAnalyticForQuizSs = (
   state: TInitialState,
   action: PayloadAction<{ result: { rating: TRatingAnalytic[] } }>,
-) => ({ ...state, analyticForQuiz: action.payload.result.rating });
+) => {
+  state.analyticForQuiz = action.payload.result.rating;
+};
 
 const handleAnswersSuccess = (
   state: TInitialState,
-  action: PayloadAction<{ result: { answers: TAnswers[] } }>,
-) => ({ ...state, answers: action.payload.result.answers });
+  action: PayloadAction<{ result: { answers: TAnswer[] } }>,
+) => {
+  state.answers = action.payload.result.answers;
+};
 
 const handleQuizPassSuccess = (
   state: TInitialState,
   action: PayloadAction<{ result: { quizzes: TQuizPass[] } }>,
-) => ({ ...state, quizzesPass: action.payload.result.quizzes });
+) => {
+  state.quizzesPass = action.payload.result.quizzes;
+};
 
 const handleNotificationSuccess = (
   state: TInitialState,
   action: PayloadAction<{ result: { notifications: TNotification[] } }>,
-) => ({ ...state, notifications: action.payload.result.notifications });
+) => {
+  state.notifications = action.payload.result.notifications;
+};
 
 const handleMarkNoteSuccess = (
   state: TInitialState,
   action: PayloadAction<{ result: { notification_id: number } }>,
-) => ({ ...state, readNoteId: action.payload.result.notification_id });
+) => {
+  state.readNoteId = action.payload.result.notification_id;
+};
 
 // slice
 const userDataSlice = createSlice({

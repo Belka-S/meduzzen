@@ -1,6 +1,6 @@
 import {
   TAnswers,
-  TQuiz,
+  TQuizOfList,
   TRating,
   TRatingAnalytic,
   TUserOfList,
@@ -12,7 +12,7 @@ export type TInitialState = {
   invites: TUserOfList[];
   requests: TUserOfList[];
   blocked: TUserOfList[];
-  quizzes: TQuiz[];
+  quizzes: TQuizOfList[];
   quizzesPassed: TUsersWithQuizzesPassed[];
 
   answersCompany: TAnswers[];

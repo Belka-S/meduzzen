@@ -2,6 +2,7 @@ import { MouseEvent, useEffect, useMemo } from 'react';
 import classNames from 'classnames';
 import ProfileBtn from 'components/ProfileBtn';
 import ProfileCard from 'components/ProfileCard';
+import QuizItem from 'components/QuizItem';
 import OvalLoader from 'components/ui/Loader';
 import Section from 'components/ui/Section';
 import H3 from 'components/ui/Typography/H3';
@@ -31,14 +32,19 @@ const CompanyPage = () => {
     dispatchExtra(getCompanyThunk({ company_id: Number(id) }));
   }, [dispatchExtra, id]);
 
-  const companies = useMemo(
-    () =>
-      appendix === 'checked'
-        ? [...checkedUsers].sort((a, b) => a.user_id - b.user_id)
-        : appendix &&
-          [...companyData[appendix]].sort((a, b) => a.user_id - b.user_id),
-    [appendix, checkedUsers, companyData],
-  );
+  const list = useMemo(() => {
+    if (appendix === 'checked') {
+      return { users: [...checkedUsers].sort((a, b) => a.user_id - b.user_id) };
+    } else if (appendix === 'quizzez') {
+      return {
+        quizzes: [...companyData.quizzes].sort((a, b) => a.quiz_id - b.quiz_id),
+      };
+    } else if (appendix) {
+      return {
+        users: [...companyData[appendix]].sort((a, b) => a.user_id - b.user_id),
+      };
+    }
+  }, [appendix, checkedUsers, companyData]);
 
   if (!company) return;
   const isMyCompany = company?.company_owner?.user_id === owner?.user_id;
@@ -96,7 +102,13 @@ const CompanyPage = () => {
         ) : (
           <span />
         )}
-        {companies?.map(el => el && <UserItem key={el?.user_id} props={el} />)}
+
+        {list?.users?.map(
+          el => el && <UserItem key={el?.user_id} props={el} />,
+        )}
+        {list?.quizzes?.map(
+          el => el && <QuizItem key={el?.quiz_id} props={el} />,
+        )}
       </div>
     </Section>
   );

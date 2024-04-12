@@ -1,5 +1,6 @@
 import { MouseEvent, useState } from 'react';
 import EditBarBtn from 'components/EditBarBtn';
+import QuizAddForm from 'components/QuizForm/AddForm';
 import Modal from 'components/ui/Modal';
 import H6 from 'components/ui/Typography/H6';
 import CompanyForm from 'layouts/Footer/CompanyForm';
@@ -13,6 +14,7 @@ import { createActionFromCompanyThunk, leaveCompanyThunk } from 'store/action';
 import { deleteCompanyThunk, editCompany } from 'store/company';
 import { setCompanyAppendix, uncheckAllCompanies } from 'store/company';
 import { getCompanyRequestsListThunk } from 'store/companyData';
+import { getQuizzesListThunk } from 'store/companyData';
 import { getInvitesListThunk } from 'store/companyData';
 import { getMembersListThunk } from 'store/companyData';
 import { setUserAppendix, uncheckAllUsers } from 'store/user';
@@ -32,7 +34,8 @@ const CompanyEditBar = () => {
   const { appendix: appendixCompany, select } = useCompany();
   const { owner, checkedUsers, appendix } = useUser();
   const { companyData } = useAction();
-  const [isModal, setIsModal] = useState(false);
+  const [isAddCompanyModal, setIsAddCompanyModal] = useState(false);
+  const [isAddQuizModal, setIsAddQuizModal] = useState(false);
 
   const isMyCompany = company?.company_owner?.user_id === owner?.user_id;
   const isCompanyProfile = pathname.includes('/company/');
@@ -240,6 +243,13 @@ const CompanyEditBar = () => {
     });
   };
 
+  const handleGetQuizzes = async (e: MouseEvent<HTMLButtonElement>) => {
+    e.currentTarget.blur();
+    const company_id = company?.company_id;
+    company_id && (await dispatchExtra(getQuizzesListThunk({ company_id })));
+    dispatch(setCompanyAppendix('quizzez'));
+  };
+
   return (
     <div className={s.editbar}>
       <EditBarBtn
@@ -280,30 +290,6 @@ const CompanyEditBar = () => {
       />
 
       <EditBarBtn
-        onClick={handleInviteUsersToCompany}
-        svgId="ui-add_user"
-        shownIf={
-          isMyCompany &&
-          !checkedInvites[0] &&
-          !checkedRequests[0] &&
-          appendix !== 'checked'
-        }
-        size={24}
-      />
-
-      <EditBarBtn
-        onClick={handleRequestJoinCompany}
-        svgId="ui-add_company"
-        shownIf={
-          !!checkedCompanies[0] &&
-          !checkedInvites[0] &&
-          !checkedRequests[0] &&
-          appendix !== 'checked'
-        }
-        size={24}
-      />
-
-      <EditBarBtn
         onClick={handleAcceptRequest}
         svgId="ui-accept"
         shownIf={
@@ -317,17 +303,6 @@ const CompanyEditBar = () => {
         onClick={handleDeclineAction}
         svgId="ui-decline"
         shownIf={!!checkedInvites[0] || !!checkedRequests[0]}
-        size={24}
-      />
-
-      <EditBarBtn
-        onClick={handleNavigateToCompany}
-        svgId="ui-add_company"
-        shownIf={
-          pathname === '/company' &&
-          !!checkedCompanies[0] &&
-          appendixCompany === 'checked'
-        }
         size={24}
       />
 
@@ -350,6 +325,54 @@ const CompanyEditBar = () => {
       />
 
       <EditBarBtn
+        onClick={handleRequestJoinCompany}
+        svgId="ui-add_company"
+        shownIf={
+          !!checkedCompanies[0] &&
+          !checkedInvites[0] &&
+          !checkedRequests[0] &&
+          appendix !== 'checked'
+        }
+        size={24}
+      />
+
+      <EditBarBtn
+        onClick={handleNavigateToCompany}
+        svgId="ui-add_company"
+        shownIf={
+          pathname === '/company' &&
+          !!checkedCompanies[0] &&
+          appendixCompany === 'checked'
+        }
+        size={24}
+      />
+
+      <EditBarBtn
+        onClick={handleInviteUsersToCompany}
+        svgId="ui-add_user"
+        shownIf={
+          isMyCompany &&
+          !checkedInvites[0] &&
+          !checkedRequests[0] &&
+          appendix !== 'checked'
+        }
+        size={24}
+      />
+
+      <EditBarBtn
+        onClick={() => setIsAddQuizModal(!isAddQuizModal)}
+        svgId="ui-quiz_add"
+        size={26}
+        shownIf={isCompanyProfile && select !== 'all'}
+      />
+
+      <EditBarBtn
+        onClick={handleGetQuizzes}
+        svgId="ui-quiz"
+        shownIf={isCompanyProfile && select !== 'all'}
+      />
+
+      <EditBarBtn
         svgId="ui-edit"
         onClick={handleUpdateInfo}
         shownIf={isCompanyProfile}
@@ -368,16 +391,30 @@ const CompanyEditBar = () => {
       />
 
       <EditBarBtn
-        onClick={() => setIsModal(!isModal)}
+        onClick={() => setIsAddCompanyModal(!isAddCompanyModal)}
         svgId="menu-plus"
         shownIf={!isCompanyProfile}
       />
 
       <H6>COMPANY</H6>
 
-      {isModal && (
-        <Modal className={s.modal} setIsModal={() => setIsModal(!isModal)}>
-          <CompanyForm setIsModal={() => setIsModal(!isModal)} />
+      {isAddCompanyModal && (
+        <Modal
+          className={s.modal}
+          setIsModal={() => setIsAddCompanyModal(!isAddCompanyModal)}
+        >
+          <CompanyForm
+            setIsModal={() => setIsAddCompanyModal(!isAddCompanyModal)}
+          />
+        </Modal>
+      )}
+
+      {isAddQuizModal && (
+        <Modal
+          className={s.modal}
+          setIsModal={() => setIsAddQuizModal(!isAddQuizModal)}
+        >
+          <QuizAddForm setIsModal={() => setIsAddQuizModal(!isAddQuizModal)} />
         </Modal>
       )}
     </div>

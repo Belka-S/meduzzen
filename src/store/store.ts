@@ -16,6 +16,7 @@ import { companyReducer } from './company/companySlice';
 import { actionReducer } from './action';
 import { authReducer } from './auth';
 import { companyDataReducer } from './companyData';
+import { quizReducer } from './quiz';
 import { commonReducer } from './server';
 import { usersReducer } from './user';
 import { userDataReducer } from './userData';
@@ -33,6 +34,7 @@ export const rootReducer = combineReducers({
   auth: persistReducer(authPersistConfig, authReducer),
   users: usersReducer,
   companies: companyReducer,
+  quizzes: quizReducer,
   actions: actionReducer,
   userData: userDataReducer,
   companyData: companyDataReducer,

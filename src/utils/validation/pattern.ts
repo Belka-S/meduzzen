@@ -5,6 +5,9 @@ const pattern = (regExp: regExp.TRegExp): [RegExp, string] => {
   return [regExp.pattern, regExp.msg];
 };
 
+// number
+const number = Yup.number().integer().moreThan(-1).required('is required');
+
 // name
 const name = Yup.string()
   .min(4, 'is too short')
@@ -53,4 +56,4 @@ const file = Yup.mixed<File>().test(
   file => (!file ? true : file.size <= MAX_SIZE),
 ); // .test('type', 'invalid file type', (file: any) => !file ? true : file.type.includes('image'), );
 
-export { address, email, file, link, name, password, phone, text };
+export { address, email, file, link, name, number, password, phone, text };

@@ -1,4 +1,4 @@
-import { MouseEvent, ReactElement } from 'react';
+import { MouseEvent, ReactElement, RefObject } from 'react';
 
 export type TButtonProps = {
   className?: string;
@@ -8,6 +8,8 @@ export type TButtonProps = {
   color?: 'default' | 'outlined' | 'transparent' | 'disabled';
   variant?: 'orthogonal' | 'smooth' | 'round';
   label?: string;
+  ref?: RefObject<HTMLButtonElement>;
+  id?: string;
 
   href?: string;
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void;

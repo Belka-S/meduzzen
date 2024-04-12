@@ -47,34 +47,45 @@ const handleUncheckUser = (
 const handleAppendix = (
   state: TInitialState,
   action: PayloadAction<TUserAppendix>,
-) => ({ ...state, appendix: action.payload });
+) => {
+  state.appendix = action.payload;
+};
 
 const handleEditSuccess = (
   state: TInitialState,
   action: PayloadAction<TEdit>,
-) => ({ ...state, edit: action.payload });
+) => {
+  state.edit = action.payload;
+};
 
 const handleRegisterSuccess = (
   state: TInitialState,
   action: PayloadAction<{ result: TUser }>,
-) => ({ ...state, owner: action.payload.result });
+) => {
+  state.owner = action.payload.result;
+};
 
 const handleGetMeSuccess = (
   state: TInitialState,
   action: PayloadAction<{ result: TUser }>,
-) => ({ ...state, owner: action.payload?.result });
+) => {
+  state.owner = action.payload?.result;
+};
 
 const handleGetUserSuccess = (
   state: TInitialState,
   action: PayloadAction<{ result: TUser }>,
-) => ({ ...state, user: action.payload.result });
+) => {
+  state.user = action.payload.result;
+};
 
 const handleAvatarPreviewSuccess = (
   state: TInitialState,
   action: PayloadAction<Pick<TUser, 'user_avatar'>>,
 ) => {
   if (!state || !state.user) return;
-  return { ...state, user: { ...state.user, ...action.payload } };
+  const { user_avatar } = action.payload;
+  state.user.user_avatar = user_avatar;
 };
 
 const handleGetAllSuccess = (
@@ -84,11 +95,8 @@ const handleGetAllSuccess = (
   }>,
 ) => {
   const { users, pagination } = action.payload.result;
-  return {
-    ...state,
-    userList: state.userList.concat(users),
-    pagination,
-  };
+  state.userList = [...state.userList, ...users];
+  state.pagination = pagination;
 };
 
 // slice

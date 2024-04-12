@@ -25,13 +25,16 @@ const handleAvatarPreviewSuccess = (
   action: PayloadAction<Pick<TCompany, 'company_avatar'>>,
 ) => {
   if (!state || !state.company) return;
-  return { ...state, company: { ...state.company, ...action.payload } };
+  const { company_avatar } = action.payload;
+  state.company.company_avatar = company_avatar;
 };
 
 const handleSelectCompanies = (
   state: TInitialState,
   action: PayloadAction<TCompanySelect>,
-) => ({ ...state, select: action.payload });
+) => {
+  state.select = action.payload;
+};
 
 const handleCheckCompany = (
   state: TInitialState,
@@ -52,7 +55,9 @@ const handleUncheckCompany = (
 const handleAppendix = (
   state: TInitialState,
   action: PayloadAction<TCompanyAppendix>,
-) => ({ ...state, appendix: action.payload });
+) => {
+  state.appendix = action.payload;
+};
 
 const handleEditSuccess = (
   state: TInitialState,
@@ -63,13 +68,15 @@ const handleCreateSuccess = (
   state: TInitialState,
   action: PayloadAction<{ result: TCompanyOfList }>,
 ) => {
-  state.companyList.push({ ...action.payload.result });
+  state.companyList.push(action.payload.result);
 };
 
 const handleGetSuccess = (
   state: TInitialState,
   action: PayloadAction<{ result: TCompany }>,
-) => ({ ...state, company: action.payload.result });
+) => {
+  state.company = action.payload.result;
+};
 
 const handleUpdateVisibleSuccess = (
   state: TInitialState,
@@ -100,11 +107,8 @@ const handleGetAllSuccess = (
   }>,
 ) => {
   const { companies, pagination } = action.payload.result;
-  return {
-    ...state,
-    companyList: state.companyList.concat(companies),
-    pagination,
-  };
+  state.companyList = [...state.companyList, ...companies];
+  state.pagination = pagination;
 };
 
 // slice

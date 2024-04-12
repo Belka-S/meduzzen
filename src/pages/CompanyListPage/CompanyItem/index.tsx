@@ -63,23 +63,21 @@ const CompanyItem: FC<TCompanyProps> = ({ props }) => {
     dispatch(uncheckCompany({ company_id }));
   };
 
+  const handleLinkClick = async () => {
+    if (!checkedUsers.length && select !== 'all' && pathname === '/company') {
+      await dispatchExtra(getMembersListThunk({ company_id }));
+      dispatch(setCompanyAppendix('members'));
+    } else {
+      dispatch(setCompanyAppendix(null));
+    }
+  };
+
   return (
     <NavLink
       to={`/company/${company_id}`}
       id={isActive ? 'active-company' : ''}
       className={classNames(s.item, s.hover, isActive && s.active)}
-      onClick={async () => {
-        if (
-          !checkedUsers.length &&
-          select !== 'all' &&
-          pathname === '/company'
-        ) {
-          await dispatchExtra(getMembersListThunk({ company_id }));
-          dispatch(setCompanyAppendix('members'));
-        } else {
-          dispatch(setCompanyAppendix(null));
-        }
-      }}
+      onClick={handleLinkClick}
     >
       <ProfileBtn className={s.avatar} ava={ava} />
 

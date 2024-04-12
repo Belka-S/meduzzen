@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import { TAnswers, TQuiz, TRating, TRatingAnalytic, TUserOfList } from 'store';
+import { TAnswer, TQuiz, TRating, TRatingAnalytic, TUserOfList } from 'store';
 import { TUsersWithQuizzesPassed } from 'store';
 import * as TNK from 'store/companyData/companyDataThunks';
 import { initialState, TInitialState } from 'store/companyData/initialState';
@@ -47,72 +47,100 @@ const handleMembersListSuccess = (
 const handleInvitesListSuccess = (
   state: TInitialState,
   action: PayloadAction<{ result: { users: TUserOfList[] } }>,
-) => ({ ...state, invites: action.payload.result.users });
+) => {
+  state.invites = action.payload.result.users;
+};
 
 const handleRequestsListSuccess = (
   state: TInitialState,
   action: PayloadAction<{ result: { users: TUserOfList[] } }>,
-) => ({ ...state, requests: action.payload.result.users });
+) => {
+  state.requests = action.payload.result.users;
+};
 
 const handleBlockedListSuccess = (
   state: TInitialState,
   action: PayloadAction<{ result: { users: TUserOfList[] } }>,
-) => ({ ...state, blocked: action.payload.result.users });
+) => {
+  state.blocked = action.payload.result.users;
+};
 
 const handleQuizzesListSuccess = (
   state: TInitialState,
   action: PayloadAction<{ result: { quizzes: TQuiz[] } }>,
-) => ({ ...state, ...action.payload.result.quizzes });
+) => {
+  state.quizzes = action.payload.result.quizzes;
+};
 
 const handleAnswersCompanySs = (
   state: TInitialState,
-  action: PayloadAction<{ result: { answers: TAnswers[] } }>,
-) => ({ ...state, answersCompany: action.payload.result.answers });
+  action: PayloadAction<{ result: { answers: TAnswer[] } }>,
+) => {
+  state.answersCompany = action.payload.result.answers;
+};
 
 const handleAnswersUserSs = (
   state: TInitialState,
-  action: PayloadAction<{ result: { answers: TAnswers[] } }>,
-) => ({ ...state, answersUser: action.payload.result.answers });
+  action: PayloadAction<{ result: { answers: TAnswer[] } }>,
+) => {
+  state.answersUser = action.payload.result.answers;
+};
 
 const handleAnswersQuizSs = (
   state: TInitialState,
-  action: PayloadAction<{ result: { answers: TAnswers[] } }>,
-) => ({ ...state, answersQuiz: action.payload.result.answers });
+  action: PayloadAction<{ result: { answers: TAnswer[] } }>,
+) => {
+  state.answersQuiz = action.payload.result.answers;
+};
 
 const handleRatingUsersSuccess = (
   state: TInitialState,
   action: PayloadAction<{ result: { rating: TRating[] } }>,
-) => ({ ...state, ratingUsers: action.payload.result.rating });
+) => {
+  state.ratingUsers = action.payload.result.rating;
+};
 
 const handleRatingUserSuccess = (
   state: TInitialState,
   action: PayloadAction<{ result: { rating: TRating[] } }>,
-) => ({ ...state, ratingUser: action.payload.result.rating });
+) => {
+  state.ratingUser = action.payload.result.rating;
+};
 
 const handleRatingQuizSuccess = (
   state: TInitialState,
   action: PayloadAction<{ result: { rating: TRating[] } }>,
-) => ({ ...state, ratingQuiz: action.payload.result.rating });
+) => {
+  state.ratingQuiz = action.payload.result.rating;
+};
 
 const handleAnalyticUsersSuccess = (
   state: TInitialState,
   action: PayloadAction<{ result: { rating: TRatingAnalytic[] } }>,
-) => ({ ...state, analyticUsers: action.payload.result.rating });
+) => {
+  state.analyticUsers = action.payload.result.rating;
+};
 
 const handleAnalyticUserSuccess = (
   state: TInitialState,
   action: PayloadAction<{ result: { rating: TRatingAnalytic[] } }>,
-) => ({ ...state, analyticUser: action.payload.result.rating });
+) => {
+  state.analyticUser = action.payload.result.rating;
+};
 
 const handleAnalyticQuizSuccess = (
   state: TInitialState,
   action: PayloadAction<{ result: { rating: TRatingAnalytic[] } }>,
-) => ({ ...state, analyticQuiz: action.payload.result.rating });
+) => {
+  state.analyticQuiz = action.payload.result.rating;
+};
 
 const handleQuizzesPassSs = (
   state: TInitialState,
   action: PayloadAction<{ result: { users: TUsersWithQuizzesPassed[] } }>,
-) => ({ ...state, quizzesPassed: action.payload.result.users });
+) => {
+  state.quizzesPassed = action.payload.result.users;
+};
 
 // slice
 const companyDataSlice = createSlice({
