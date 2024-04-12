@@ -1,0 +1,60 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+        with:
+          useLockFile: 'package.json'
+
+      - name: Build project
+        run: npm run build
+        working-directory: './client'
+        env:
+          VITE_PROD_BACK_HTTP: ${{ vars.VITE_PROD_BACK_HTTP }}
+          VITE_AUTH0_DOMAIN: ${{vars.VITE_AUTH0_DOMAIN}}
+          VITE_AUTH0_CLIENT_ID: ${{vars.VITE_AUTH0_CLIENT_ID}}
+          VITE_AUTH0_AUDIENCE: ${{vars.VITE_AUTH0_AUDIENCE}}
+
+      - name: Copy index.html to 404.html
+        run: cp ./dist/index.html ./dist/404.html
+
+      - name: Upload production-ready build files
+        uses: actions/upload-artifact@v3
+        with:
+          name: production-files
+          path: ./dist
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: production-files
+          path: ./client/dist
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
