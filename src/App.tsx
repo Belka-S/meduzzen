@@ -49,13 +49,6 @@ const App = () => {
     isAuth && dispatchExtra(getMeThunk());
   }, [accessToken, dispatch, dispatchExtra, isAuth]);
 
-  if (window.location.protocol.indexOf('https') == 0) {
-    const el = document.createElement('meta');
-    el.setAttribute('http-equiv', 'Content-Security-Policy');
-    el.setAttribute('content', 'upgrade-insecure-requests');
-    document.head.append(el);
-  }
-
   return (
     <>
       {(!loading || owner) && (
