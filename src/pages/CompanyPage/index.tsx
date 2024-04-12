@@ -5,7 +5,7 @@ import ProfileCard from 'components/ProfileCard';
 import OvalLoader from 'components/ui/Loader';
 import Section from 'components/ui/Section';
 import H3 from 'components/ui/Typography/H3';
-import UserItem from 'pages/ClusterListPage/UserItem';
+import UserItem from 'pages/UserListPage/UserItem';
 import AvatarForm from 'pages/CompanyPage/AvatarForm';
 import ProfileForm from 'pages/CompanyPage/ProfileForm';
 import QuizItem from 'pages/QuizPage/QuizItem';
