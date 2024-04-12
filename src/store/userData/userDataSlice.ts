@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import { TAnswer, TCompanyOfList, TNotification } from 'store';
+import { TAnswers, TCompanyOfList, TNotification } from 'store';
 import { TQuizPass, TRatingAnalytic } from 'store';
 import { initialState, TInitialState } from 'store/userData/initialState';
 import * as TNK from 'store/userData/userDataThunks';
@@ -24,12 +24,8 @@ const thunkArr = [
 ];
 
 // handlers
-const fn = (type: 'pending' | 'fulfilled' | 'rejected') =>
-  thunkArr.map(el => {
-    if (type === 'pending') return el.pending;
-    if (type === 'fulfilled') return el.fulfilled;
-    else return el.rejected;
-  });
+type TState = 'pending' | 'fulfilled' | 'rejected';
+const fn = (state: TState) => thunkArr.map(el => el[state]);
 
 const handleSuccess = () => {
   toast.success('Succeed');
@@ -100,7 +96,7 @@ const handleAnalyticForQuizSs = (
 
 const handleAnswersSuccess = (
   state: TInitialState,
-  action: PayloadAction<{ result: { answers: TAnswer[] } }>,
+  action: PayloadAction<{ result: { answers: TAnswers[] } }>,
 ) => {
   state.answers = action.payload.result.answers;
 };

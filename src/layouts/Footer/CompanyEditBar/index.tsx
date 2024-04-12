@@ -1,9 +1,10 @@
-import { MouseEvent, useState } from 'react';
+import { MouseEvent, useMemo, useState } from 'react';
+import Analytics from 'components/Analytics';
 import EditBarBtn from 'components/EditBarBtn';
-import QuizAddForm from 'pages/QuizPage/QuizForm/AddForm';
 import Modal from 'components/ui/Modal';
 import H6 from 'components/ui/Typography/H6';
 import CompanyForm from 'layouts/Footer/CompanyForm';
+import QuizAddForm from 'pages/QuizPage/QuizForm/AddForm';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppExtraDispatch } from 'store';
@@ -36,19 +37,36 @@ const CompanyEditBar = () => {
   const { companyData } = useAction();
   const [isAddCompanyModal, setIsAddCompanyModal] = useState(false);
   const [isAddQuizModal, setIsAddQuizModal] = useState(false);
+  const [isAnalyticsModal, setIsAnalyticsModal] = useState(false);
 
   const isMyCompany = company?.company_owner?.user_id === owner?.user_id;
   const isCompanyProfile = pathname.includes('/company/');
+  const action = useMemo(
+    () => companyData.members.find(el => el.user_id === owner?.user_id)?.action,
+    [companyData.members, owner?.user_id],
+  );
 
-  const checkedInvites = checkedUsers.map(el => {
-    const user = companyData.invites.find(item => item.user_id === el.user_id);
-    return user?.action_id;
-  });
+  const checkedInvites = useMemo(
+    () =>
+      checkedUsers.map(el => {
+        const user = companyData.invites.find(
+          item => item.user_id === el.user_id,
+        );
+        return user?.action_id;
+      }),
+    [checkedUsers, companyData.invites],
+  );
 
-  const checkedRequests = checkedUsers.map(el => {
-    const user = companyData.requests.find(item => item.user_id === el.user_id);
-    return user?.action_id;
-  });
+  const checkedRequests = useMemo(
+    () =>
+      checkedUsers.map(el => {
+        const user = companyData.requests.find(
+          item => item.user_id === el.user_id,
+        );
+        return user?.action_id;
+      }),
+    [checkedUsers, companyData.requests],
+  );
 
   // edit profile
   const handleUpdateInfo = (e: MouseEvent<HTMLButtonElement>) => {
@@ -253,6 +271,16 @@ const CompanyEditBar = () => {
   return (
     <div className={s.editbar}>
       <EditBarBtn
+        onClick={e => {
+          e.preventDefault();
+          setIsAnalyticsModal(!isAnalyticsModal);
+        }}
+        svgId="ui-chart"
+        size={24}
+        shownIf={action === 'owner' || action === 'admin'}
+      />
+
+      <EditBarBtn
         onClick={handleAddToAdmin}
         svgId="ui-admin_add"
         size={26}
@@ -415,6 +443,12 @@ const CompanyEditBar = () => {
           setIsModal={() => setIsAddQuizModal(!isAddQuizModal)}
         >
           <QuizAddForm setIsModal={() => setIsAddQuizModal(!isAddQuizModal)} />
+        </Modal>
+      )}
+
+      {isAnalyticsModal && company && (
+        <Modal setIsModal={() => setIsAnalyticsModal(!isAnalyticsModal)}>
+          <Analytics company_id={company.company_id} />
         </Modal>
       )}
     </div>
