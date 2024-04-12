@@ -1,0 +1,35 @@
+.screen {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 3fr 4fr;
+  gap: 20px;
+  justify-content: flex-start;
+}
+
+// main info
+.main {
+  position: relative;
+  margin-bottom: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.avatar {
+  margin-inline: 20px;
+}
+
+.name {
+  margin-bottom: 0 !important;
+  margin-right: auto;
+  text-transform: capitalize;
+}
+
+// appendix info
+.appendix {
+  // outline: 1px solid wheat;
+}
+
+.title {
+  text-align: center;
+}

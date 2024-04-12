@@ -1,0 +1,40 @@
+.main__info {
+  padding-block: 2px;
+  display: grid;
+  grid-template-columns: 1fr 6fr;
+  grid-column-gap: 20px;
+  text-align: right;
+
+  font-size: 20px;
+  font-weight: 500;
+
+  &:not(:nth-last-of-type(1)) {
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  & span {
+    padding-block: 8px;
+    text-align: start;
+
+    &:nth-of-type(2n + 1) {
+      text-align: end;
+      color: var(--placeholder-color);
+
+      &::first-letter {
+        text-transform: lowercase;
+      }
+    }
+  }
+
+  & a {
+    padding-block: 8px;
+    text-align: start;
+    font-size: 18px;
+    text-decoration: underline;
+    transition: color 250ms;
+
+    &:hover {
+      color: var(--hover-color);
+    }
+  }
+}

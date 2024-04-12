@@ -1,0 +1,7 @@
+.active {
+  color: var(--hover-color);
+
+  &:hover {
+    color: var(--hover-color) !important;
+  }
+}

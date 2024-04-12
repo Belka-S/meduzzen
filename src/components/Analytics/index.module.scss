@@ -1,0 +1,17 @@
+.analytics {
+  min-width: 400px;
+  min-height: 250px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  background-color: var(--white-color);
+  border-radius: var(--indent-s);
+}
+
+.chart {
+  height: 80vh;
+  width: 80vw;
+}
