@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import { TCommonResult, TQuiz } from 'store';
+import { TCommonResult, TQuiz, TQuizResult } from 'store';
 import { initialState, TInitialState } from 'store/quiz';
 import * as TNK from 'store/quiz/quizThunks';
 
@@ -44,6 +44,17 @@ const handleGetQuizSuccess = (
   state.quiz = action.payload.result;
 };
 
+const handleTakeQuizSuccess = (
+  state: TInitialState,
+  action: PayloadAction<{ result: TQuizResult; status_code: number }>,
+) => {
+  const { result, status_code } = action.payload;
+  status_code < 300
+    ? toast.success(`Success. Quiz result: ${result.result_score}%`)
+    : toast.error(status_code);
+  state.result = result;
+};
+
 // slice
 const quizSlice = createSlice({
   name: 'users',
@@ -56,7 +67,7 @@ const quizSlice = createSlice({
       .addCase(TNK.getQuizThunk.fulfilled, handleGetQuizSuccess)
       .addCase(TNK.deleteQuizThunk.fulfilled, handleResultSuccess)
       .addCase(TNK.updateQuizThunk.fulfilled, handleResultSuccess)
-      .addCase(TNK.takeQuizThunk.fulfilled, handleResultSuccess)
+      .addCase(TNK.takeQuizThunk.fulfilled, handleTakeQuizSuccess)
       // question success
       .addCase(TNK.addQuestionThunk.fulfilled, handleResultSuccess)
       .addCase(TNK.updateQuestionThunk.fulfilled, handleResultSuccess)

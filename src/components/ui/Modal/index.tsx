@@ -40,6 +40,7 @@ const Modal: FC<TModalProps> = ({
 
   const handleBackdropClick = (e: MouseEvent<HTMLDivElement>) => {
     e.target === e.currentTarget && setIsModal(false);
+    e.stopPropagation();
   };
 
   if (modalRoot)

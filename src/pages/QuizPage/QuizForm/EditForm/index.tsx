@@ -15,9 +15,9 @@ import { InferType } from 'yup';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import QuestionEditList from '../EditForm/QuestionEditList';
+import QuestionEditList from './EditList';
 
-import s from './index.module.scss';
+import s from '../form.module.scss';
 
 type TQuizForm = { setIsModal: () => void };
 type TQuizInput = InferType<typeof quizSchema>;
@@ -57,14 +57,12 @@ const QuizEditForm: FC<TQuizForm> = ({ setIsModal }) => {
   const {
     reset,
     setValue,
-    getFieldState,
     register: registerQ,
     handleSubmit: addQuestion,
     formState: formStateQ,
   } = useForm<TQuestionInput>({
     resolver: questionResolver,
     mode: 'onChange',
-    // defaultValues: '',
   });
 
   if (!quiz || !company) return;
@@ -74,27 +72,25 @@ const QuizEditForm: FC<TQuizForm> = ({ setIsModal }) => {
   const onQuizSubmit: SubmitHandler<TQuizInput> = async data => {
     await dispatchExtra(updateQuizThunk({ ...data, quiz_id }));
     await dispatchExtra(getQuizzesListThunk({ company_id }));
-    // dispatch(setCompanyAppendix('quizzez'));
     setIsModal();
   };
 
   const handleAddQuestion: SubmitHandler<TQuestionInput> = async data => {
     const { question_text, question_correct_answer } = data;
-    const { isTouched } = getFieldState('question_correct_answer', formStateQ);
 
     const question: TQuestion = {
       question_id,
       question_text,
-      question_answers: getAnswerArr(data, isTouched) as string[],
+      question_answers: getAnswerArr(data, true) as string[],
       question_correct_answer: question_correct_answer - 1,
     };
 
     if (!question_id) {
-      await dispatchExtra(addQuestionThunk({ ...question, quiz_id }));
-    } else {
       if (questions_list.find(el => el.question_text === question_text)) {
         return alert(`You alreddy have ${question_text} question`);
       }
+      await dispatchExtra(addQuestionThunk({ ...question, quiz_id }));
+    } else {
       await dispatchExtra(updateQuestionThunk({ ...question, question_id }));
     }
     await dispatchExtra(getQuizThunk({ quiz_id }));
@@ -111,7 +107,7 @@ const QuizEditForm: FC<TQuizForm> = ({ setIsModal }) => {
 
   return (
     <div className={s.form_wrap}>
-      <H3 className={s.title}>Create quiz</H3>
+      <H3 className={s.title}>Edit quiz</H3>
 
       <form className={s.form} onSubmit={handleSubmit(onQuizSubmit)}>
         {quizFields.map(el => (

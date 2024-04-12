@@ -1,6 +1,6 @@
 import { MouseEvent, useState } from 'react';
 import EditBarBtn from 'components/EditBarBtn';
-import QuizAddForm from 'components/QuizForm/AddForm';
+import QuizAddForm from 'pages/QuizPage/QuizForm/AddForm';
 import Modal from 'components/ui/Modal';
 import H6 from 'components/ui/Typography/H6';
 import CompanyForm from 'layouts/Footer/CompanyForm';
@@ -247,7 +247,7 @@ const CompanyEditBar = () => {
     e.currentTarget.blur();
     const company_id = company?.company_id;
     company_id && (await dispatchExtra(getQuizzesListThunk({ company_id })));
-    dispatch(setCompanyAppendix('quizzez'));
+    dispatch(setCompanyAppendix('quizzes'));
   };
 
   return (

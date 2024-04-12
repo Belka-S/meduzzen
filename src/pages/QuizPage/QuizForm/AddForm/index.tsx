@@ -1,8 +1,8 @@
 import { FC, useState } from 'react';
 import InputText from 'components/InputText';
-import QuestionAddList from 'components/QuizForm/AddForm/QuestionAddList';
 import Button from 'components/ui/Button';
 import H3 from 'components/ui/Typography/H3';
+import QuestionAddList from 'pages/QuizPage/QuizForm/AddForm/AddList';
 import { Resolver, SubmitHandler, useForm } from 'react-hook-form';
 import { TQuestion, TQuizCreate, useAppDispatch } from 'store';
 import { useAppExtraDispatch } from 'store';
@@ -16,7 +16,7 @@ import { InferType } from 'yup';
 
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import s from './index.module.scss';
+import s from '../form.module.scss';
 
 type TQuizForm = { setIsModal: () => void };
 type TQuizInput = InferType<typeof quizSchema>;
@@ -35,7 +35,6 @@ const QuizAddForm: FC<TQuizForm> = ({ setIsModal }) => {
   const [answerObj, setAnswerObj] = useState(answerObjInitialState);
   const [questions_list, setQuestionList] = useState<TQuestion[]>([]);
 
-  // RHF quiz
   const quizResolver: Resolver<TQuizInput> = yupResolver(quizSchema);
   const { register, handleSubmit, formState } = useForm<TQuizInput>({
     resolver: quizResolver,
@@ -72,7 +71,7 @@ const QuizAddForm: FC<TQuizForm> = ({ setIsModal }) => {
     const quiz = { ...data, company_id, questions_list } as TQuizCreate;
     await dispatchExtra(createQuizThunk(quiz));
     await dispatchExtra(getQuizzesListThunk({ company_id }));
-    dispatch(setCompanyAppendix('quizzez'));
+    dispatch(setCompanyAppendix('quizzes'));
     setIsModal();
   };
 

@@ -1,4 +1,4 @@
-import { TQuestion, TQuizCreate, TQuizUpdate } from 'store';
+import { TAnswers, TQuestion, TQuizCreate, TQuizUpdate } from 'store';
 
 import { apiClientToken } from './apiHttp';
 
@@ -28,9 +28,11 @@ export const deleteQuiz = async (params: { quiz_id: number }) => {
   return data;
 };
 
-export const takeQuiz = async (params: { quiz_id: number }) => {
-  const { quiz_id } = params;
-  const { data } = await apiClientToken.delete(`/quiz/${quiz_id}/take_quiz/`);
+export const takeQuiz = async (params: TAnswers & { quiz_id: number }) => {
+  const { quiz_id, ...answersObj } = params;
+  const { data } = await apiClientToken.post(`/quiz/${quiz_id}/take_quiz/`, {
+    answers: answersObj,
+  });
   return data;
 };
 

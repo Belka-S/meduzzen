@@ -1,9 +1,9 @@
-import { TCommonResult, TQuiz } from 'store';
+import { TCommonResult, TQuiz, TQuizResult } from 'store';
 
 export type TInitialState = {
   quiz: TQuiz | null;
 
-  result: TCommonResult;
+  result: TCommonResult | TQuizResult | null;
   detail: string;
   status_code: number;
 
