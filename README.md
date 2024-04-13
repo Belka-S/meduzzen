@@ -19,7 +19,7 @@ To get started with the project, follow these steps:
 
 2. Change directory to the project folder:
 
-`cd mern-tstarter`
+`cd react-meduzzen`
 
 3.  Install the project dependencies:
 
